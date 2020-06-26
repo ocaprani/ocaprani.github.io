@@ -1,0 +1,31 @@
+/* First version 
+const myHeading = document.querySelector('h1');
+myHeading.textContent = 'Hello world!';
+*/
+
+/* Second version 
+document.querySelector('html').onclick = function() {
+    alert('Ouch! Stop poking me!');
+}
+// Lidt klarere med eksplicit reference til det element som udvælges
+let myHTML = document.querySelector('html');
+myHTML.onclick = function() {
+    alert(3+6);
+};
+*/
+
+/* Third version, ændret så de to billeder vises med samme højde uanset billedets originale dimensioner */
+let myImage = document.querySelector('img'); // global variabel
+let height = 300;
+myImage.setAttribute('height', height);
+alert(height);
+myImage.onclick = function() {
+
+    let mySrc = myImage.getAttribute('src'); // lokal variabel
+
+    if(mySrc === 'images/firefox-icon.png') {
+      myImage.setAttribute ('src','images/firefox.jpg');
+    } else {
+      myImage.setAttribute ('src','images/firefox-icon.png');
+    }
+}
