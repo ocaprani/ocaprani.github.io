@@ -1,0 +1,37 @@
+let buttonCreate = document.querySelector('#opret');
+let buttonChange = document.querySelector('#skift');
+let buttonDelete = document.querySelector('#slet');
+let heading = document.querySelector('h1');
+let headingText = heading.innerHTML;
+
+buttonCreate.onclick = function() {
+  setUserName();
+}
+
+buttonChange.onclick = function() {
+  setUserName();
+}
+
+buttonDelete.onclick = function() {
+  deleteUserName();
+}
+
+function setUserName() {
+  let name = prompt('Skriv dit navn: ');
+  if(!name) {
+    setUserName();
+  } else {
+    localStorage.setItem('name', name);
+    heading.innerHTML =  headingText + ', ' + name;
+  }
+}
+
+function deleteUserName() {
+  localStorage.clear();
+  heading.innerHTML =  headingText;
+}
+
+if(localStorage.getItem('name')) {
+  let storedName = localStorage.getItem('name');
+  heading.textContent = headingText + ', ' + storedName;
+}

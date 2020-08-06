@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Husk bruger</title>
+    
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
+    
+  </head>
+  <body>
+    <h1>Velkommen</h1>
+    <img src="images/firefox-icon.png" alt="The Firefox logo: a flaming fox surrounding the Earth.">
+
+    <button id="opret">Opret bruger</button>
+    <button id="skift">Skift bruger</button>
+    <button id="slet">Slet bruger</button>
+    
+    <script src="scripts/main.js"></script>
+  </body>
+</html>
