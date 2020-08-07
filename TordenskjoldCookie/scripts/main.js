@@ -58,7 +58,7 @@ function getCookie(cname) {
 function checkCookie() {
     
   var size = getCookie('imageSize');
-    
+  console.log(size); 
   if (size == "") {
 	
     // Set large image, textSmall and imageSize cookie	
