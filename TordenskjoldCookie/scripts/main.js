@@ -69,13 +69,13 @@ function checkCookie() {
   
   } else {
 
-    // Set state according to the value of the cookie
-    image.setAttribute('height', size);
-      
+    // Set state according to the value of the cookie  
     if( size == 'Large') {
 	text.textContent = textSmall;
+	image.setAttribute('height', heightLarge);
     } else {
 	text.textContent = textLarge; 
+	image.setAttribute('height', heightSmall);
     }
   }
 }
