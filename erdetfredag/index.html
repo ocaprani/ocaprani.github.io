@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+<meta charset="utf-8">
+<title>Er det fredag?</title>
+
+<link rel="stylesheet" type="text/css" href="styles/style.css" />
+
+<script>
+function isitFriday() {
+    var d = new Date();
+    var elem = document.getElementById("answer");
+    if (d.getDay() == 5) {
+      elem.innerHTML = "Ja";
+      elem.style.color = "#5f5";
+    } else {
+      elem.innerHTML = "Nej";
+      elem.style.color = "#f55";
+    }
+}
+</script>
+</head>
+
+<body onLoad="isitFriday();">
+
+<h1>Er det fredag?</h1>
+
+<h2 id="answer"></h2>
+
+</body>
+
+</html>
