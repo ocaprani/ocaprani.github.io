@@ -17,14 +17,10 @@ image.onclick = function() {
 	image.setAttribute ('height', heightSmall);
 	text.textContent = textLarge;
 	setCookie('imageSize', 'Small', 30);
-	console.log(document.cookie);
-	console.log("Small");
     } else {
 	image.setAttribute ('height', heightLarge);
 	text.textContent = textSmall;
 	setCookie('imageSize', 'Large', 30);
-	console.log(document.cookie);
-	console.log("Large");
     }
 }
 
@@ -44,7 +40,6 @@ function getCookie(cname) {
   var ca = decodedCookie.split(';');
   for(var i = 0; i < ca.length; i++) {
     var c = ca[i];
-    console.log(c);
     while (c.charAt(0) == ' ') {
       c = c.substring(1);
     }
@@ -58,14 +53,12 @@ function getCookie(cname) {
 function checkCookie() {
     
   var size = getCookie('imageSize');
-  console.log(size); 
   if (size == "") {
 	
     // Set large image, textSmall and imageSize cookie	
     image.setAttribute ('height', heightLarge);
     text.textContent = textSmall;
     setCookie('imageSize', 'Large', 30);
-    console.log(document.cookie);
   
   } else {
 
@@ -80,6 +73,4 @@ function checkCookie() {
   }
 }
 
-console.log("Start");
-console.log(document.cookie);
 checkCookie();
