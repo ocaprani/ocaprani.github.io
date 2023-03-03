@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>WebUSB Micro:bit</title>
+        <link rel="stylesheet" href="styles/styles.css" />
+        <link
+            href="https://fonts.googleapis.com/css?family=Orbitron"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <h1>Micro:bit USB</h1>
+        <input class="button" type="button" id="connectButton" value="Connect" />
+        <input class="button" type="button" id="disconnectButton" value="Disconnect" />
+
+        <hr/>
+        <br/>
+
+        <div id="connected">
+          <div id ="connected-text">
+          </div>
+          <div id="usb-output">
+          </div>
+        </div>
+
+        <script src="scripts/main.js" type="module"></script>
+    </body>
+</html>

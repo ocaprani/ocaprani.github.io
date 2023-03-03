@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link href="styles/style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+    <title>My test page</title>
+  </head>
+  <body>
+    <p>Lidt tekst</p>
+    <img src="images/firefox-icon.jpeg" alt="Firefox icon" />
+  </body>
+</html>
