@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Whiteboard</title>
+    <link rel="icon" href="favicon.ico"> <!-- https://www.flaticon.com/free-icon/whiteboard_3253220 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    
+
+    <div id="top">
+
+        <div id="color_picker">
+            <!-- <canvas id="canvas" width="400" height="400" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas> -->
+            <div id="color-div">
+                <div>Choose Color</div>
+                <div style="background:transparent;" id="hidden_spacer"></div>
+                <div style="background:black;" class="color" id="color_black" onclick="setBrush(this)"></div>
+                <div style="background:green;" class="color" id="color_green" onclick="setBrush(this)"></div>
+                <div style="background:blue;" class="color" id="color_blue" onclick="setBrush(this)"></div>
+                <div style="background:red;" class="color" id="color_red" onclick="setBrush(this)"></div>
+                <div style="background:yellow;" class="color" id="color_yellow" onclick="setBrush(this)"></div>
+                <div style="background:purple;" class="color" id="color_orange" onclick="setBrush(this)"></div>
+                <div style="background:orange;" class="color" id="color_orange" onclick="setBrush(this)"></div>
+                <!-- <div style="background:pink;" class="color" id="color_orange" onclick="setBrush(this)"></div> -->
+            </div>
+            
+            <div id="colpbottom">
+                <!-- <div id="checkbox_div">
+                    <label for="checkbox">Draw peer's</label>
+                    <input type="checkbox" id="checkbox" onclick="showPeerDrawings(this)" checked>
+                </div> -->
+                
+                <div id="eraser_div">
+                    <div style="margin-left: 14px;">Eraser</div>
+                    <div style="background:white; cursor: pointer;" id="eraser" onclick="setBrush(this)"></div>
+                </div>
+                <!-- <input type="checkbox" checked="" id="fill_ch" onclick="showPeerDrawings(this)"> -->
+                <div id="button_div">
+                    <input type="button" value="Save image" id="save_button" class="buttons" onclick="saveImg()">
+                    <input type="button" value="Save file" id="save_button" class="buttons" onclick="saveJSON()">
+                    <input type="button" value="Save app" id="save_button" class="buttons" onclick="saveApp()">
+                    <input type="button" value="Load" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();" />
+                    <input type="file" style="display: none;" id="load_element" onchange="load(event)">
+                    <br>
+                    <input type="button" value="Home" id="home_button" class="buttons" onclick="canvasHome()">
+                    <input type="button" value="Clear" id="clear_button" class="buttons" onclick="canvasClear()">
+                    <input type="button" value="Undo" id="undo_button" class="buttons" onclick="canvasUndo()">
+                    <input type="button" value="Redo" id="redo_button" class="buttons" onclick="canvasRedo()">
+                </div>
+
+                
+            </div>
+        </div>
+
+        <div id="room-component">
+            <!-- <h2 id="curRoomText" style="margin: 0px 0px 10px 20px; display:flex; justify-content: center;">In room: Private room</h2> -->
+            <div style="display: inline-flex;">
+                <div id="peers_in_room">
+                    <h3 style="margin-bottom: 8px; margin-top: 0px;">People in this room</h3>
+                    <!-- <p id="peerList-text">You</p> -->
+                    <p id="peerInfoText"><input type="checkbox" class="disableable" id="showAllCheckbox" onclick="allPeerCheckbox(this)"><label for="showAllCheckbox">Show</label> | Name</p>
+                    <ul class="itemlist">
+                        <li class="peerItem">
+                            <input id="cb0" type="checkbox" class="peerCheckbox disableable" onclick="peerCheckbox(this)">|  <label for="cb0" class="peerName" style="margin: 0px;">You</label>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="margin-bottom: 5px; margin-top: 0px;">Rooms</h3>
+                    <!-- <p id="roomList-text">Private room</p> -->
+                    <ul class="itemlist" id="roomList">
+                        <li class="roomItem active" onclick="changeRoom(this.textContent)">Private room</li>
+                    </ul>
+                    <input type="button" value="New room" style="margin-bottom: 5px; margin-top: 5px;" onclick="createRoom()">
+                </div>
+            </div>
+        </div>
+        
+        <div id="connect-component">
+            <h2 id="myPeerText" style="margin-top: 0px;">Your peer id is: </h2>
+            <h3 id="connect-text">Connect</h3>
+            <div style="display: flex;">
+                <input type="text" name="Connection" id="connect-input" style="width: 75px; margin-right: 5px;">
+                <button id="connect-btn">Connect</button>
+            </div>
+            <p id="status-text">Type a peer id to connect</p>
+            
+        </div>
+        
+    </div>
+    
+    <div id="canvas-div">
+        <canvas id="canvas"></canvas>
+        <!-- <img id="canvas" style="position: absolute; background-color: transparent; z-index: 2;" style="display:none;"> -->
+        <!-- <canvas style="position: absolute; background-color: transparent; z-index: 2;" id="canvas2"></canvas> -->
+    </div>
+
+
+    <script src="../../Library/peerjs.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
