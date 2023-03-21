@@ -44,7 +44,6 @@ let pathsDrawn = [];
 let pathsUndone = [];
 let points = [];
 let showMine = true;
-// let imgs = [];
 let otherPeerPoints = {};
 let rooms = [{ name: "Private room", owner: myPeerId, peers: [myPeerId] }];
 let curRoomName = rooms[0].name;
