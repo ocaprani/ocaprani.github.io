@@ -33,7 +33,7 @@ let peer = new Peer(myPeerId);
 console.log(peer);
 let peerConnections = [];
 let conn = null;
-let reconnectTiemout = null;
+let reconnectTimeout = null;
 
 let logData = [];
 
@@ -44,7 +44,7 @@ let pathsDrawn = [];
 let pathsUndone = [];
 let points = [];
 let showMine = true;
-let imgs = [];
+// let imgs = [];
 let otherPeerPoints = {};
 let rooms = [{ name: "Private room", owner: myPeerId, peers: [myPeerId] }];
 let curRoomName = rooms[0].name;
@@ -139,22 +139,15 @@ function init() {
             // updateRoomList();
         }
         onOpenConn(document.querySelector('#connect-input').value)
-    })
+    });
 
+    document.querySelector('#connect-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.querySelector('#connect-btn').click();
+        }
+    });
 
-
-    // canvas.addEventListener("mousemove", function (e) {
-    //     findxy('move', e)
-    // });
-    // canvas.addEventListener("mousedown", function (e) {
-    //     findxy('down', e)
-    // });
-    // canvas.addEventListener("mouseup", function (e) {
-    //     findxy('up', e)
-    // });
-    // canvas.addEventListener("mouseout", function (e) {
-    //     findxy('out', e)
-    // });
 }
 
 
@@ -170,7 +163,7 @@ function onMouseUp(e) {
 
         isDrawing = false;
         // Adding the path to the array or the paths
-        var path = { points: [points], color: ctx.strokeStyle, width: ctx.lineWidth, room: curRoomName };
+        var path = { points: [points], color: ctx.strokeStyle, width: ctx.lineWidth, room: curRoomName, type: "path" };
         pathsDrawn.push(path);
         sendToAllPeers({ msgType: "paths", paths: [path] });
     } else if (e.button === 2) {
@@ -200,7 +193,8 @@ function onMouseMove(e) {
         ctx.stroke();
         sendToAllPeers({
             msgType: "draw", newPoints: current_adj, prevPoints: previous_adjusted,
-            color: ctx.strokeStyle, width: ctx.lineWidth, room: curRoomName, time: Date.now()
+            color: ctx.strokeStyle, width: ctx.lineWidth, room: curRoomName,
+            time: Date.now(), type: "path"
         });
     } else if (isDragging) {
         previous = { x: mouse.x, y: mouse.y };
@@ -239,9 +233,30 @@ function onOpenConn(peerId) {
     if (peerId === myPeerId) { return; }
     if (!peerIdList.includes(peerId)) {
         let newConn = peer.connect(peerId);
+
+        newConn.on("error", (err) => {
+            console.log(err);
+            document.getElementById('status-text').textContent = "Error connecting to " + peerId;
+        });
+
+        newConn.on("close", () => {
+            console.log("Connection closed");
+            document.getElementById('status-text').textContent = "Disconnected from " + peerId;
+            peerConnections = peerConnections.filter((conn) => conn.peer !== peerId);
+            let curRoom = rooms.find(room => room.name === curRoomName);
+            if (curRoom !== undefined) {
+                curRoom.peers.splice(curRoom.peers.indexOf(peerId), 1);
+            }
+            updatePeopleInRoom(curRoom);
+
+            // TODO: Keep drawings?
+            delete otherPeerPoints[peerId];
+            redrawCanvas(false);
+        });
+
         newConn.on("open", () => {
             peerConnections.push(newConn);
-            newConn.send({ msgType: "network", peerList: peerIdList, paths: pathsDrawn, rooms: rooms });
+            newConn.send({ msgType: "network", peerList: peerIdList, paths: extractImageData(pathsDrawn), rooms: rooms });
             document.getElementById('status-text').textContent = "Connected to " + newConn.peer;
 
             let showPeerInRoom = {};
@@ -365,41 +380,62 @@ function redrawCanvas(sync) {
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (showMine) {
-        pathsDrawn.forEach(path => {
-            drawPath(path, ctx);
-        });
-    }
-
+    // In order to draw the images first, we need to draw the paths in two passes
+    let pathsToDrawn = [];
     peerConnections.forEach(conn => {
         let pp = otherPeerPoints[conn.peer]
         if (pp !== undefined && pp.showInRoom[curRoomName]) {
             pp.paths.forEach(path => {
-                drawPath(path, ctx);
+                if (path.type === "img" && path.room === curRoomName) {
+                    ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y);
+                } else {
+                    pathsToDrawn.push(path);
+                }
             });
         }
     });
+
+    if (showMine) {
+        pathsDrawn.forEach(path => {
+            if (path.type === "img" && path.room === curRoomName) {
+                ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y);
+            } else {
+                pathsToDrawn.push(path);
+            }
+        });
+    }
+
+    pathsToDrawn.forEach(path => {
+        drawPath(path, ctx);
+    });
+
+
+
     ctx.closePath();
 
-    imgs.forEach(img => {
-        ctx.drawImage(img, canvasPosition.x, canvasPosition.y);
-    });
 }
 
-function redrawCanvas2(x, y) {
-    currentImg.x += x;
-    currentImg.y += y;
-    // console.log("redrawing canvas2", currentImg.x, currentImg.y)
-    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-    // ctx2.drawImage(img, canvasPosition.x, canvasPosition.y);
-    // ctx2.putImageData(currentImg.img, currentImg.x, currentImg.y);
+// function redrawCanvas2(x, y) {
+//     currentImg.x += x;
+//     currentImg.y += y;
+//     // console.log("redrawing canvas2", currentImg.x, currentImg.y)
+//     ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+//     // ctx2.drawImage(img, canvasPosition.x, canvasPosition.y);
+//     // ctx2.putImageData(currentImg.img, currentImg.x, currentImg.y);
 
-}
+// }
 
 function drawPath(path, ctx) {
     if (path.room !== curRoomName) {
         return;
     }
+
+    if (path.type === "img") {
+        ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y);
+        return
+    }
+
+
 
     ctx.strokeStyle = path.color;
     ctx.lineWidth = path.width;
@@ -426,7 +462,11 @@ function canvasRedo() {
     if (pathsUndone.length > 0) {
         pathsUndone.pop().forEach(path => {
             pathsDrawn.push(path);
-            sendToAllPeers({ msgType: "paths", paths: [path] });
+            if (path.type === "img") {
+                sendToAllPeers({ msgType: "img", img: path.img.src, room: path.room });
+            } else {
+                sendToAllPeers({ msgType: "paths", paths: [path] });
+            }
         });
         redrawCanvas(true);
     }
@@ -455,16 +495,29 @@ function saveImg() {
     link.click();
 }
 
+
+function extractImageData(img) {
+    return img.map(path => {
+        if (path.type === "img") {
+            return { type: "img", img: path.img.src, room: path.room };
+        } else {
+            return path;
+        }
+    });
+}
+
+
 function saveJSON() {
     let listOfopp = peerConnections
         .map(conn => {
             return otherPeerPoints[conn.peer].paths;
         }).flat(depth = 1);
     console.log(listOfopp);
+
     let data = JSON.stringify({
-        pathsDrawn: pathsDrawn.filter(path => path.room === curRoomName),
-        pathsUndone: pathsUndone.filter(paths => paths[0].room === curRoomName),
-        otherPeerPoints: listOfopp.filter(path => path.room === curRoomName)
+        pathsDrawn: extractImageData(pathsDrawn).filter(path => path.room === curRoomName),
+        pathsUndone: extractImageData(pathsUndone).filter(paths => paths[0].room === curRoomName),
+        otherPeerPoints: extractImageData(listOfopp).filter(path => path.room === curRoomName)
     });
     let link = document.createElement('a');
     link.download = 'drawing.json';
@@ -485,6 +538,18 @@ function saveApp() {
         .catch(console.error);
 }
 
+function fromImageData(imgData, whereToPush, connPeer) {
+    var img = new Image();
+    img.src = imgData;
+    img.onload = function () {
+        if (whereToPush === 1) {
+            pathsDrawn.push({ type: "img", img: img, room: curRoomName });
+        } else if (whereToPush === 2) {
+            pathsUndone.push([{ type: "img", img: img, room: curRoomName }]);
+        }
+        redrawCanvas(false);
+    }
+}
 
 // load a locally saved image or JSON to canvas
 function load(e) {
@@ -495,12 +560,12 @@ function load(e) {
             console.log("Image loaded");
             var img = new Image();
             img.onload = function () {
-                ctx.drawImage(img, canvasPosition.x, canvasPosition.y);
-                imgs.push(img);
+                pathsDrawn.push({ type: "img", img: img, room: curRoomName });
+                // ctx.drawImage(img, canvasPosition.x, canvasPosition.y);
+                redrawCanvas(false);
             }
             img.src = e.target.result;
-            // console.log(img);
-            // sendToAllPeers({ msgType: "img2", img: img });
+            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName });
         }
         reader.readAsDataURL(file);
     } else if (file.type == "application/json" || file.type == "text/json") {
@@ -508,15 +573,29 @@ function load(e) {
         reader.onload = function (e) {
             var data = JSON.parse(e.target.result);
 
-            let pd = data.pathsDrawn;
+            // conver img data to img
+            data.pathsDrawn.filter(path => path.type === "img").forEach(path => {
+                fromImageData(path.img, 1);
+            });
+            data.otherPeerPoints.filter(path => path.type === "img").forEach(path => {
+                fromImageData(path.img, 1);
+            });
+            data.pathsUndone.forEach(paths => {
+                paths.filter(path => path.type === "img").forEach(path => {
+                    fromImageData(path.img, 2);
+                });
+            });
+
+            let pd = data.pathsDrawn.filter(path => path.type !== "img");
             pd.forEach(path => path.room = curRoomName);
-            let po = data.otherPeerPoints;
+            let po = data.otherPeerPoints.filter(path => path.type !== "img");
             po.forEach(path => path.room = curRoomName);
             pathsDrawn = pathsDrawn.concat(pd, po);
 
-            let pu = data.pathsUndone;
+            let pu = data.pathsUndone.filter(paths => paths[0].type !== "img");
             pu.forEach(paths => paths[0].room = curRoomName);
             pathsUndone = pathsUndone.concat(pu);
+
 
             redrawCanvas(false);
         }
@@ -557,6 +636,7 @@ function findxy(res, e) {
     }
 }
 
+
 function showPeerDrawings(element) {
     if (element.checked) {
         canvas2.style.display = "block";
@@ -564,7 +644,6 @@ function showPeerDrawings(element) {
         canvas2.style.display = "none";
     }
 }
-
 
 
 function createRoom() {
@@ -585,7 +664,6 @@ function addRoom(roomToAdd) {
         addAllToRoom(roomToAdd.peers, curRoomName);
     }
 }
-
 
 
 function addAllToRoom(peersToAdd, roomName) {
@@ -610,9 +688,25 @@ function changeRoom(newRoomName) {
 
     sendToAllPeers({ msgType: "changeRoom", toRoom: newRoomName, fromRoom: curRoomName });
 
-    removeAllFromPeerList();
     let newRoom = rooms.find(room => room.name === newRoomName);
     newRoom.peers.push(myPeerId);
+    console.log(newRoom)
+    updatePeopleInRoom(newRoom);
+
+    let curRoomObj = rooms.find(room => room.name === curRoomName);
+    if (curRoomObj !== undefined) {
+        curRoomObj.peers.splice(curRoomObj.peers.indexOf(myPeerId), 1);
+    }
+
+    curRoomName = newRoomName;
+    redrawCanvas(false);
+    updateRoomList();
+    
+}
+
+
+function updatePeopleInRoom(newRoom) {
+    removeAllFromPeerList();
     newRoom.peers.forEach(peer => {
         if (peer !== myPeerId) {
             addToPeerList(peer);
@@ -631,16 +725,8 @@ function changeRoom(newRoomName) {
         document.getElementById('showAllCheckbox').style.display = "inline-block";
     }
 
-    let curRoomObj = rooms.find(room => room.name === curRoomName)
-    if (curRoomObj !== undefined) {
-        curRoomObj.peers.splice(curRoomObj.peers.indexOf(myPeerId), 1);
-    }
-
-    curRoomName = newRoomName;
-    redrawCanvas(false);
-    updateRoomList();
+    
 }
-
 
 function updateRoomList() {
     let li = document.getElementsByClassName('roomItem')[0];
@@ -706,6 +792,22 @@ function christiansAlg(toPeer) {
 
 
 init()
+
+
+peer.on("close", () => {
+    console.log("Connection to network was closed");
+    document.querySelector('#status-text').textContent = "Connection to network was closed";
+})
+
+peer.on("disconnected", () => {
+    console.log("Connection to network lost");
+    document.querySelector('#status-text').textContent = "Disconnected from network";
+})
+
+peer.on("error", (err) => {
+    console.log("Error: " + err);
+    document.querySelector('#status-text').textContent = "Error occured";
+})
 
 
 peer.on("connection", (conn) => {
@@ -809,16 +911,27 @@ peer.on("connection", (conn) => {
                 break;
 
             case "img":
-                let uint8View = new Uint8Array(data.img);
-                let imgData = ctx2.createImageData(w, h);
-                imgData.data.set(uint8View);
-                ctx2.putImageData(imgData, canvasPosition.x, canvasPosition.y);
+                console.log(data.img)
+                var img = new Image();
+                img.src = data.img;
+                img.onload = function () {
+                    // ctx.drawImage(img, canvasPosition.x, canvasPosition.y);
+                    console.log("received img: " + img);
+                    otherPeerPoints[conn.peer].paths.push({ type: "img", img: img, room: data.room });
+                    redrawCanvas(false);
+                }
                 break;
 
-            case "img2":
-                console.log(data.img)
-                ctx2.drawImage(data.img, canvasPosition.x, canvasPosition.y);
-                break;
+            // case "img2":
+            //     let uint8View = new Uint8Array(data.img);
+            //     let imgData = ctx.createImageData(w, h);
+            //     imgData.data.set(uint8View);
+            //     console.log("received img: " + data.img);
+            //     console.log("received imgData: " + imgData);
+
+            //     ctx.putImageData(imgData, canvasPosition.x, canvasPosition.y);
+            //     ctx.drawImage(imgData, canvasPosition.x, canvasPosition.y);
+            //     break;
 
             case "network":
                 // console.log(myPeerId, "received network:", conn.peer);
@@ -829,6 +942,8 @@ peer.on("connection", (conn) => {
                         addRoom(room);
                     });
                 }
+                console.log(rooms)
+                curRoomName = "No room"
                 changeRoom(rooms[0].name);
                 updateRoomList();
                 let pl = data.peerList;
@@ -836,9 +951,20 @@ peer.on("connection", (conn) => {
                 pl.forEach(peerId => {
                     onOpenConn(peerId);
                 });
+                
 
                 data.paths.forEach(path => {
-                    otherPeerPoints[conn.peer].paths.push(path);
+                    if (path.type === "img") {
+                        let img = new Image();
+                        img.src = path.img;
+                        img.onload = function () {
+                            path.img = img;
+                            otherPeerPoints[conn.peer].paths.push(path);
+                            // TODO: is this correct? only redraw if in same room?
+                        }
+                    } else {
+                        otherPeerPoints[conn.peer].paths.push(path);
+                    }
                     drawPath(path, ctx);
                 });
                 break;
@@ -935,7 +1061,7 @@ function tryReconnecting() {
 
 peer.on("disconnected", () => {
     console.log("disconnected");
-    reconnectTiemout = setTimeout(tryReconnecting, 1000);
+    reconnectTimeout = setTimeout(tryReconnecting, 1000);
 });
 
 
