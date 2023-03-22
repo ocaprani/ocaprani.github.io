@@ -65,16 +65,7 @@ function init() {
     canvas.width = w;
     canvas.height = h;
     
-    // let canvasDiv = document.getElementById('canvas-div');
-    // canvasDiv.width = w;
-    // canvasDiv.height = h;
-    // console.log("canvas size: " + w + "x" + h);
-    // let canvas2 = document.getElementById('canvas2');
-    // ctx2 = canvas2.getContext("2d");
-    // canvas2.width = w;
-    // canvas2.height = h;
-    // canvas2.style.top = canvas.offsetTop + "px";
-    // canvas2.style.left = "0px";
+    menuBarHeight = document.getElementById('top').clientHeight;
 
 
     document.getElementById('showAllCheckbox').checked = true;
@@ -386,7 +377,7 @@ function redrawCanvas(sync) {
         if (pp !== undefined && pp.showInRoom[curRoomName]) {
             pp.paths.forEach(path => {
                 if (path.type === "img" && path.room === curRoomName) {
-                    ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y);
+                    ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight);
                 } else {
                     pathsToDrawn.push(path);
                 }
@@ -397,7 +388,7 @@ function redrawCanvas(sync) {
     if (showMine) {
         pathsDrawn.forEach(path => {
             if (path.type === "img" && path.room === curRoomName) {
-                ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y);
+                ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight);
             } else {
                 pathsToDrawn.push(path);
             }
@@ -414,15 +405,6 @@ function redrawCanvas(sync) {
 
 }
 
-// function redrawCanvas2(x, y) {
-//     currentImg.x += x;
-//     currentImg.y += y;
-//     // console.log("redrawing canvas2", currentImg.x, currentImg.y)
-//     ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-//     // ctx2.drawImage(img, canvasPosition.x, canvasPosition.y);
-//     // ctx2.putImageData(currentImg.img, currentImg.x, currentImg.y);
-
-// }
 
 function drawPath(path, ctx) {
     if (path.room !== curRoomName) {
@@ -430,7 +412,7 @@ function drawPath(path, ctx) {
     }
 
     if (path.type === "img") {
-        ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y);
+        ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight);
         return
     }
 
