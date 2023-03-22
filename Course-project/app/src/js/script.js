@@ -650,6 +650,7 @@ function addRoom(roomToAdd) {
 
 
 function addAllToRoom(peersToAdd, roomName) {
+    console.log("[]", myPeerId, peersToAdd, roomName, rooms)
     let peersInCurRoom = rooms.find(r => r.name === roomName).peers
     peersToAdd.forEach(peer => {
         if (!peersInCurRoom.includes(peer) && peer !== myPeerId) {
@@ -672,7 +673,15 @@ function changeRoom(newRoomName) {
     sendToAllPeers({ msgType: "changeRoom", toRoom: newRoomName, fromRoom: curRoomName });
 
     let newRoom = rooms.find(room => room.name === newRoomName);
-    newRoom.peers.push(myPeerId);
+    if (newRoom === undefined) {
+        console.log("Room not found");
+        return;
+    }
+    // if peer doesn't exist in room, add it
+    if (!newRoom.peers.includes(myPeerId)) {
+        newRoom.peers.push(myPeerId);
+    }
+        
     console.log(newRoom)
     updatePeopleInRoom(newRoom);
 
