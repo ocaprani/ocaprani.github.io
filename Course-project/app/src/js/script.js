@@ -239,7 +239,6 @@ function onOpenConn(peerId) {
             }
             updatePeopleInRoom(curRoom);
 
-            // TODO: Keep drawings?
             delete otherPeerPoints[peerId];
             redrawCanvas(false);
         });
@@ -377,7 +376,7 @@ function redrawCanvas(sync) {
         if (pp !== undefined && pp.showInRoom[curRoomName]) {
             pp.paths.forEach(path => {
                 if (path.type === "img" && path.room === curRoomName) {
-                    ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight);
+                    drawToCtx(path);
                 } else {
                     pathsToDrawn.push(path);
                 }
@@ -388,7 +387,7 @@ function redrawCanvas(sync) {
     if (showMine) {
         pathsDrawn.forEach(path => {
             if (path.type === "img" && path.room === curRoomName) {
-                ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight);
+                drawToCtx(path);
             } else {
                 pathsToDrawn.push(path);
             }
@@ -406,13 +405,22 @@ function redrawCanvas(sync) {
 }
 
 
+function drawToCtx(path) {
+    // If image is bigger than canvas, scale it down
+    let scale = 1;
+    if (path.img.width > canvas.width || path.img.height > canvas.height) {
+        scale = Math.min(canvas.width / path.img.width, (canvas.height - menuBarHeight) / path.img.height);
+    }
+    ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight, path.img.width * scale, path.img.height * scale);
+}
+
 function drawPath(path, ctx) {
     if (path.room !== curRoomName) {
         return;
     }
 
     if (path.type === "img") {
-        ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight);
+        drawToCtx(path);
         return
     }
 
@@ -461,12 +469,6 @@ function canvasClear() {
     redrawCanvas(true);
 }
 
-// function canvasimg_save() {
-//     document.getElementById("canvasimg").style.border = "2px solid";
-//     var dataURL = canvas.toDataURL();
-//     document.getElementById("canvasimg").src = dataURL;
-//     document.getElementById("canvasimg").style.display = "inline";
-// }
 
 function saveImg() {
     var dataURL = canvas.toDataURL();
@@ -540,12 +542,11 @@ function load(e) {
         reader.onload = function (e) {
             console.log("Image loaded");
             var img = new Image();
+            img.src = e.target.result;
             img.onload = function () {
                 pathsDrawn.push({ type: "img", img: img, room: curRoomName });
-                // ctx.drawImage(img, canvasPosition.x, canvasPosition.y);
                 redrawCanvas(false);
             }
-            img.src = e.target.result;
             sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName });
         }
         reader.readAsDataURL(file);
@@ -554,7 +555,7 @@ function load(e) {
         reader.onload = function (e) {
             var data = JSON.parse(e.target.result);
 
-            // conver img data to img
+            // convert img data to img
             data.pathsDrawn.filter(path => path.type === "img").forEach(path => {
                 fromImageData(path.img, 1);
             });
@@ -896,23 +897,11 @@ peer.on("connection", (conn) => {
                 var img = new Image();
                 img.src = data.img;
                 img.onload = function () {
-                    // ctx.drawImage(img, canvasPosition.x, canvasPosition.y);
                     console.log("received img: " + img);
                     otherPeerPoints[conn.peer].paths.push({ type: "img", img: img, room: data.room });
                     redrawCanvas(false);
                 }
                 break;
-
-            // case "img2":
-            //     let uint8View = new Uint8Array(data.img);
-            //     let imgData = ctx.createImageData(w, h);
-            //     imgData.data.set(uint8View);
-            //     console.log("received img: " + data.img);
-            //     console.log("received imgData: " + imgData);
-
-            //     ctx.putImageData(imgData, canvasPosition.x, canvasPosition.y);
-            //     ctx.drawImage(imgData, canvasPosition.x, canvasPosition.y);
-            //     break;
 
             case "network":
                 // console.log(myPeerId, "received network:", conn.peer);
