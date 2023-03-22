@@ -406,12 +406,7 @@ function redrawCanvas(sync) {
 
 
 function drawToCtx(path) {
-    // If image is bigger than canvas, scale it down
-    let scale = 1;
-    if (path.img.width > canvas.width || path.img.height > canvas.height) {
-        scale = Math.min(canvas.width / path.img.width, (canvas.height - menuBarHeight) / path.img.height);
-    }
-    ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight, path.img.width * scale, path.img.height * scale);
+    ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight, path.img.width, path.img.height);
 }
 
 function drawPath(path, ctx) {
@@ -543,6 +538,12 @@ function load(e) {
             console.log("Image loaded");
             var img = new Image();
             img.src = e.target.result;
+            // scale image if it is too big
+            if (img.width > canvas.width || img.height > canvas.height) {
+                let scale = Math.min(canvas.width / img.width, (canvas.height - menuBarHeight) / img.height);
+                img.width *= scale;
+                img.height *= scale;
+            }
             img.onload = function () {
                 pathsDrawn.push({ type: "img", img: img, room: curRoomName });
                 redrawCanvas(false);
