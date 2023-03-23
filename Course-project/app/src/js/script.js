@@ -21,7 +21,7 @@ if (TESTING) {
     }
     document.title = myPeerId;
 } else {
-    myPeerNum = Math.random().toString().slice(2, 5);
+    myPeerNum = Math.random().toString().slice(2, 6);
     myPeerId = "peer" + myPeerNum;
     document.querySelector('#status-text').textContent = myPeerId
 }
@@ -525,13 +525,12 @@ function saveApp() {
 function fromImageData(imgPath, whereToPush) {
     var img = new Image();
     img.src = imgPath.img;
-    img.width = img.width * imgPath.scale;
-    img.height = img.height * imgPath.scale;
     img.onload = function () {
         if (whereToPush === 1) {
-            pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: imgPath.scale });
+            pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: 1 });
+            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: 1 });
         } else if (whereToPush === 2) {
-            pathsUndone.push([{ type: "img", img: img, room: curRoomName, scale: imgPath.scale }]);
+            pathsUndone.push([{ type: "img", img: img, room: curRoomName, scale: 1 }]);
         }
         redrawCanvas(false);
     }
@@ -577,6 +576,10 @@ function load(e) {
             let po = data.otherPeerPoints.filter(path => path.type !== "img");
             po.forEach(path => path.room = curRoomName);
             pathsDrawn = pathsDrawn.concat(pd, po);
+
+            sendToAllPeers({ msgType: "paths", paths: pd });
+            sendToAllPeers({ msgType: "paths", paths: po });
+
 
             let pu = data.pathsUndone.filter(paths => paths[0].type !== "img");
             pu.forEach(paths => paths[0].room = curRoomName);
@@ -921,10 +924,10 @@ peer.on("connection", (conn) => {
                 break;
 
             case "img":
-                console.log(data.img)
                 var img = new Image();
                 img.src = data.img;
-                scaleImage(img);
+                img.width = data.scale * img.width;
+                img.height = data.scale * img.height;
                 img.onload = function () {
                     console.log("received img: " + img);
                     otherPeerPoints[conn.peer].paths.push({ type: "img", img: img, room: data.room, scale: data.scale });
@@ -959,7 +962,6 @@ peer.on("connection", (conn) => {
                         img.onload = function () {
                             path.img = img;
                             otherPeerPoints[conn.peer].paths.push(path);
-                            // TODO: is this correct? only redraw if in same room?
                         }
                     } else {
                         otherPeerPoints[conn.peer].paths.push(path);
