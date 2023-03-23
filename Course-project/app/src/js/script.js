@@ -547,6 +547,7 @@ function load(e) {
             img.src = e.target.result;
             // scale image if it is too big
             if (img.width > canvas.width || img.height > canvas.height) {
+                console.log("Image too big" + img.width + " x " + img.height + ", " + canvas.width + " x " + canvas.height)
                 let scale = Math.min(canvas.width / img.width, (canvas.height - menuBarHeight) / img.height);
                 img.width *= scale;
                 img.height *= scale;
