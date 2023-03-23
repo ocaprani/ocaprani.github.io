@@ -412,7 +412,6 @@ function redrawCanvas(sync) {
 
 
 function drawToCtx(path) {
-    console.log(path)
     ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight, path.img.width, path.img.height);
 }
 
@@ -454,7 +453,7 @@ function canvasRedo() {
         pathsUndone.pop().forEach(path => {
             pathsDrawn.push(path);
             if (path.type === "img") {
-                sendToAllPeers({ msgType: "img", img: path.img.src, room: path.room });
+                sendToAllPeers({ msgType: "img", img: path.img.src, room: path.room, scale: path.scale });
             } else {
                 sendToAllPeers({ msgType: "paths", paths: [path] });
             }
@@ -484,7 +483,7 @@ function saveImg() {
 function extractImageData(img) {
     return img.map(path => {
         if (path.type === "img") {
-            return { type: "img", img: path.img.src, room: path.room };
+            return { type: "img", img: path.img.src, room: path.room, scale: path.scale };
         } else {
             return path;
         }
@@ -523,14 +522,16 @@ function saveApp() {
         .catch(console.error);
 }
 
-function fromImageData(imgData, whereToPush, connPeer) {
+function fromImageData(imgPath, whereToPush) {
     var img = new Image();
-    img.src = imgData;
+    img.src = imgPath.img;
+    img.width = img.width * imgPath.scale;
+    img.height = img.height * imgPath.scale;
     img.onload = function () {
         if (whereToPush === 1) {
-            pathsDrawn.push({ type: "img", img: img, room: curRoomName });
+            pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: imgPath.scale });
         } else if (whereToPush === 2) {
-            pathsUndone.push([{ type: "img", img: img, room: curRoomName }]);
+            pathsUndone.push([{ type: "img", img: img, room: curRoomName, scale: imgPath.scale }]);
         }
         redrawCanvas(false);
     }
@@ -545,18 +546,12 @@ function load(e) {
             console.log("Image loaded");
             var img = new Image();
             img.src = e.target.result;
-            // scale image if it is too big
-            if (img.width > canvas.width || img.height > canvas.height) {
-                console.log("Image too big" + img.width + " x " + img.height + ", " + canvas.width + " x " + canvas.height)
-                let scale = Math.min(canvas.width / img.width, (canvas.height - menuBarHeight) / img.height);
-                img.width *= scale;
-                img.height *= scale;
-            }
+            let scale = scaleImage(img);
             img.onload = function () {
-                pathsDrawn.push({ type: "img", img: img, room: curRoomName });
+                pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: scale });
                 redrawCanvas(false);
             }
-            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName });
+            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: scale });
         }
         reader.readAsDataURL(file);
     } else if (file.type == "application/json" || file.type == "text/json") {
@@ -566,14 +561,14 @@ function load(e) {
 
             // convert img data to img
             data.pathsDrawn.filter(path => path.type === "img").forEach(path => {
-                fromImageData(path.img, 1);
+                fromImageData(path, 1);
             });
             data.otherPeerPoints.filter(path => path.type === "img").forEach(path => {
-                fromImageData(path.img, 1);
+                fromImageData(path, 1);
             });
             data.pathsUndone.forEach(paths => {
                 paths.filter(path => path.type === "img").forEach(path => {
-                    fromImageData(path.img, 2);
+                    fromImageData(path, 2);
                 });
             });
 
@@ -594,6 +589,17 @@ function load(e) {
     } else {
         alert("Invalid file type");
     }
+}
+
+function scaleImage(img) {
+    let scale = 1;
+    if (img.width > canvas.width || img.height > canvas.height) {
+        console.log("Image too big, " + img.width + " x " + img.height + ", " + canvas.width + " x " + canvas.height);
+        scale = Math.min(canvas.width / img.width, (canvas.height - menuBarHeight) / img.height);
+        img.width *= scale;
+        img.height *= scale;
+    }
+    return scale;
 }
 
 function findxy(res, e) {
@@ -918,9 +924,10 @@ peer.on("connection", (conn) => {
                 console.log(data.img)
                 var img = new Image();
                 img.src = data.img;
+                scaleImage(img);
                 img.onload = function () {
                     console.log("received img: " + img);
-                    otherPeerPoints[conn.peer].paths.push({ type: "img", img: img, room: data.room });
+                    otherPeerPoints[conn.peer].paths.push({ type: "img", img: img, room: data.room, scale: data.scale });
                     redrawCanvas(false);
                 }
                 break;
