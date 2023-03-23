@@ -43,9 +43,9 @@ let brushSettings = { size: 50, color: "black" };
 let pathsDrawn = [];
 let pathsUndone = [];
 let points = [];
-let showMine = true;
 let otherPeerPoints = {};
 let rooms = [{ name: "Private room", owner: myPeerId, peers: [myPeerId] }];
+let roomPermissions = { "Private room": true };
 let curRoomName = rooms[0].name;
 
 var mouse = { x: 0, y: 0 };
@@ -224,6 +224,12 @@ function onOpenConn(peerId) {
     if (!peerIdList.includes(peerId)) {
         let newConn = peer.connect(peerId);
 
+        if (newConn === undefined) {
+            console.log("Connection failed");
+            document.getElementById('status-text').textContent = "Error connecting to " + peerId;
+            return;
+        }
+
         newConn.on("error", (err) => {
             console.log(err);
             document.getElementById('status-text').textContent = "Error connecting to " + peerId;
@@ -384,15 +390,15 @@ function redrawCanvas(sync) {
         }
     });
 
-    if (showMine) {
-        pathsDrawn.forEach(path => {
-            if (path.type === "img" && path.room === curRoomName) {
-                drawToCtx(path);
-            } else {
-                pathsToDrawn.push(path);
-            }
-        });
-    }
+    // if (roomPermissions[curRoomName]) {
+    // }
+    pathsDrawn.forEach(path => {
+        if (path.type === "img" && path.room === curRoomName) {
+            drawToCtx(path);
+        } else {
+            pathsToDrawn.push(path);
+        }
+    });
 
     pathsToDrawn.forEach(path => {
         drawPath(path, ctx);
@@ -406,6 +412,7 @@ function redrawCanvas(sync) {
 
 
 function drawToCtx(path) {
+    console.log(path)
     ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight, path.img.width, path.img.height);
 }
 
@@ -643,6 +650,7 @@ function addRoom(roomToAdd) {
         peerConnections.forEach(conn => {
             otherPeerPoints[conn.peer].showInRoom[roomToAdd.name] = true;
         });
+        roomPermissions[roomToAdd.name] = true;
     } else if (roomToAdd.name === curRoomName) {
         addAllToRoom(roomToAdd.peers, curRoomName);
     }
@@ -650,7 +658,6 @@ function addRoom(roomToAdd) {
 
 
 function addAllToRoom(peersToAdd, roomName) {
-    console.log("[]", myPeerId, peersToAdd, roomName, rooms)
     let peersInCurRoom = rooms.find(r => r.name === roomName).peers
     peersToAdd.forEach(peer => {
         if (!peersInCurRoom.includes(peer) && peer !== myPeerId) {
@@ -681,9 +688,6 @@ function changeRoom(newRoomName) {
     if (!newRoom.peers.includes(myPeerId)) {
         newRoom.peers.push(myPeerId);
     }
-        
-    console.log(newRoom)
-    updatePeopleInRoom(newRoom);
 
     let curRoomObj = rooms.find(room => room.name === curRoomName);
     if (curRoomObj !== undefined) {
@@ -691,19 +695,24 @@ function changeRoom(newRoomName) {
     }
 
     curRoomName = newRoomName;
-    redrawCanvas(false);
+    updatePeopleInRoom(newRoom);
     updateRoomList();
-    
+    redrawCanvas(false);
 }
 
 
 function updatePeopleInRoom(newRoom) {
     removeAllFromPeerList();
     newRoom.peers.forEach(peer => {
-        if (peer !== myPeerId) {
+        if (peer === myPeerId) {
+            // document.getElementById('cb0').checked = 
+            document.getElementById('cb0').checked = roomPermissions[newRoom.name];
+        } else {
             addToPeerList(peer);
         }
     });
+
+    
 
     let disableableCbs = document.getElementsByClassName('disableable');
     let setCursorTo = newRoom.owner === myPeerId ? "default" : "not-allowed";
@@ -712,7 +721,7 @@ function updatePeopleInRoom(newRoom) {
     }
 
     if (newRoom.owner !== myPeerId) {
-        document.getElementById('showAllCheckbox').style.display = "none";
+        document.getElementById('showAllCheckbox').style.visibility = "hidden";
     } else {
         document.getElementById('showAllCheckbox').style.display = "inline-block";
     }
@@ -739,6 +748,7 @@ function updateRoomList() {
 }
 
 
+// called from HTML
 function allPeerCheckbox(el) {
     let havePermission = rooms.filter(room => room.name === curRoomName)[0].owner === myPeerId;
     if (havePermission) {
@@ -753,12 +763,13 @@ function allPeerCheckbox(el) {
 }
 
 
+// called from HTML
 function peerCheckbox(el) {
     let havePermission = rooms.filter(room => room.name === curRoomName)[0].owner === myPeerId;
     if (havePermission) {
         let peerName = "";
         if (el.id === "cb0") {
-            showMine = el.checked;
+            roomPermissions[curRoomName] = el.checked;
             peerName = myPeerId;
         } else {
             peerName = el.parentElement.children[1].textContent;
@@ -922,7 +933,7 @@ peer.on("connection", (conn) => {
                         addRoom(room);
                     });
                 }
-                console.log(rooms)
+                // console.log(rooms)
                 curRoomName = "No room"
                 changeRoom(rooms[0].name);
                 updateRoomList();
@@ -966,7 +977,7 @@ peer.on("connection", (conn) => {
 
             case "showPeer":
                 if (data.peer === myPeerId) {
-                    showMine = data.show;
+                    roomPermissions[data.room] = data.show;
                     document.getElementById('cb0').checked = data.show;
                 } else {
                     otherPeerPoints[data.peer].showInRoom[data.room] = data.show;
