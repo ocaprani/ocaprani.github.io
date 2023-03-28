@@ -52,7 +52,8 @@ var mouse = { x: 0, y: 0 };
 var previous = { x: 0, y: 0 };
 var canvasPosition = { x: 0, y: 0 };
 
-var currentImg = { img: null, x: 0, y: 0 };
+var movingImg = null;
+var movingImgIndex = null;
 
 let colorEl = document.getElementsByClassName('color');
 
@@ -144,7 +145,8 @@ function init() {
 function onMouseUp(e) {
 
     if (e.button === 0 || e.type == "touchend" || e.type == "touchcancel") {
-        
+        document.getElementById("canvas").style.cursor = "default";
+        movingImg = null;
         if (!isDrawing) return;
 
         if (e.touches != undefined && e.touches.length > 0) {
@@ -158,6 +160,7 @@ function onMouseUp(e) {
         sendToAllPeers({ msgType: "paths", paths: [path] });
     } else if (e.button === 2) {
         isDragging = false;
+        movingImg = null;
         document.getElementById("canvas").style.cursor = "default";
     }
 }
@@ -192,7 +195,14 @@ function onMouseMove(e) {
         canvasPosition.x += mouse.x - previous.x;
         canvasPosition.y += mouse.y - previous.y;
         redrawCanvas();
-        // redrawCanvas2(mouse.x - previous.x, mouse.y - previous.y);
+
+    } else if (movingImg != null) {
+        previous = { x: mouse.x, y: mouse.y };
+        mouse = getMousePos(e);
+        movingImg.x += mouse.x - previous.x;
+        movingImg.y += mouse.y - previous.y;
+        sendToAllPeers({ msgType: "moveImg", index: movingImgIndex, x: movingImg.x, y: movingImg.y, room: curRoomName });
+        redrawCanvas();
     }
 }
 
@@ -211,9 +221,37 @@ function onMouseDown(e) {
             points.push({ x: mouse.x - canvasPosition.x, y: mouse.y - canvasPosition.y });
         }
     } else if (e.button == 2) {
-        isDragging = true;
-        document.getElementById("canvas").style.cursor = "move";
-        // currentImg = { img: ctx2.getImageData(0, 0, canvas2.width, canvas2.height), x: 0, y: 0 };
+        // find image under mouse
+        movingImg = null;
+        movingImgIndex = -1;
+        pathsDrawn.forEach((path) => {
+            if (path.type == "img" && path.room == curRoomName) {
+                movingImgIndex++;
+                // console.log(path.img.width, path.img.height);
+                // console.log(mouse);
+                if (
+                 path.x <= mouse.x - canvasPosition.x &&
+                 path.x + path.img.width >= mouse.x - canvasPosition.x &&
+                 path.y <= mouse.y - canvasPosition.y &&
+                 path.y + path.img.height >= mouse.y - canvasPosition.y) {
+                    movingImg = path;
+                }
+            }
+        });
+        console.log("Selected image:", movingImg);
+        
+        // only drag if no image under cursor
+        if (movingImg == null) {
+            isDragging = true;
+            document.getElementById("canvas").style.cursor = "move";
+            movingImgIndex = null;
+        } else {
+            document.getElementById("canvas").style.cursor = "grabbing";            
+        }
+
+
+
+        
     }
 
 }
@@ -412,7 +450,7 @@ function redrawCanvas(sync) {
 
 
 function drawToCtx(path) {
-    ctx.drawImage(path.img, canvasPosition.x, canvasPosition.y + menuBarHeight, path.img.width, path.img.height);
+    ctx.drawImage(path.img, canvasPosition.x + path.x, canvasPosition.y + path.y, path.img.width, path.img.height);
 }
 
 function drawPath(path, ctx) {
@@ -453,7 +491,7 @@ function canvasRedo() {
         pathsUndone.pop().forEach(path => {
             pathsDrawn.push(path);
             if (path.type === "img") {
-                sendToAllPeers({ msgType: "img", img: path.img.src, room: path.room, scale: path.scale });
+                sendToAllPeers({ msgType: "img", img: path.img.src, room: path.room, scale: path.scale, x: path.x, y: path.y });
             } else {
                 sendToAllPeers({ msgType: "paths", paths: [path] });
             }
@@ -483,7 +521,7 @@ function saveImg() {
 function extractImageData(img) {
     return img.map(path => {
         if (path.type === "img") {
-            return { type: "img", img: path.img.src, room: path.room, scale: path.scale };
+            return { type: "img", img: path.img.src, room: path.room, scale: path.scale, x: path.x, y: path.y };
         } else {
             return path;
         }
@@ -527,10 +565,10 @@ function fromImageData(imgPath, whereToPush) {
     img.src = imgPath.img;
     img.onload = function () {
         if (whereToPush === 1) {
-            pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: 1 });
-            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: 1 });
+            pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: 1, x: imgPath.x, y: imgPath.y });
+            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: 1, x: imgPath.x, y: imgPath.y });
         } else if (whereToPush === 2) {
-            pathsUndone.push([{ type: "img", img: img, room: curRoomName, scale: 1 }]);
+            pathsUndone.push([{ type: "img", img: img, room: curRoomName, scale: 1, x: imgPath.x, y: imgPath.y }]);
         }
         redrawCanvas(false);
     }
@@ -547,10 +585,11 @@ function load(e) {
             img.src = e.target.result;
             let scale = scaleImage(img);
             img.onload = function () {
-                pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: scale });
+                pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: scale, 
+                                  x: -canvasPosition.x, y: -canvasPosition.y + menuBarHeight });
                 redrawCanvas(false);
             }
-            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: scale });
+            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: scale, x: 0, y: menuBarHeight });
         }
         reader.readAsDataURL(file);
     } else if (file.type == "application/json" || file.type == "text/json") {
@@ -930,7 +969,19 @@ peer.on("connection", (conn) => {
                 img.height = data.scale * img.height;
                 img.onload = function () {
                     console.log("received img: " + img);
-                    otherPeerPoints[conn.peer].paths.push({ type: "img", img: img, room: data.room, scale: data.scale });
+                    otherPeerPoints[conn.peer].paths.push({ type: "img", img: img, room: data.room, 
+                                                            scale: data.scale, x: data.x, y: data.y });
+                    redrawCanvas(false);
+                }
+                break;
+
+            case "moveImg":
+                let imgIndex = otherPeerPoints[conn.peer].paths.findIndex(path => { 
+                    return path.type === "img" && path.room === data.room
+                });
+                if (imgIndex !== -1) {
+                    otherPeerPoints[conn.peer].paths[imgIndex].x = data.x;
+                    otherPeerPoints[conn.peer].paths[imgIndex].y = data.y;
                     redrawCanvas(false);
                 }
                 break;
@@ -959,14 +1010,18 @@ peer.on("connection", (conn) => {
                     if (path.type === "img") {
                         let img = new Image();
                         img.src = path.img;
+                        img.width = path.scale * img.width;
+                        img.height = path.scale * img.height;
+                        path.img = img;
+                        otherPeerPoints[conn.peer].paths.push(path);
                         img.onload = function () {
-                            path.img = img;
-                            otherPeerPoints[conn.peer].paths.push(path);
+                            drawPath(path, ctx);
+                            redrawCanvas(false);
                         }
                     } else {
                         otherPeerPoints[conn.peer].paths.push(path);
+                        drawPath(path, ctx);
                     }
-                    drawPath(path, ctx);
                 });
                 break;
 
