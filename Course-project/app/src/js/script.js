@@ -23,9 +23,9 @@ if (TESTING) {
 } else {
     myPeerNum = Math.random().toString().slice(2, 6);
     myPeerId = "peer" + myPeerNum;
-    document.querySelector('#status-text').textContent = myPeerId
+    // document.querySelector('#status-text').textContent = myPeerId
 }
-document.getElementById('myPeerText').textContent = "Your peer id is: " + myPeerId;
+document.getElementById('myPeerText').textContent = "Dit person ID: " + myPeerId;
 
 
 
@@ -44,8 +44,8 @@ let pathsDrawn = [];
 let pathsUndone = [];
 let points = [];
 let otherPeerPoints = {};
-let rooms = [{ name: "Private room", owner: myPeerId, peers: [myPeerId] }];
-let roomPermissions = { "Private room": true };
+let rooms = [{ name: "Privat tegning", owner: myPeerId, peers: [myPeerId] }];
+let roomPermissions = { "Privat tegning": true };
 let curRoomName = rooms[0].name;
 
 var mouse = { x: 0, y: 0 };
@@ -71,12 +71,12 @@ function init() {
 
     document.getElementById('showAllCheckbox').checked = true;
     document.getElementById('cb0').checked = true;
-    document.getElementsByClassName('peerName')[0].textContent = myPeerId + " (You)"
+    document.getElementsByClassName('peerName')[0].textContent = myPeerId + " (Dig)"
 
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    colorEl[myPeerNum % colorEl.length].click();
+    colorEl[myPeerNum % (colorEl.length-1) + 1].click();
 
 
 
@@ -136,6 +136,13 @@ function init() {
         if (e.key === 'Enter') {
             e.preventDefault();
             document.querySelector('#connect-btn').click();
+        }
+    });
+
+    document.querySelector('#room-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.querySelector('#room-button').click();
         }
     });
 
@@ -264,18 +271,18 @@ function onOpenConn(peerId) {
 
         if (newConn === undefined) {
             console.log("Connection failed");
-            document.getElementById('status-text').textContent = "Error connecting to " + peerId;
+            document.getElementById('status-text').textContent = "Fejl ved forbindelse til " + peerId;
             return;
         }
 
         newConn.on("error", (err) => {
             console.log(err);
-            document.getElementById('status-text').textContent = "Error connecting to " + peerId;
+            document.getElementById('status-text').textContent = "Fejl ved forbindelse til " + peerId;
         });
 
         newConn.on("close", () => {
             console.log("Connection closed");
-            document.getElementById('status-text').textContent = "Disconnected from " + peerId;
+            document.getElementById('status-text').textContent = "Afbrudt forbindelse til " + peerId;
             peerConnections = peerConnections.filter((conn) => conn.peer !== peerId);
             let curRoom = rooms.find(room => room.name === curRoomName);
             if (curRoom !== undefined) {
@@ -290,7 +297,7 @@ function onOpenConn(peerId) {
         newConn.on("open", () => {
             peerConnections.push(newConn);
             newConn.send({ msgType: "network", peerList: peerIdList, paths: extractImageData(pathsDrawn), rooms: rooms });
-            document.getElementById('status-text').textContent = "Connected to " + newConn.peer;
+            document.getElementById('status-text').textContent = "Forbindelse oprettet til " + newConn.peer;
 
             let showPeerInRoom = {};
             rooms.forEach(room => {
@@ -347,22 +354,25 @@ function setBrush(obj) {
         colorEl[i].style.height = "30px";
         colorEl[i].style.width = "30px";
     }
-    document.getElementById('eraser').style.border = "2px solid black";
 
-    if (obj.id === "eraser") {
-        let cDiv = document.getElementById("canvas-div")
-        let color = window.getComputedStyle(cDiv).backgroundColor;
-        obj.style.border = "4px solid black";
-        brushSettings = { color: color, size: 50 };
-        return
-    } else {
-        obj.style.border = "4px solid black";
-        obj.style.height = "40px";
-        obj.style.width = "40px";
-    }
+    // document.getElementById('eraser').style.border = "2px solid black";
 
-    // ctx.strokeStyle = obj.style.background;
-    // ctx.lineWidth = 4;
+    // if (obj.id === "eraser") {
+    //     let cDiv = document.getElementById("canvas-div")
+    //     let color = window.getComputedStyle(cDiv).backgroundColor;
+    //     obj.style.border = "4px solid black";
+    //     brushSettings = { color: color, size: 50 };
+    //     return
+    // } else {
+    //     obj.style.border = "4px solid black";
+    //     obj.style.height = "40px";
+    //     obj.style.width = "40px";
+    // }
+
+    obj.style.border = "4px solid black";
+    obj.style.height = "40px";
+    obj.style.width = "40px";
+
     brushSettings = { color: obj.style.background, size: 4 };
 }
 
@@ -644,6 +654,7 @@ function scaleImage(img) {
     return scale;
 }
 
+// Remove??
 function findxy(res, e) {
     if (res == 'up' || res == "out") {
         isDrawing = false;
@@ -686,9 +697,22 @@ function showPeerDrawings(element) {
 
 
 function createRoom() {
-    let newRoom = { name: "Room" + (rooms.length + 1), owner: myPeerId, peers: [] };
+    let newRoomName = document.getElementById("room-input").value;
+    if (newRoomName === "") {
+        alert("Skriv et navn på din nye tegning");
+        return;
+    }
+    if (rooms.map(r => { return r.name }).includes(newRoomName)) {
+        alert("Der findes allerede en tegning med dette navn, vælg et andet navn");
+        document.getElementById("room-input").value = "";
+        return;
+    }
+
+    let newRoom = { name: newRoomName, owner: myPeerId, peers: [] };
+
     addRoom(newRoom);
     sendToAllPeers({ msgType: "newRoom", room: newRoom });
+    document.getElementById("room-input").value = "";
     updateRoomList()
 }
 
@@ -848,23 +872,23 @@ init()
 
 peer.on("close", () => {
     console.log("Connection to network was closed");
-    document.querySelector('#status-text').textContent = "Connection to network was closed";
+    document.querySelector('#status-text').textContent = "Mistet forbindelse til netværket";
 })
 
 peer.on("disconnected", () => {
     console.log("Connection to network lost");
-    document.querySelector('#status-text').textContent = "Disconnected from network";
+    document.querySelector('#status-text').textContent = "Forbindelse til netværket blev lukket";
 })
 
 peer.on("error", (err) => {
     console.log("Error: " + err);
-    document.querySelector('#status-text').textContent = "Error occured";
+    document.querySelector('#status-text').textContent = "Fejl under oprettelse af forbindelse";
 })
 
 
 peer.on("connection", (conn) => {
     console.log("connection made to " + conn.peer);
-    document.querySelector('#status-text').textContent = "Connected to " + conn.peer;
+    document.querySelector('#status-text').textContent = "Oprettet forbindelse til " + conn.peer;
     document.getElementById('cb0').checked = true;
     let showPeerInRoom = {};
     rooms.forEach(room => {
@@ -989,14 +1013,14 @@ peer.on("connection", (conn) => {
             case "network":
                 // console.log(myPeerId, "received network:", conn.peer);
                 if (data.peerList.length === 0 && peerConnections.length === 0) {
-                    addRoom({ name: "Main room", owner: myPeerId, peers: [] })
+                    addRoom({ name: "Tegning", owner: myPeerId, peers: [] })
                 } else if (data.rooms.length > 0) {
                     data.rooms.forEach(room => {
                         addRoom(room);
                     });
                 }
                 // console.log(rooms)
-                curRoomName = "No room"
+                curRoomName = "Ingen valgt"
                 changeRoom(rooms[0].name);
                 updateRoomList();
                 let pl = data.peerList;

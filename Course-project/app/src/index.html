@@ -13,42 +13,34 @@
 
     <div id="top">
         <div id="color_picker">
-            <!-- <canvas id="canvas" width="400" height="400" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas> -->
             <div id="color-div">
-                <div>Choose Color</div>
+                <div>Vælg farve</div>
                 <div style="background:transparent;" id="hidden_spacer"></div>
+                <div style="background:white;" class="color" id="color_white" onclick="setBrush(this)"></div>
                 <div style="background:black;" class="color" id="color_black" onclick="setBrush(this)"></div>
                 <div style="background:green;" class="color" id="color_green" onclick="setBrush(this)"></div>
                 <div style="background:blue;" class="color" id="color_blue" onclick="setBrush(this)"></div>
                 <div style="background:red;" class="color" id="color_red" onclick="setBrush(this)"></div>
                 <div style="background:yellow;" class="color" id="color_yellow" onclick="setBrush(this)"></div>
                 <div style="background:purple;" class="color" id="color_orange" onclick="setBrush(this)"></div>
-                <div style="background:orange;" class="color" id="color_orange" onclick="setBrush(this)"></div>
-                <!-- <div style="background:pink;" class="color" id="color_orange" onclick="setBrush(this)"></div> -->
             </div>
             
             <div id="colpbottom">
-                <!-- <div id="checkbox_div">
-                    <label for="checkbox">Draw peer's</label>
-                    <input type="checkbox" id="checkbox" onclick="showPeerDrawings(this)" checked>
-                </div> -->
                 
-                <div id="eraser_div">
+                <!-- <div id="eraser_div">
                     <div style="margin-left: 14px;">Eraser</div>
                     <div style="background:white; cursor: pointer;" id="eraser" onclick="setBrush(this)"></div>
-                </div>
-                <!-- <input type="checkbox" checked="" id="fill_ch" onclick="showPeerDrawings(this)"> -->
+                </div> -->
                 <div id="button_div">
-                    <input type="button" value="Save image" id="save_button" class="buttons" onclick="saveImg()">
-                    <input type="button" value="Save file" id="save_button" class="buttons" onclick="saveJSON()">
-                    <input type="button" value="Save app" id="save_button" class="buttons" onclick="saveApp()">
-                    <input type="button" value="Load" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();" />
-                    <input type="file" style="display: none;" id="load_element" onchange="load(event)">
+                    <input type="button" value="Gem tegning" id="save_button" class="buttons" onclick="saveImg()">
+                    <input type="button" value="Gem tegnedata" id="save_button" class="buttons" onclick="saveJSON()">
+                    <input type="button" value="Indlæs fil (jpg, png, json)" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();" />
                     <br>
-                    <input type="button" value="Home" id="home_button" class="buttons" onclick="canvasHome()">
-                    <input type="button" value="Clear" id="clear_button" class="buttons" onclick="canvasClear()">
-                    <input type="button" value="Undo" id="undo_button" class="buttons" onclick="canvasUndo()">
-                    <input type="button" value="Redo" id="redo_button" class="buttons" onclick="canvasRedo()">
+                    <input type="button" value="Centrer" id="home_button" class="buttons" onclick="canvasHome()">
+                    <input type="file" style="display: none;" id="load_element" onchange="load(event)">
+                    <input type="button" value="Slet egne bidrag" id="clear_button" class="buttons" onclick="canvasClear()">
+                    <input type="button" value="Fortryd" id="undo_button" class="buttons" onclick="canvasUndo()">
+                    <input type="button" value="Annuller fortryd" id="redo_button" class="buttons" onclick="canvasRedo()">
                 </div>
 
                 
@@ -56,37 +48,36 @@
         </div>
 
         <div id="room-component">
-            <!-- <h2 id="curRoomText" style="margin: 0px 0px 10px 20px; display:flex; justify-content: center;">In room: Private room</h2> -->
             <div style="display: inline-flex;">
                 <div id="peers_in_room">
-                    <h3 style="margin-bottom: 8px; margin-top: 0px;">People in this room</h3>
-                    <!-- <p id="peerList-text">You</p> -->
-                    <p id="peerInfoText"><input type="checkbox" class="disableable" id="showAllCheckbox" onclick="allPeerCheckbox(this)"><label id="showText" for="showAllCheckbox">Show</label> | Name</p>
+                    <h3 style="margin-bottom: 8px; margin-top: 0px;">Personer som tegner</h3>
+                    <p id="peerInfoText"><input type="checkbox" class="disableable" id="showAllCheckbox" onclick="allPeerCheckbox(this)"><label id="showText" for="showAllCheckbox">Deltager</label> | Personer</p>
                     <ul class="itemlist">
                         <li class="peerItem">
-                            <input id="cb0" type="checkbox" class="peerCheckbox disableable" onclick="peerCheckbox(this)">|  <label for="cb0" class="peerName" style="margin: 0px;">You</label>
+                            <input id="cb0" type="checkbox" class="peerCheckbox disableable" onclick="peerCheckbox(this)">|  <label for="cb0" class="peerName" style="margin: 0px;">Dig</label>
                         </li>
                     </ul>
                 </div>
                 <div>
-                    <h3 style="margin-bottom: 5px; margin-top: 0px;">Rooms</h3>
-                    <!-- <p id="roomList-text">Private room</p> -->
+                    <h3 style="margin-bottom: 5px; margin-top: 0px;">Tegninger</h3>
                     <ul class="itemlist" id="roomList">
-                        <li class="roomItem active" onclick="changeRoom(this.textContent)">Private room</li>
+                        <li class="roomItem active" style="overflow: hidden; white-space:nowrap; text-overflow:ellipsis;" onclick="changeRoom(this.textContent)">Privat tegning</li>
                     </ul>
-                    <input type="button" value="New room" style="margin-bottom: 5px; margin-top: 5px;" onclick="createRoom()">
+                    <input type="text" name="Room" placeholder="Skole" id="room-input" style="width: 85px; margin-left: 10px;">
+                    <br>
+                    <input type="button" value="Ny tegning" id="room-button" style="margin-bottom: 15px; margin-top: 5px; margin-left: 20px;" onclick="createRoom()">
                 </div>
             </div>
         </div>
         
         <div id="connect-component">
-            <h2 id="myPeerText" style="margin-top: 0px;">Your peer id is: </h2>
-            <h3 id="connect-text">Connect</h3>
+            <h2 id="myPeerText" style="margin-top: 0px;"></h2>
+            <h3 id="connect-text">Forbind til person</h3>
             <div style="display: flex;">
-                <input type="text" name="Connection" id="connect-input" style="width: 75px; margin-right: 5px;">
-                <button id="connect-btn">Connect</button>
+                <input type="text" name="Connection" placeholder="peer1234" id="connect-input" style="width: 75px; margin-right: 5px;">
+                <button id="connect-btn">Forbind</button>
             </div>
-            <p id="status-text">Type a peer id to connect</p>
+            <p id="status-text">Skriv et person ID for at forbinde</p>
             
         </div>
         
@@ -94,8 +85,6 @@
     
     <div id="canvas-div">
         <canvas id="canvas"></canvas>
-        <!-- <img id="canvas" style="position: absolute; background-color: transparent; z-index: 2;" style="display:none;"> -->
-        <!-- <canvas style="position: absolute; background-color: transparent; z-index: 2;" id="canvas2"></canvas> -->
     </div>
 
 
