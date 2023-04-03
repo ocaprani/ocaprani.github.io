@@ -20,10 +20,13 @@ if (TESTING) {
         document.querySelector('#connect-input').value = "peer0";
     }
     document.title = myPeerId;
+    let debugNumber = 1;
+    document.querySelector("#status-text").innerHTML = "Debug: " + debugNumber;
 } else {
     myPeerNum = Math.random().toString().slice(2, 6);
     myPeerId = "peer" + myPeerNum;
     // document.querySelector('#status-text').textContent = myPeerId
+    
 }
 document.getElementById('myPeerText').textContent = "Dit person ID: " + myPeerId;
 
@@ -162,7 +165,7 @@ function onMouseUp(e) {
 
         isDrawing = false;
         // Adding the path to the array or the paths
-        var path = { points: [points], color: ctx.strokeStyle, width: ctx.lineWidth, room: curRoomName, type: "path" };
+        var path = { points: [points], color: brushSettings.color, width: brushSettings.size, room: curRoomName, type: "path" };
         pathsDrawn.push(path);
         sendToAllPeers({ msgType: "paths", paths: [path] });
     } else if (e.button === 2) {
@@ -191,9 +194,10 @@ function onMouseMove(e) {
         ctx.moveTo(previous.x, previous.y);
         ctx.lineTo(mouse.x, mouse.y);
         ctx.stroke();
+        ctx.closePath();
         sendToAllPeers({
             msgType: "draw", newPoints: current_adj, prevPoints: previous_adjusted,
-            color: ctx.strokeStyle, width: ctx.lineWidth, room: curRoomName,
+            color: brushSettings.color, width: brushSettings.size, room: curRoomName,
             time: Date.now(), type: "path"
         });
     } else if (isDragging) {
@@ -245,7 +249,7 @@ function onMouseDown(e) {
                 }
             }
         });
-        console.log("Selected image:", movingImg);
+        // console.log("Selected image:", movingImg);
         
         // only drag if no image under cursor
         if (movingImg == null) {
@@ -477,14 +481,15 @@ function drawPath(path, ctx) {
 
     ctx.strokeStyle = path.color;
     ctx.lineWidth = path.width;
+    ctx.beginPath();
     path.points.forEach(p => {
-        ctx.beginPath();
         ctx.moveTo(p[0].x + canvasPosition.x, p[0].y + canvasPosition.y);
         for (let i = 1; i < p.length; i++) {
             ctx.lineTo(p[i].x + canvasPosition.x, p[i].y + canvasPosition.y);
         }
         ctx.stroke();
     });
+    ctx.closePath();
 }
 
 
@@ -522,7 +527,7 @@ function canvasClear() {
 function saveImg() {
     var dataURL = canvas.toDataURL();
     var link = document.createElement('a');
-    link.download = 'drawing.png';
+    link.download = 'Tegning.png';
     link.href = dataURL;
     link.click();
 }
@@ -552,7 +557,7 @@ function saveJSON() {
         otherPeerPoints: extractImageData(listOfopp).filter(path => path.room === curRoomName)
     });
     let link = document.createElement('a');
-    link.download = 'drawing.json';
+    link.download = 'TegneData.json';
     link.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(data);
     link.click();
 }
@@ -909,23 +914,6 @@ peer.on("connection", (conn) => {
     // peerConnections.push(conn);
     conn.on("data", (data) => {
         // console.log(data.msgType);
-        // if (data.msgType === "msg") {
-        //     console.log("received: " + data);
-        // } else if (data.msgType === "img") {
-        //     var uint8View = new Uint8Array(data.img);
-        //     var imgData = ctx2.createImageData(w, h);
-        //     imgData.data.set(uint8View);
-        //     ctx2.putImageData(imgData, 0, 0);
-        // } else if (data.msgType === "draw") {
-        //     ctx2.beginPath();
-        //     ctx2.moveTo(data.prevx, data.prevy);
-        //     ctx2.lineTo(data.x, data.y);
-        //     ctx2.strokeStyle = data.color;
-        //     ctx2.lineWidth = data.width;
-        //     ctx2.stroke();
-        //     ctx2.closePath();
-        // }
-
 
         switch (data.msgType) {
             case "timeRequest":
@@ -946,12 +934,6 @@ peer.on("connection", (conn) => {
                 });
                 break;
             case "redraw":
-                // ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-                // data.paths.forEach(path => {
-                //     drawPath(path, ctx2);
-                // })
-                // ctx2.closePath();
-
                 redrawCanvas(false);
                 break;
 
@@ -982,8 +964,11 @@ peer.on("connection", (conn) => {
             case "paths":
                 data.paths.forEach(path => {
                     otherPeerPoints[conn.peer].paths.push(path);
-                })
-                redrawCanvas(false);
+                    // draw
+                    drawPath(path);
+
+                });
+                // redrawCanvas(false);
                 break;
 
             case "img":
