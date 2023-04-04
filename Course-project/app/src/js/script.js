@@ -44,6 +44,8 @@ let logData = [];
 
 let isDrawing = false;
 let isDragging = false;
+let inDeleteMode = false;
+let deleteRadius = 20;
 let brushSettings = { size: 50, color: "black" };
 let pathsDrawn = [];
 let pathsUndone = [];
@@ -217,11 +219,33 @@ function onMouseMove(e) {
         sendToAllPeers({ msgType: "moveImg", index: movingImgIndex, x: movingImg.x, y: movingImg.y, room: curRoomName });
         redrawCanvas();
     }
+    else if (inDeleteMode) {
+        closestPath = getClosestPath(getMousePos(e), false);
+        if (closestPath != null) {
+            // highlight closest path
+            redrawCanvas(false);
+            let pathToHighlight = closestPath.points[0]; //TODO
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(pathToHighlight[0].x + canvasPosition.x, pathToHighlight[0].y + canvasPosition.y);
+            for (var i = 1; i < pathToHighlight.length; i++) {
+                ctx.lineTo(pathToHighlight[i].x + canvasPosition.x, pathToHighlight[i].y + canvasPosition.y);
+            }
+            ctx.stroke();
+            ctx.closePath();
+        }
+        else {
+            redrawCanvas();
+        }
+    }
 }
 
 function onMouseDown(e) {
     // console.log("Mousedown:", Date.now());
     // console.log(e);
+
+
     mouse = getMousePos(e);
     previous = { x: mouse.x, y: mouse.y };
     if (e.button == 0 || e.type == "touchstart") {
@@ -229,6 +253,10 @@ function onMouseDown(e) {
             onMouseUp({ type: "touchcancel" });
             isDragging = true;
         } else {
+            if (inDeleteMode) {
+                getClosestPath(getMousePos(e), true);
+                return;
+            }
             isDrawing = true;
             points = [];
             points.push({ x: mouse.x - canvasPosition.x, y: mouse.y - canvasPosition.y });
@@ -353,6 +381,42 @@ function removeAllFromPeerList() {
 }
 
 
+function getClosestPath(mousePos, deletePath) {
+    // console.log("deleting point");
+    // find path with the closest point to the mouse
+    // only my own paths
+    let closestPath = null;
+    // let closestPoint = null;
+    let closestDist = deleteRadius;
+    pathsDrawn.forEach((path) => {
+        if (path.type == "path" && path.room == curRoomName) {
+            path.points.forEach((points) => {
+                points.forEach((point) => {
+                    let dist = Math.sqrt(Math.pow(point.x - mousePos.x, 2) + Math.pow(point.y - mousePos.y, 2));
+                    if (dist < closestDist) {
+                        closestDist = dist;
+                        closestPath = path;
+                        // closestPoint = point;
+                    }
+                });
+            });
+        }
+    });
+
+    // console.log(closestPath, closestPoint, closestDist)
+
+    if (deletePath && closestPath !== null) {
+        let indexToDelete = pathsDrawn.indexOf(closestPath)
+        pathsDrawn.splice(indexToDelete, 1);
+        sendToAllPeers({ msgType: "deletePath", pathIndex: indexToDelete });
+        redrawCanvas(false);
+    }
+    else {
+        return closestPath;
+    }
+}
+
+
 function setBrush(obj) {
 
     for (let i = 0; i < colorEl.length; i++) {
@@ -374,6 +438,13 @@ function setBrush(obj) {
     //     obj.style.height = "40px";
     //     obj.style.width = "40px";
     // }
+
+    if (obj.id === "color_white") {
+        setDeleteMode(true);
+    }
+    else {
+        setDeleteMode(false);
+    }
 
     obj.style.border = "4px solid black";
     obj.style.height = "40px";
@@ -455,9 +526,21 @@ function redrawCanvas(sync) {
     });
 
     pathsToDrawn.forEach(path => {
-        drawPath(path, ctx);
+        drawPath(path);
     });
 
+
+    
+    // if (inDeleteMode) {
+    //     // draw small circles at the beginning of each path, with the same color as the path
+    //     pathsToDrawn.forEach(path => {
+    //         ctx.beginPath();
+    //         ctx.arc(path.points[0][0].x + canvasPosition.x, path.points[0][0].y + canvasPosition.y, 10, 0, 2 * Math.PI);
+    //         ctx.fillStyle = path.color;
+    //         ctx.fill();
+    //         ctx.closePath();
+    //     });
+    // }
 
 
     ctx.closePath();
@@ -465,11 +548,16 @@ function redrawCanvas(sync) {
 }
 
 
+function setDeleteMode(setTo) {
+    inDeleteMode = setTo;
+    redrawCanvas(false);
+}
+
 function drawToCtx(path) {
     ctx.drawImage(path.img, canvasPosition.x + path.x, canvasPosition.y + path.y, path.img.width, path.img.height);
 }
 
-function drawPath(path, ctx) {
+function drawPath(path) {
     if (path.room !== curRoomName) {
         return;
     }
@@ -972,6 +1060,12 @@ peer.on("connection", (conn) => {
                 });
                 // redrawCanvas(false);
                 break;
+            
+            case "deletePath":
+                otherPeerPoints[conn.peer].paths.splice(data.pathIndex, 1);
+                redrawCanvas(false);
+                
+                break;
 
             case "img":
                 var img = new Image();
@@ -1026,12 +1120,12 @@ peer.on("connection", (conn) => {
                         path.img = img;
                         otherPeerPoints[conn.peer].paths.push(path);
                         img.onload = function () {
-                            drawPath(path, ctx);
+                            drawPath(path);
                             redrawCanvas(false);
                         }
                     } else {
                         otherPeerPoints[conn.peer].paths.push(path);
-                        drawPath(path, ctx);
+                        drawPath(path);
                     }
                 });
                 break;
