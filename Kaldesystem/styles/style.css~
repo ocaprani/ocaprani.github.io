@@ -1,0 +1,13 @@
+ .box {
+     display: flex;
+     justify-content: fles-start;
+ }
+
+.space  {
+     width: 30px;
+ }
+  
+ .text  {
+     width: 330px;
+ }
+

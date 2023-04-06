@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8">
+    <title>Kaldesystem</title>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <h1>Kaldesystem</h1>
+
+    <table>
+      
+      <tr>
+	<th>Brik 1 <br>
+	  <button type="button" id="button1">Tænd</button>
+	</th>
+	<th>Brik 2 <br>
+	  <button type="button" id="button2">Tænd</button>
+	</th>
+	<th>Brik 3 <br>
+	  <button type="button" id="button3">Tænd</button>
+	</th>
+	<th>Brik 4 <br>
+	  <button type="button" id="button4">Tænd</button>
+	</th>
+	<th>Brik 5 <br>
+	  <button type="button" id="button5">Tænd</button>
+	</th>
+      </tr>
+
+      <tr>
+	<th>Brik 6 <br>
+	  <button type="button" id="button6">Tænd</button>
+	</th>
+	<th>Brik 7 <br>
+	  <button type="button" id="button7">Tænd</button>
+	</th>
+	<th>Brik 8 <br>
+	  <button type="button" id="button8">Tænd</button>
+	</th>
+	<th>Brik 9 <br>
+	  <button type="button" id="button9">Tænd</button>
+	</th>
+	<th>Brik 10 <br>
+	  <button type="button" id="button10">Tænd</button>
+	</th>
+      </tr>
+      
+    </table>
+
+
+    <hr>
+    <h2>Opsætning af kaldesystem</h2>
+
+    <div class="box">
+      
+      <div>
+	<img src= "images/forside.png" width="677" height="350">
+	<p>
+	<button id="connect" class="button">Forbind til USB</button>
+        <button id="disconnect" class="button">Afbryd forbindelse til USB</button>
+	<p id="text">
+	  Micro:bit <b>ikke</b> forbundet til kaldesystemet.
+	</p>
+      </div>
+
+      <div class="space">
+	&nbsp;
+      </div>
+      
+
+      <div class="text">
+	<p>
+	I kaldesystemet indgår et antal micro:bit:
+	<ul> <li>et antal micro:bit, som er <b>kaldebrikkerne</b> i systemet
+	    og
+	    <p>
+	    <li>én micro:bit, som er forbundet med USB til computeren.
+	</ul>
+        Programmet <a href="https://makecode.microbit.org/#pub:_Tsya4tAted84"  target="_blank">Brik</a>
+	skal overføres til
+	kaldebrikkerne.
+	<p>
+	Programmet <a href="https://makecode.microbit.org/#pub:_U6CYfY8RY0Ya"  target="_blank">KontrolAfBrikker</a>
+	skal overføres til USB micro:bit'en.
+
+
+	<p>
+	  Når Brik programmet er overført, bruges knap A på micro:bit'en til at indstille brikkens nummer
+	  fra 1 til 10.
+	<p>
+	  I de to programmer benyttes radiokanal 20. Husk at ændre, hvis flere kaldesystemer skal være tæt på hinanden.
+	<p>
+	  Læse om kaldesystemet i e-bogen <br>Digitale netværk af micro:bit
+      </div>
+
+    </div>
+    <hr>
+    <script src="scripts/main.js"></script>
+  </body>
+
+  <!--  Include the DAP support library and WebUSB support -->
+<script src="scripts/ubitwebusb.js"></script>
+
+  <script>
+
+    // Append a line to the console frame
+    function consolePrintln(message) {
+        //var con = document.getElementById("console")
+        //con.innerHTML += "<br/>"+message
+        //con.scrollTop = con.scrollHeight
+	console.log(message)
+    }
+
+    // List of connected devices (a single value could be used if only connecting to one device)
+    <!--var connectedDevices = []-->
+    var connectedDevice
+
+    // Example event call-back handler
+    function uBitEventHandler(reason, device, data) {
+        switch(reason) {
+            case "connected":
+                consolePrintln("<b>Connected!</b>")
+                <!--connectedDevices.push(device)-->
+		connectedDevice = device;
+	        document.getElementById('text').innerHTML = "Micro:bit forbundet til kaldesystemet";
+                break
+            case "disconnected":
+                consolePrintln("<b>Disconnected</b>")
+                <!--connectedDevices = connectedDevices.filter( v => v != device)-->
+		connectedDevice = null;
+	        document.getElementById('text').innerHTML = "Micro:bit <b>ikke</b> forbundet til kaldesystemet";
+                break
+            case "connection failure":
+                consolePrintln("<b>Connection Failure</b>")
+                break
+            case "error":
+                consolePrintln("<b>Error</b>")
+                break
+            case "console":
+                consolePrintln("Console Data: " + data.data)
+                break
+            case "graph-event":
+                consolePrintln(`Graph Event:  ${data.data} (for ${data.graph}${data.series.length?" / series "+data.series:""})`)
+                break
+            case "graph-data":
+                consolePrintln(`Graph Data: ${data.data} (for ${data.graph}${data.series.length?" / series "+data.series:""})`)
+                break
+        }
+    }
+
+    // Make the "go" button open the request devices box
+    document.getElementById("connect").addEventListener("click", () => uBitConnectDevice(uBitEventHandler));
+    document.getElementById("disconnect").addEventListener("click", () =>  uBitDisconnect(connectedDevice));
+									   
+
+
+</script>
+</html>
