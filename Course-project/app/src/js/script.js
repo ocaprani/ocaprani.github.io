@@ -72,9 +72,11 @@ function init() {
     h = canvas.parentElement.clientHeight - 2;
     canvas.width = w;
     canvas.height = h;
-    
     menuBarHeight = document.getElementById('top').clientHeight;
 
+    // https://www.flaticon.com/free-icon/pencil_588395?term=pencil&related_id=588395
+    canvas.style.cursor = 
+    // canvas.style.cursor = "crosshair";
 
     document.getElementById('showAllCheckbox').checked = true;
     document.getElementById('cb0').checked = true;
@@ -83,7 +85,7 @@ function init() {
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    colorEl[myPeerNum % (colorEl.length-1) + 1].click();
+    colorEl[myPeerNum % (colorEl.length-1)].click();
 
 
 
@@ -129,6 +131,14 @@ function init() {
         e.preventDefault();
         onMouseUp(e);
     });
+
+    window.addEventListener('resize', function(event){
+        w = canvas.parentElement.clientWidth;
+        h = canvas.parentElement.clientHeight - 2;
+        canvas.width = w;
+        canvas.height = h;
+        redrawCanvas();
+      });
 
 
     document.querySelector('#connect-btn').addEventListener('click', () => {
@@ -220,13 +230,17 @@ function onMouseMove(e) {
         redrawCanvas();
     }
     else if (inDeleteMode) {
-        closestPath = getClosestPath(getMousePos(e), false);
+        let closestPath = getClosestPath(getMousePos(e), false);
         if (closestPath != null) {
             // highlight closest path
             redrawCanvas(false);
             let pathToHighlight = closestPath.points[0]; //TODO
-            ctx.strokeStyle = "red";
-            ctx.lineWidth = 5;
+            // ctx.strokeStyle = "red";
+            ctx.strokeStyle = closestPath.color;
+            if (closestPath.color == "white") {
+                ctx.strokeStyle = "lightgrey";
+            }
+            ctx.lineWidth = 8;
             ctx.beginPath();
             ctx.moveTo(pathToHighlight[0].x + canvasPosition.x, pathToHighlight[0].y + canvasPosition.y);
             for (var i = 1; i < pathToHighlight.length; i++) {
@@ -439,7 +453,7 @@ function setBrush(obj) {
     //     obj.style.width = "40px";
     // }
 
-    if (obj.id === "color_white") {
+    if (obj.id === "eraser") {
         setDeleteMode(true);
     }
     else {
@@ -551,6 +565,15 @@ function redrawCanvas(sync) {
 function setDeleteMode(setTo) {
     inDeleteMode = setTo;
     redrawCanvas(false);
+
+    if (setTo) {
+        // set cursor on canvas to a delete icon (local image)
+        canvas.style.cursor = "url('delete.png'), auto";
+    }
+    else {
+        // canvas.style.cursor = "default";
+    }
+
 }
 
 function drawToCtx(path) {
@@ -611,6 +634,11 @@ function canvasClear() {
     imgs = [];
     sendToAllPeers({ msgType: "clear" });
     redrawCanvas(true);
+}
+
+
+function CanvasUndoDelete() {
+
 }
 
 
@@ -688,13 +716,13 @@ function load(e) {
             console.log("Image loaded");
             var img = new Image();
             img.src = e.target.result;
-            let scale = scaleImage(img);
             img.onload = function () {
+                let scale = scaleImage(img);
                 pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: scale, 
                                   x: -canvasPosition.x, y: -canvasPosition.y + menuBarHeight });
                 redrawCanvas(false);
+                sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: scale, x: 0, y: menuBarHeight });
             }
-            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: scale, x: 0, y: menuBarHeight });
         }
         reader.readAsDataURL(file);
     } else if (file.type == "application/json" || file.type == "text/json") {
@@ -740,7 +768,8 @@ function load(e) {
 
 function scaleImage(img) {
     let scale = 1;
-    if (img.width > canvas.width || img.height > canvas.height) {
+    console.log("Scaling image: " + img.width + " x " + img.height + ", " + canvas.width + " x " + canvas.height);
+    if (img.width > canvas.width || img.height > (canvas.height - menuBarHeight)) {
         console.log("Image too big, " + img.width + " x " + img.height + ", " + canvas.width + " x " + canvas.height);
         scale = Math.min(canvas.width / img.width, (canvas.height - menuBarHeight) / img.height);
         img.width *= scale;
@@ -1070,10 +1099,10 @@ peer.on("connection", (conn) => {
             case "img":
                 var img = new Image();
                 img.src = data.img;
-                img.width = data.scale * img.width;
-                img.height = data.scale * img.height;
                 img.onload = function () {
-                    console.log("received img: " + img);
+                    img.width = data.scale * img.width;
+                    img.height = data.scale * img.height;
+                    // console.log("received img: " + img);
                     otherPeerPoints[conn.peer].paths.push({ type: "img", img: img, room: data.room, 
                                                             scale: data.scale, x: data.x, y: data.y });
                     redrawCanvas(false);
@@ -1115,11 +1144,11 @@ peer.on("connection", (conn) => {
                     if (path.type === "img") {
                         let img = new Image();
                         img.src = path.img;
-                        img.width = path.scale * img.width;
-                        img.height = path.scale * img.height;
-                        path.img = img;
-                        otherPeerPoints[conn.peer].paths.push(path);
                         img.onload = function () {
+                            img.width = path.scale * img.width;
+                            img.height = path.scale * img.height;
+                            path.img = img;
+                            otherPeerPoints[conn.peer].paths.push(path);
                             drawPath(path);
                             redrawCanvas(false);
                         }
