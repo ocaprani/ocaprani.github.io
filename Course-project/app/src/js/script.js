@@ -64,6 +64,11 @@ var movingImgIndex = null;
 
 let colorEl = document.getElementsByClassName('color');
 
+// let defaultCursor = "crosshair";
+// let defaultCursor = "url('https://ocaprani.github.io/Course-project/app/src/img/pencil.png'), auto";
+let defaultCursor = "url('pencil.png') 0 32, auto"; // https://www.flaticon.com/free-icon/pencil_588395?term=pencil&related_id=588395
+let deleteCursor = "url('eraser.png') 0 32, auto";
+
 
 function init() {
     let canvas = document.getElementById('canvas');
@@ -74,9 +79,8 @@ function init() {
     canvas.height = h;
     menuBarHeight = document.getElementById('top').clientHeight;
 
-    // https://www.flaticon.com/free-icon/pencil_588395?term=pencil&related_id=588395
-    canvas.style.cursor = 
-    // canvas.style.cursor = "crosshair";
+    canvas.style.cursor = defaultCursor;
+
 
     document.getElementById('showAllCheckbox').checked = true;
     document.getElementById('cb0').checked = true;
@@ -132,7 +136,7 @@ function init() {
         onMouseUp(e);
     });
 
-    window.addEventListener('resize', function(event){
+    window.addEventListener('resize', function(){
         w = canvas.parentElement.clientWidth;
         h = canvas.parentElement.clientHeight - 2;
         canvas.width = w;
@@ -169,7 +173,7 @@ function init() {
 function onMouseUp(e) {
 
     if (e.button === 0 || e.type == "touchend" || e.type == "touchcancel") {
-        document.getElementById("canvas").style.cursor = "default";
+        canvas.style.cursor = inDeleteMode ? deleteCursor : defaultCursor;
         movingImg = null;
         if (!isDrawing) return;
 
@@ -185,7 +189,7 @@ function onMouseUp(e) {
     } else if (e.button === 2) {
         isDragging = false;
         movingImg = null;
-        document.getElementById("canvas").style.cursor = "default";
+        canvas.style.cursor = inDeleteMode ? deleteCursor : defaultCursor;
     }
 }
 
@@ -566,13 +570,7 @@ function setDeleteMode(setTo) {
     inDeleteMode = setTo;
     redrawCanvas(false);
 
-    if (setTo) {
-        // set cursor on canvas to a delete icon (local image)
-        canvas.style.cursor = "url('delete.png'), auto";
-    }
-    else {
-        // canvas.style.cursor = "default";
-    }
+    canvas.style.cursor = setTo ? deleteCursor : defaultCursor;
 
 }
 
