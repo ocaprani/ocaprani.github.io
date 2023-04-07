@@ -695,11 +695,14 @@ function fromImageData(imgPath, whereToPush) {
     var img = new Image();
     img.src = imgPath.img;
     img.onload = function () {
+        // scale image
+        img.width = img.width * imgPath.scale;
+        img.height = img.height * imgPath.scale;
         if (whereToPush === 1) {
-            pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: 1, x: imgPath.x, y: imgPath.y });
-            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: 1, x: imgPath.x, y: imgPath.y });
+            pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: imgPath.scale, x: imgPath.x, y: imgPath.y });
+            sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: imgPath.scale, x: imgPath.x, y: imgPath.y });
         } else if (whereToPush === 2) {
-            pathsUndone.push([{ type: "img", img: img, room: curRoomName, scale: 1, x: imgPath.x, y: imgPath.y }]);
+            pathsUndone.push([{ type: "img", img: img, room: curRoomName, scale: imgPath.scale, x: imgPath.x, y: imgPath.y }]);
         }
         redrawCanvas();
     }
