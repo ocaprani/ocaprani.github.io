@@ -61,7 +61,7 @@ html,body {
 }
 
 #status-text {
-    margin-top: 40px;
+    margin-top: 25px;
     margin-bottom: 5px;
 }
 
@@ -270,7 +270,7 @@ html,body {
 }
 
 .peerCheckbox {
-    margin-right: 39px;
+    margin-right: 20px;
 }
 
 #roomList {

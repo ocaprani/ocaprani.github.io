@@ -82,7 +82,7 @@ function init() {
     canvas.style.cursor = defaultCursor;
 
 
-    document.getElementById('showAllCheckbox').checked = true;
+    // document.getElementById('showAllCheckbox').checked = true;
     document.getElementById('cb0').checked = true;
     document.getElementsByClassName('peerName')[0].textContent = myPeerId + " (Dig)"
 
@@ -141,7 +141,8 @@ function init() {
         h = canvas.parentElement.clientHeight - 2;
         canvas.width = w;
         canvas.height = h;
-        redrawCanvas();
+        menuBarHeight = document.getElementById('top').clientHeight;
+        redrawCanvas(false);
       });
 
 
@@ -776,38 +777,6 @@ function scaleImage(img) {
     return scale;
 }
 
-// Remove??
-function findxy(res, e) {
-    if (res == 'up' || res == "out") {
-        isDrawing = false;
-    }
-    if (res == 'down') {
-        prevX = currX;
-        prevY = currY;
-        currX = e.clientX - canvas.getBoundingClientRect().left;
-        currY = e.clientY - canvas.getBoundingClientRect().top;
-
-        isDrawing = true;
-        dot_flag = true;
-        if (dot_flag) {
-            ctx.beginPath();
-            ctx.fillStyle = strokeColor;
-            ctx.fillRect(currX, currY, 2, 2);
-            ctx.closePath();
-            dot_flag = false;
-        }
-    }
-    if (res == 'move') {
-        if (isDrawing) {
-            prevX = currX;
-            prevY = currY;
-            currX = e.clientX - canvas.getBoundingClientRect().left;
-            currY = e.clientY - canvas.getBoundingClientRect().top;
-            draw();
-        }
-    }
-}
-
 
 function showPeerDrawings(element) {
     if (element.checked) {
@@ -903,7 +872,13 @@ function updatePeopleInRoom(newRoom) {
             // document.getElementById('cb0').checked = 
             document.getElementById('cb0').checked = roomPermissions[newRoom.name];
         } else {
-            addToPeerList(peer);
+            // append "(ejer)" to the peerid of the owner of the room, (if not myself)
+            let peerString = peer;
+            if (peer === newRoom.owner) {
+                peerString += " (Ejer)";
+            }
+
+            addToPeerList(peerString);
         }
     });
 
@@ -915,11 +890,13 @@ function updatePeopleInRoom(newRoom) {
         disableableCbs[i].style.cursor = setCursorTo;
     }
 
-    if (newRoom.owner !== myPeerId) {
-        document.getElementById('showAllCheckbox').style.visibility = "hidden";
-    } else {
-        document.getElementById('showAllCheckbox').style.display = "inline-block";
-    }
+    // if (newRoom.owner !== myPeerId) {
+    //     document.getElementById('showAllCheckbox').style.visibility = "hidden";
+    // } else {
+    //     document.getElementById('showAllCheckbox').style.display = "inline-block";
+    // }
+
+    
 
     
 }
@@ -1202,12 +1179,13 @@ peer.on("connection", (conn) => {
 
                 if (data.fromRoom === curRoomName) {
                     // remove from peerList
-                    let PeerItems = document.getElementsByClassName('peerItem')
-                    for (let i = 0; i < PeerItems.length; i++) {
-                        if (PeerItems[i].children[1].textContent === conn.peer) {
-                            PeerItems[i].remove();
-                        }
-                    }
+                    // let PeerItems = document.getElementsByClassName('peerItem')
+                    // for (let i = 0; i < PeerItems.length; i++) {
+                    //     if (PeerItems[i].children[1].textContent === conn.peer) {
+                    //         PeerItems[i].remove();
+                    //     }
+                    // }
+                    updatePeopleInRoom(rooms.find(room => room.name === data.fromRoom));
                 }
                 break;
 

@@ -60,7 +60,8 @@
             <div style="display: inline-flex;">
                 <div id="peers_in_room">
                     <h3 style="margin-bottom: 8px; margin-top: 0px;">Personer som tegner</h3>
-                    <p id="peerInfoText"><input type="checkbox" class="disableable" id="showAllCheckbox" onclick="allPeerCheckbox(this)"><label id="showText" for="showAllCheckbox">Deltager</label> | Personer</p>
+                    <!-- <p id="peerInfoText"><input type="checkbox" class="disableable" id="showAllCheckbox" onclick="allPeerCheckbox(this)"><label id="showText" for="showAllCheckbox">Deltager</label> | Personer</p> -->
+                    <p id="peerInfoText"><label id="showText" for="showAllCheckbox">Deltager</label> | Personer</p>
                     <ul class="itemlist">
                         <li class="peerItem">
                             <input id="cb0" type="checkbox" class="peerCheckbox disableable" onclick="peerCheckbox(this)">|  <label for="cb0" class="peerName" style="margin: 0px;">Dig</label>
@@ -72,9 +73,10 @@
                     <ul class="itemlist" id="roomList">
                         <li class="roomItem active" style="overflow: hidden; white-space:nowrap; text-overflow:ellipsis;" onclick="changeRoom(this.textContent)">Privat tegning</li>
                     </ul>
-                    <input type="text" name="Room" placeholder="Skole" id="room-input" style="width: 85px; margin-left: 10px;">
+                    <input type="button" value="Opret" id="room-button" style="margin-bottom: 0px; margin-top: 5px; margin-left: 0px;" onclick="createRoom()">
+                    <label for="room-input" style="margin-top: 0; display: inline; text-align: center;">ny tegning <br> med navn:</label>
                     <br>
-                    <input type="button" value="Ny tegning" id="room-button" style="margin-bottom: 15px; margin-top: 5px; margin-left: 20px;" onclick="createRoom()">
+                    <input type="text" name="Room" placeholder="F.eks. biltegning" id="room-input" style="width: 110px; margin-left: 0px;">
                 </div>
             </div>
         </div>
