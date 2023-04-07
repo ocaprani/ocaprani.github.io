@@ -49,10 +49,13 @@ let deleteRadius = 20;
 let brushSettings = { size: 50, color: "black" };
 let pathsDrawn = [];
 let pathsUndone = [];
+let pathsDeleted = [];
 let points = [];
 let otherPeerPoints = {};
-let rooms = [{ name: "Privat tegning", owner: myPeerId, peers: [myPeerId] }];
-let roomPermissions = { "Privat tegning": true };
+let privateDrawingName = "Privat tegning";
+let firstPublicRoomName = "Tegning";
+let rooms = [{ name: privateDrawingName, owner: myPeerId, peers: [myPeerId] }];
+let roomPermissions = { privateDrawingName: true };
 let curRoomName = rooms[0].name;
 
 var mouse = { x: 0, y: 0 };
@@ -142,7 +145,7 @@ function init() {
         canvas.width = w;
         canvas.height = h;
         menuBarHeight = document.getElementById('top').clientHeight;
-        redrawCanvas(false);
+        redrawCanvas();
       });
 
 
@@ -196,7 +199,6 @@ function onMouseUp(e) {
 
 function onMouseMove(e) {
     e.preventDefault();
-    // console.log("onMouseMove:", isDrawing);
 
     if (isDrawing) {
         previous = { x: mouse.x, y: mouse.y };
@@ -238,9 +240,8 @@ function onMouseMove(e) {
         let closestPath = getClosestPath(getMousePos(e), false);
         if (closestPath != null) {
             // highlight closest path
-            redrawCanvas(false);
-            let pathToHighlight = closestPath.points[0]; //TODO
-            // ctx.strokeStyle = "red";
+            redrawCanvas();
+            let pathToHighlight = closestPath.points[0]; // This was change, so there can only be one drawn line per path
             ctx.strokeStyle = closestPath.color;
             if (closestPath.color == "white") {
                 ctx.strokeStyle = "lightgrey";
@@ -344,11 +345,17 @@ function onOpenConn(peerId) {
             updatePeopleInRoom(curRoom);
 
             delete otherPeerPoints[peerId];
-            redrawCanvas(false);
+            redrawCanvas();
         });
 
         newConn.on("open", () => {
             peerConnections.push(newConn);
+
+            // pathsDrawn.forEach((path) => {
+            //     if (path.room === privateDrawingName) {
+            //         path.room = firstPublicRoomName;
+            //     }
+            // });
             newConn.send({ msgType: "network", peerList: peerIdList, paths: extractImageData(pathsDrawn), rooms: rooms });
             document.getElementById('status-text').textContent = "Forbindelse oprettet til " + newConn.peer;
 
@@ -361,11 +368,8 @@ function onOpenConn(peerId) {
                 showInRoom: showPeerInRoom,
                 paths: []
             };
-            // addToPeerList(newConn.peer);
-            // document.getElementById('curRoomText').textContent = "In room: Public room";
-            // document.getElementById('roomList-text').textContent = "Main room";
 
-            redrawCanvas(false);
+            redrawCanvas();
         });
     } else if (TESTING) {
         christiansAlg(peerId);
@@ -422,13 +426,12 @@ function getClosestPath(mousePos, deletePath) {
         }
     });
 
-    // console.log(closestPath, closestPoint, closestDist)
-
     if (deletePath && closestPath !== null) {
         let indexToDelete = pathsDrawn.indexOf(closestPath)
-        pathsDrawn.splice(indexToDelete, 1);
+        let deletedPath = pathsDrawn.splice(indexToDelete, 1);
+        pathsDeleted.push(deletedPath);
         sendToAllPeers({ msgType: "deletePath", pathIndex: indexToDelete });
-        redrawCanvas(false);
+        redrawCanvas();
     }
     else {
         return closestPath;
@@ -444,39 +447,29 @@ function setBrush(obj) {
         colorEl[i].style.width = "30px";
     }
 
-    // document.getElementById('eraser').style.border = "2px solid black";
-
-    // if (obj.id === "eraser") {
-    //     let cDiv = document.getElementById("canvas-div")
-    //     let color = window.getComputedStyle(cDiv).backgroundColor;
-    //     obj.style.border = "4px solid black";
-    //     brushSettings = { color: color, size: 50 };
-    //     return
-    // } else {
-    //     obj.style.border = "4px solid black";
-    //     obj.style.height = "40px";
-    //     obj.style.width = "40px";
-    // }
-
+    
+    obj.style.border = "4px solid black";
     if (obj.id === "eraser") {
         setDeleteMode(true);
     }
     else {
         setDeleteMode(false);
+        obj.style.height = "40px";
+        obj.style.width = "40px";
     }
 
-    obj.style.border = "4px solid black";
-    obj.style.height = "40px";
-    obj.style.width = "40px";
 
     brushSettings = { color: obj.style.background, size: 4 };
 }
 
+
 function canvasHome() {
     canvasPosition = { x: 0, y: 0 };
-    redrawCanvas(false);
+    redrawCanvas();
 }
 
+
+// delete?
 function draw() {
     sendToAllPeers({ msgType: "draw", x: currX, y: currY, prevx: prevX, prevy: prevY, color: strokeColor, width: strokeWidth });
     ctx.strokeStyle = strokeColor;
@@ -513,10 +506,7 @@ function getMousePos(e) {
 }
 
 
-function redrawCanvas(sync) {
-    if (sync) {
-        sendToAllPeers({ msgType: "redraw" });
-    }
+function redrawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // In order to draw the images first, we need to draw the paths in two passes
@@ -534,8 +524,6 @@ function redrawCanvas(sync) {
         }
     });
 
-    // if (roomPermissions[curRoomName]) {
-    // }
     pathsDrawn.forEach(path => {
         if (path.type === "img" && path.room === curRoomName) {
             drawToCtx(path);
@@ -547,7 +535,6 @@ function redrawCanvas(sync) {
     pathsToDrawn.forEach(path => {
         drawPath(path);
     });
-
 
     
     // if (inDeleteMode) {
@@ -569,7 +556,7 @@ function redrawCanvas(sync) {
 
 function setDeleteMode(setTo) {
     inDeleteMode = setTo;
-    redrawCanvas(false);
+    redrawCanvas();
 
     canvas.style.cursor = setTo ? deleteCursor : defaultCursor;
 
@@ -609,7 +596,7 @@ function canvasUndo() {
     if (pathsDrawn.length > 0) {
         pathsUndone.push([pathsDrawn.pop()]);
         sendToAllPeers({ msgType: "undo" });
-        redrawCanvas(true);
+        redrawCanvas();
     }
 }
 
@@ -623,21 +610,36 @@ function canvasRedo() {
                 sendToAllPeers({ msgType: "paths", paths: [path] });
             }
         });
-        redrawCanvas(true);
+        redrawCanvas();
     }
 }
 
 function canvasClear() {
+    if (pathsDrawn.length === 0) {
+        return;
+    }
     let ps = pathsDrawn.splice(0, pathsDrawn.length);
-    pathsUndone.push(ps);
-    imgs = [];
+    pathsDeleted.push(ps);
     sendToAllPeers({ msgType: "clear" });
-    redrawCanvas(true);
+    redrawCanvas();
 }
 
 
 function CanvasUndoDelete() {
+    if (pathsDeleted.length === 0) {
+        return;
+    }
+    let paths = pathsDeleted.pop();
+    paths.forEach(path => {
+        pathsDrawn.push(path);
+        if (path.type === "img") {
+            sendToAllPeers({ msgType: "img", img: path.img.src, room: path.room, scale: path.scale, x: path.x, y: path.y });
+        } else {
+            sendToAllPeers({ msgType: "paths", paths: [path] });
+        }
+    });
 
+    redrawCanvas();
 }
 
 
@@ -650,8 +652,8 @@ function saveImg() {
 }
 
 
-function extractImageData(img) {
-    return img.map(path => {
+function extractImageData(paths) {
+    return paths.map(path => {
         if (path.type === "img") {
             return { type: "img", img: path.img.src, room: path.room, scale: path.scale, x: path.x, y: path.y };
         } else {
@@ -702,7 +704,7 @@ function fromImageData(imgPath, whereToPush) {
         } else if (whereToPush === 2) {
             pathsUndone.push([{ type: "img", img: img, room: curRoomName, scale: 1, x: imgPath.x, y: imgPath.y }]);
         }
-        redrawCanvas(false);
+        redrawCanvas();
     }
 }
 
@@ -719,7 +721,7 @@ function load(e) {
                 let scale = scaleImage(img);
                 pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: scale, 
                                   x: -canvasPosition.x, y: -canvasPosition.y + menuBarHeight });
-                redrawCanvas(false);
+                redrawCanvas();
                 sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: scale, x: 0, y: menuBarHeight });
             }
         }
@@ -757,7 +759,7 @@ function load(e) {
             pathsUndone = pathsUndone.concat(pu);
 
 
-            redrawCanvas(false);
+            redrawCanvas();
         }
         reader.readAsText(file);
     } else {
@@ -861,7 +863,7 @@ function changeRoom(newRoomName) {
     curRoomName = newRoomName;
     updatePeopleInRoom(newRoom);
     updateRoomList();
-    redrawCanvas(false);
+    redrawCanvas();
 }
 
 
@@ -869,20 +871,15 @@ function updatePeopleInRoom(newRoom) {
     removeAllFromPeerList();
     newRoom.peers.forEach(peer => {
         if (peer === myPeerId) {
-            // document.getElementById('cb0').checked = 
             document.getElementById('cb0').checked = roomPermissions[newRoom.name];
         } else {
-            // append "(ejer)" to the peerid of the owner of the room, (if not myself)
             let peerString = peer;
             if (peer === newRoom.owner) {
                 peerString += " (Ejer)";
             }
-
             addToPeerList(peerString);
         }
     });
-
-    
 
     let disableableCbs = document.getElementsByClassName('disableable');
     let setCursorTo = newRoom.owner === myPeerId ? "default" : "not-allowed";
@@ -895,9 +892,6 @@ function updatePeopleInRoom(newRoom) {
     // } else {
     //     document.getElementById('showAllCheckbox').style.display = "inline-block";
     // }
-
-    
-
     
 }
 
@@ -951,7 +945,7 @@ function peerCheckbox(el) {
     } else {
         el.checked = !el.checked;
     }
-    redrawCanvas(false);
+    redrawCanvas();
 }
 
 
@@ -1027,9 +1021,6 @@ peer.on("connection", (conn) => {
                     console.log(log);
                 });
                 break;
-            case "redraw":
-                redrawCanvas(false);
-                break;
 
             case "draw":
                 if (TESTING) {
@@ -1058,16 +1049,14 @@ peer.on("connection", (conn) => {
             case "paths":
                 data.paths.forEach(path => {
                     otherPeerPoints[conn.peer].paths.push(path);
-                    // draw
                     drawPath(path);
-
                 });
-                // redrawCanvas(false);
+
                 break;
             
             case "deletePath":
                 otherPeerPoints[conn.peer].paths.splice(data.pathIndex, 1);
-                redrawCanvas(false);
+                redrawCanvas();
                 
                 break;
 
@@ -1080,7 +1069,7 @@ peer.on("connection", (conn) => {
                     // console.log("received img: " + img);
                     otherPeerPoints[conn.peer].paths.push({ type: "img", img: img, room: data.room, 
                                                             scale: data.scale, x: data.x, y: data.y });
-                    redrawCanvas(false);
+                    redrawCanvas();
                 }
                 break;
 
@@ -1091,30 +1080,36 @@ peer.on("connection", (conn) => {
                 if (imgIndex !== -1) {
                     otherPeerPoints[conn.peer].paths[imgIndex].x = data.x;
                     otherPeerPoints[conn.peer].paths[imgIndex].y = data.y;
-                    redrawCanvas(false);
+                    redrawCanvas();
                 }
                 break;
 
             case "network":
                 // console.log(myPeerId, "received network:", conn.peer);
+                console.log(myPeerId + " received network from " + conn.peer);
+                console.log("data.rooms:", data.rooms);
                 if (data.peerList.length === 0 && peerConnections.length === 0) {
-                    addRoom({ name: "Tegning", owner: myPeerId, peers: [] })
-                } else if (data.rooms.length > 0) {
-                    data.rooms.forEach(room => {
-                        addRoom(room);
-                    });
+                    addRoom({ name: firstPublicRoomName, owner: myPeerId, peers: [] })
+                    //TODO add and send drawings?
                 }
-                // console.log(rooms)
+
+                data.rooms.forEach(room => {
+                    addRoom(room);
+                    // TODO if roomname already exists?
+                });
+
+                console.log("rooms:", rooms);
                 curRoomName = "Ingen valgt"
                 changeRoom(rooms[0].name);
                 updateRoomList();
                 let pl = data.peerList;
                 pl.push(conn.peer);
+                console.log("pl:", pl)
                 pl.forEach(peerId => {
                     onOpenConn(peerId);
                 });
-                
 
+                console.log("paths", data.paths);
                 data.paths.forEach(path => {
                     if (path.type === "img") {
                         let img = new Image();
@@ -1125,7 +1120,7 @@ peer.on("connection", (conn) => {
                             path.img = img;
                             otherPeerPoints[conn.peer].paths.push(path);
                             drawPath(path);
-                            redrawCanvas(false);
+                            redrawCanvas();
                         }
                     } else {
                         otherPeerPoints[conn.peer].paths.push(path);
@@ -1136,12 +1131,12 @@ peer.on("connection", (conn) => {
 
             case "undo":
                 otherPeerPoints[conn.peer].paths.pop();
-                redrawCanvas(false);
+                redrawCanvas();
                 break;
 
             case "clear":
                 otherPeerPoints[conn.peer].paths = [];
-                redrawCanvas(false);
+                redrawCanvas();
                 break;
 
             case "newRoom":
@@ -1165,7 +1160,7 @@ peer.on("connection", (conn) => {
                         }
                     }
                 }
-                redrawCanvas(false);
+                redrawCanvas();
                 break;
 
             case "changeRoom":
