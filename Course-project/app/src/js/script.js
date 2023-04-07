@@ -67,10 +67,8 @@ var movingImgIndex = null;
 
 let colorEl = document.getElementsByClassName('color');
 
-// let defaultCursor = "crosshair";
-// let defaultCursor = "url('https://ocaprani.github.io/Course-project/app/src/img/pencil.png'), auto";
 let defaultCursor = "url('pencil.png') 0 32, auto"; // https://www.flaticon.com/free-icon/pencil_588395?term=pencil&related_id=588395
-let deleteCursor = "url('eraser.png') 0 32, auto";
+let deleteCursor = "url('eraser.png') 0 32, auto"; // https://www.flaticon.com/free-icon/eraser_179530?term=eraser&page=1&position=4&origin=search&related_id=179530
 
 
 function init() {
@@ -264,7 +262,6 @@ function onMouseMove(e) {
 function onMouseDown(e) {
     // console.log("Mousedown:", Date.now());
     // console.log(e);
-
 
     mouse = getMousePos(e);
     previous = { x: mouse.x, y: mouse.y };
