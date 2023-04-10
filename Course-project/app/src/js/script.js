@@ -78,7 +78,6 @@ function init() {
     h = canvas.parentElement.clientHeight - 2;
     canvas.width = w;
     canvas.height = h;
-    menuBarHeight = document.getElementById('top').clientHeight;
 
     canvas.style.cursor = defaultCursor;
 
@@ -142,7 +141,6 @@ function init() {
         h = canvas.parentElement.clientHeight - 2;
         canvas.width = w;
         canvas.height = h;
-        menuBarHeight = document.getElementById('top').clientHeight;
         redrawCanvas();
       });
 
@@ -720,9 +718,9 @@ function load(e) {
             img.onload = function () {
                 let scale = scaleImage(img);
                 pathsDrawn.push({ type: "img", img: img, room: curRoomName, scale: scale, 
-                                  x: -canvasPosition.x, y: -canvasPosition.y + menuBarHeight });
+                                  x: -canvasPosition.x, y: -canvasPosition.y });
                 redrawCanvas();
-                sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: scale, x: 0, y: menuBarHeight });
+                sendToAllPeers({ msgType: "img", img: img.src, room: curRoomName, scale: scale, x: 0, y: 0 });
             }
         }
         reader.readAsDataURL(file);
@@ -770,9 +768,9 @@ function load(e) {
 function scaleImage(img) {
     let scale = 1;
     console.log("Scaling image: " + img.width + " x " + img.height + ", " + canvas.width + " x " + canvas.height);
-    if (img.width > canvas.width || img.height > (canvas.height - menuBarHeight)) {
+    if (img.width > canvas.width || img.height > canvas.height) {
         console.log("Image too big, " + img.width + " x " + img.height + ", " + canvas.width + " x " + canvas.height);
-        scale = Math.min(canvas.width / img.width, (canvas.height - menuBarHeight) / img.height);
+        scale = Math.min(canvas.width / img.width, canvas.height / img.height);
         img.width *= scale;
         img.height *= scale;
     }
