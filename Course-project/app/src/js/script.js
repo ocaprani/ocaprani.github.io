@@ -234,9 +234,9 @@ function onMouseMove(e) {
     }
     else if (inDeleteMode) {
         let closestPath = getClosestPath(getMousePos(e), false);
-        if (closestPath != null) {
+        redrawCanvas();
+        if (closestPath != null && closestPath.type === "path") {
             // highlight closest path
-            redrawCanvas();
             let pathToHighlight = closestPath.points[0]; // This was change, so there can only be one drawn line per path
             ctx.strokeStyle = closestPath.color;
             if (closestPath.color == "white") {
@@ -251,8 +251,18 @@ function onMouseMove(e) {
             ctx.stroke();
             ctx.closePath();
         }
-        else {
-            redrawCanvas();
+        else if (closestPath != null && closestPath.type === "img") {
+            console.log("Highlighting image: ", closestPath)
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.setLineDash([30, 20]);
+            ctx.rect(closestPath.x + canvasPosition.x, closestPath.y + canvasPosition.y, 
+                     closestPath.img.width, closestPath.img.height);
+            ctx.stroke();
+            // reset dashed
+            ctx.setLineDash([]);
+            ctx.closePath();
         }
     }
 }
@@ -285,11 +295,8 @@ function onMouseDown(e) {
                 movingImgIndex++;
                 // console.log(path.img.width, path.img.height);
                 // console.log(mouse);
-                if (
-                 path.x <= mouse.x - canvasPosition.x &&
-                 path.x + path.img.width >= mouse.x - canvasPosition.x &&
-                 path.y <= mouse.y - canvasPosition.y &&
-                 path.y + path.img.height >= mouse.y - canvasPosition.y) {
+
+                if (mouseOnImg(mouse, path)) {
                     movingImg = path;
                 }
             }
@@ -373,6 +380,14 @@ function onOpenConn(peerId) {
 }
 
 
+function mouseOnImg(mouse, imgPath) {
+    return imgPath.x <= mouse.x - canvasPosition.x &&
+    imgPath.x + imgPath.img.width >= mouse.x - canvasPosition.x &&
+    imgPath.y <= mouse.y - canvasPosition.y &&
+    imgPath.y + imgPath.img.height >= mouse.y - canvasPosition.y
+}
+
+
 function addToPeerList(peerId, roomOwner) {
     let peerItems = document.getElementsByClassName('peerItem');
     let li = peerItems[0];
@@ -409,12 +424,15 @@ function getClosestPath(mousePos, deletePath) {
     // only my own paths
     let closestPath = null;
     // let closestPoint = null;
+    let imgPaths = [];
     let closestDist = deleteRadius;
     pathsDrawn.forEach((path) => {
         if (path.type == "path" && path.room == curRoomName) {
             path.points.forEach((points) => {
                 points.forEach((point) => {
-                    let dist = Math.sqrt(Math.pow(point.x - mousePos.x, 2) + Math.pow(point.y - mousePos.y, 2));
+                    // let dist = Math.sqrt(Math.pow(point.x - mousePos.x, 2) + Math.pow(point.y - mousePos.y, 2));
+                    let dist = Math.sqrt(Math.pow(point.x - mousePos.x + canvasPosition.x, 2) + 
+                                         Math.pow(point.y - mousePos.y + canvasPosition.y, 2));
                     if (dist < closestDist) {
                         closestDist = dist;
                         closestPath = path;
@@ -422,8 +440,18 @@ function getClosestPath(mousePos, deletePath) {
                     }
                 });
             });
+        } else if (path.type == "img" && path.room == curRoomName) {
+            imgPaths.push(path);
         }
     });
+
+    if (closestPath === null) {
+        imgPaths.forEach((imgPath) => {
+            if (mouseOnImg(mousePos, imgPath)) {
+                closestPath = imgPath;
+            }
+        });
+    }
 
     if (deletePath && closestPath !== null) {
         let indexToDelete = pathsDrawn.indexOf(closestPath)
