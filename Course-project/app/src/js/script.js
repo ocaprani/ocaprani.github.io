@@ -84,7 +84,7 @@ function init() {
 
     // document.getElementById('showAllCheckbox').checked = true;
     document.getElementById('cb0').checked = true;
-    document.getElementsByClassName('peerName')[0].textContent = myPeerId + " (Dig)"
+    document.getElementsByClassName('peerName')[0].textContent = myPeerId + " (Dig, Ejer)"
 
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
@@ -373,14 +373,18 @@ function onOpenConn(peerId) {
 }
 
 
-function addToPeerList(peerId) {
+function addToPeerList(peerId, roomOwner) {
     let peerItems = document.getElementsByClassName('peerItem');
     let li = peerItems[0];
     let newId = li.children[0].id.replace("0", peerItems.length);
     let newLi = li.cloneNode(true)
     newLi.children[0].id = newId
     newLi.children[1].setAttribute("for", newId)
-    newLi.children[1].textContent = peerId
+    let peerString = peerId;
+    if (peerId === roomOwner) {
+        peerString += " (Ejer)";
+    }
+    newLi.children[1].textContent = peerString;
     if (otherPeerPoints[peerId] !== undefined && otherPeerPoints[peerId].showInRoom[curRoomName] !== undefined) {
         newLi.children[0].checked = otherPeerPoints[peerId].showInRoom[curRoomName];
     } else {
@@ -822,12 +826,12 @@ function addRoom(roomToAdd) {
 
 
 function addAllToRoom(peersToAdd, roomName) {
-    let peersInCurRoom = rooms.find(r => r.name === roomName).peers
+    let newRoom = rooms.find(r => r.name === roomName);
     peersToAdd.forEach(peer => {
-        if (!peersInCurRoom.includes(peer) && peer !== myPeerId) {
-            peersInCurRoom.push(peer);
+        if (!newRoom.peers.includes(peer) && peer !== myPeerId) {
+            newRoom.peers.push(peer);
             if (roomName === curRoomName) {
-                addToPeerList(peer);
+                addToPeerList(peer, newRoom.owner);
             }
         }
     });
@@ -870,12 +874,13 @@ function updatePeopleInRoom(newRoom) {
     newRoom.peers.forEach(peer => {
         if (peer === myPeerId) {
             document.getElementById('cb0').checked = roomPermissions[newRoom.name];
-        } else {
-            let peerString = peer;
-            if (peer === newRoom.owner) {
-                peerString += " (Ejer)";
+            if (newRoom.owner === myPeerId) {
+                document.getElementsByClassName('peerName')[0].textContent = myPeerId + " (Dig, Ejer)"
+            } else {
+                document.getElementsByClassName('peerName')[0].textContent = myPeerId + " (Dig)"
             }
-            addToPeerList(peerString);
+        } else {
+            addToPeerList(peer, newRoom.owner);
         }
     });
 
