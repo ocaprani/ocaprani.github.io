@@ -45,6 +45,7 @@ let logData = [];
 let isDrawing = false;
 let isDragging = false;
 let inDeleteMode = false;
+let inInsertedImageMode = false;
 let deleteRadius = 20;
 let brushSettings = { size: 50, color: "black" };
 let pathsDrawn = [];
@@ -67,8 +68,11 @@ var movingImgIndex = null;
 
 let colorEl = document.getElementsByClassName('color');
 
-let defaultCursor = "url('pencil.png') 0 32, auto"; // https://www.flaticon.com/free-icon/pencil_588395?term=pencil&related_id=588395
 let deleteCursor = "url('eraser.png') 0 32, auto"; // https://www.flaticon.com/free-icon/eraser_179530?term=eraser&page=1&position=4&origin=search&related_id=179530
+let drawCursor = "url('pencil.png') 0 32, auto"; // https://www.flaticon.com/free-icon/pencil_588395?term=pencil&related_id=588395
+let defaultCursor = drawCursor;
+
+
 
 
 function init() {
@@ -89,7 +93,8 @@ function init() {
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    colorEl[myPeerNum % (colorEl.length-1)].click();
+    // Dont set to white or eraser
+    colorEl[(myPeerNum % (colorEl.length-2)) + 1].click();
 
 
 
@@ -252,7 +257,7 @@ function onMouseMove(e) {
             ctx.closePath();
         }
         else if (closestPath != null && closestPath.type === "img") {
-            console.log("Highlighting image: ", closestPath)
+            // console.log("Highlighting image: ", closestPath)
             ctx.strokeStyle = "black";
             ctx.lineWidth = 5;
             ctx.beginPath();
@@ -281,6 +286,8 @@ function onMouseDown(e) {
             if (inDeleteMode) {
                 getClosestPath(getMousePos(e), true);
                 return;
+            } else if (inInsertedImageMode) {
+                return;
             }
             isDrawing = true;
             points = [];
@@ -290,18 +297,14 @@ function onMouseDown(e) {
         // find image under mouse
         movingImg = null;
         movingImgIndex = -1;
-        pathsDrawn.forEach((path) => {
-            if (path.type == "img" && path.room == curRoomName) {
-                movingImgIndex++;
-                // console.log(path.img.width, path.img.height);
-                // console.log(mouse);
 
-                if (mouseOnImg(mouse, path)) {
-                    movingImg = path;
-                }
+        for (let i = 0; i < pathsDrawn.length; i++) {
+            if (pathsDrawn[i].type == "img" && pathsDrawn[i].room == curRoomName && mouseOnImg(mouse, pathsDrawn[i])) {
+                movingImg = pathsDrawn[i];
+                movingImgIndex = i;
+                break;
             }
-        });
-        // console.log("Selected image:", movingImg);
+        }
         
         // only drag if no image under cursor
         if (movingImg == null) {
@@ -355,8 +358,8 @@ function onOpenConn(peerId) {
 
             // pathsDrawn.forEach((path) => {
             //     if (path.room === privateDrawingName) {
-            //         path.room = firstPublicRoomName;
-            //     }
+                //         path.room = firstPublicRoomName;
+                //     }
             // });
             newConn.send({ msgType: "network", peerList: peerIdList, paths: extractImageData(pathsDrawn), rooms: rooms });
             document.getElementById('status-text').textContent = "Forbindelse oprettet til " + newConn.peer;
@@ -474,6 +477,13 @@ function setBrush(obj) {
         colorEl[i].style.width = "30px";
     }
 
+    if (obj === undefined) {
+        setDeleteMode(false);
+        return;
+    }
+
+    defaultCursor = drawCursor;
+    inInsertedImageMode = false;
     
     obj.style.border = "4px solid black";
     if (obj.id === "eraser") {
@@ -583,10 +593,8 @@ function redrawCanvas() {
 
 function setDeleteMode(setTo) {
     inDeleteMode = setTo;
-    redrawCanvas();
-
     canvas.style.cursor = setTo ? deleteCursor : defaultCursor;
-
+    redrawCanvas();
 }
 
 function drawToCtx(path) {
@@ -738,8 +746,17 @@ function fromImageData(imgPath, whereToPush) {
     }
 }
 
-// load a locally saved image or JSON to canvas
+
 function load(e) {
+    // console.log("Loading file: ", e.target.files[0]);
+
+    inInsertedImageMode = true;
+    setBrush(undefined);
+    defaultCursor = "wait";
+    document.body.style.cursor = "wait";
+    canvas.style.cursor = "wait";
+
+
     var file = e.target.files[0];
     if (file.type == "image/png" || file.type == "image/jpeg") {
         var reader = new FileReader();
@@ -795,11 +812,15 @@ function load(e) {
     } else {
         alert("Invalid file type");
     }
+
+    defaultCursor = "default";
+    document.body.style.cursor = "default";
+    canvas.style.cursor = "default";
 }
 
 function scaleImage(img) {
     let scale = 1;
-    console.log("Scaling image: " + img.width + " x " + img.height + ", " + canvas.width + " x " + canvas.height);
+    // console.log("Scaling image: " + img.width + " x " + img.height + ", " + canvas.width + " x " + canvas.height);
     if (img.width > canvas.width || img.height > canvas.height) {
         console.log("Image too big, " + img.width + " x " + img.height + ", " + canvas.width + " x " + canvas.height);
         scale = Math.min(canvas.width / img.width, canvas.height / img.height);
@@ -808,6 +829,7 @@ function scaleImage(img) {
     }
     return scale;
 }
+
 
 
 function showPeerDrawings(element) {
@@ -1105,14 +1127,10 @@ peer.on("connection", (conn) => {
                 break;
 
             case "moveImg":
-                let imgIndex = otherPeerPoints[conn.peer].paths.findIndex(path => { 
-                    return path.type === "img" && path.room === data.room
-                });
-                if (imgIndex !== -1) {
-                    otherPeerPoints[conn.peer].paths[imgIndex].x = data.x;
-                    otherPeerPoints[conn.peer].paths[imgIndex].y = data.y;
-                    redrawCanvas();
-                }
+                otherPeerPoints[conn.peer].paths[data.index].x = data.x;
+                otherPeerPoints[conn.peer].paths[data.index].y = data.y;
+                redrawCanvas();
+
                 break;
 
             case "network":

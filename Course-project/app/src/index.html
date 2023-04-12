@@ -45,7 +45,8 @@
                     <input type="button" value="Indlæs fil (jpg, png, json)" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();" />
                     <br>
                     <!-- <input type="button" value="Centrer" id="home_button" class="buttons" onclick="canvasHome()"> -->
-                    <input type="file" style="display: none;" id="load_element" onchange="load(event)">
+
+                    <input type="file" style="display: none;" id="load_element" accept="image/png, image/jpeg, application/json" onchange="load(event)">
                     <input type="button" value="Slet egne bidrag" id="clear_button" class="buttons" onclick="canvasClear()">
                     <input type="button" value="Annuller slet" id="undo_delete_button" class="buttons" onclick="CanvasUndoDelete()">
                     <input type="button" value="Fortryd" id="undo_button" class="buttons" onclick="canvasUndo()">
