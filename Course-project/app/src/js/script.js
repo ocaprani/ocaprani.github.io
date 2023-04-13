@@ -5,7 +5,8 @@ console.log("Version 0.1.6")
 
 
 let myPeerId = "";
-myPeerNum = 0;
+let myPeerNum = 0;
+let peer = null;
 
 
 if (TESTING) {
@@ -32,7 +33,7 @@ if (TESTING) {
     for (let i = 0; i < 3; i++) {
         myPeerNum = Math.random().toString().slice(2, 6);
         myPeerId = "peer" + myPeerNum;
-        let peer = new Peer(myPeerId);
+        peer = new Peer(myPeerId);
         console.log(peer);
         if (!peer.disconnected) {
             break;
