@@ -1,9 +1,12 @@
 
 const TESTING = false;
+console.log("Version 0.1.6")
+
+
+
 let myPeerId = "";
 myPeerNum = 0;
 
-console.log("Version 0.1.0")
 
 if (TESTING) {
     document.getElementById('canvas-div').style.backgroundColor = "salmon";
@@ -25,17 +28,23 @@ if (TESTING) {
     let debugNumber = 1;
     document.querySelector("#status-text").innerHTML = "Debug: " + debugNumber;
 } else {
-    myPeerNum = Math.random().toString().slice(2, 6);
-    myPeerId = "peer" + myPeerNum;
-    // document.querySelector('#status-text').textContent = myPeerId
-    
+    // try 3 times
+    for (let i = 0; i < 3; i++) {
+        myPeerNum = Math.random().toString().slice(2, 6);
+        myPeerId = "peer" + myPeerNum;
+        let peer = new Peer(myPeerId);
+        console.log(peer);
+        if (!peer.disconnected) {
+            break;
+        }
+        console.log("Peer " + myPeerId + " disconnected, retrying");
+    }
 }
+
 document.getElementById('myPeerText').textContent = "Dit person ID: " + myPeerId;
 
 
 
-let peer = new Peer(myPeerId);
-console.log(peer);
 let peerConnections = [];
 let conn = null;
 let reconnectTimeout = null;
@@ -748,7 +757,7 @@ function fromImageData(imgPath, whereToPush) {
 
 
 function load(e) {
-    // console.log("Loading file: ", e.target.files[0]);
+    console.log("Loading file: ", e.target.files[0]);
 
     inInsertedImageMode = true;
     setBrush(undefined);
@@ -1269,10 +1278,10 @@ function tryReconnecting() {
 
 
 
-peer.on("disconnected", () => {
-    console.log("disconnected");
-    reconnectTimeout = setTimeout(tryReconnecting, 1000);
-});
+// peer.on("disconnected", () => {
+//     console.log("disconnected");
+//     reconnectTimeout = setTimeout(tryReconnecting, 1000);
+// });
 
 
 
