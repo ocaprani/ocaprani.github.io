@@ -72,7 +72,7 @@
                 <div>
                     <h3 style="margin-bottom: 5px; margin-top: 0px;">Tegninger</h3>
                     <ul class="itemlist" id="roomList">
-                        <li class="roomItem active" style="overflow: hidden; white-space:nowrap; text-overflow:ellipsis;" onclick="changeRoom(this.textContent)">Privat tegning</li>
+                        <li class="roomItem active" style="overflow-y: visible; overflow-x: hidden; white-space:nowrap; text-overflow:ellipsis; flex-shrink: 0;" onclick="changeRoom(this.textContent)">Privat tegning</li>
                     </ul>
                     <input type="button" value="Opret" id="room-button" style="margin-bottom: 0px; margin-top: 5px; margin-left: 0px;" onclick="createRoom()">
                     <label for="room-input" style="margin-top: 0; display: inline; text-align: center;">ny tegning <br> med navn:</label>
