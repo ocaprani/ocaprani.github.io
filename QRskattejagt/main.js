@@ -52,7 +52,7 @@ function showState() {
     
     if ( name != "") {
 	
-	document.getElementById("text2").innerHTML = "Hej " + name;
+	document.getElementById("text2").innerHTML = "Hej " + name + ",";
 	document.getElementById("text3").innerHTML = "Du har allerede besøgt post " + posts;
 	
     } else {
