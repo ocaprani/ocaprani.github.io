@@ -51,7 +51,7 @@ function showState() {
     
     if ( name != "") {
 	
-	document.getElementById("text2").innerHTML = "Du har allerede besøgt";
+	document.getElementById("text2").innerHTML = "Du har allerede besøgt post";
 	
     } else {
 	
