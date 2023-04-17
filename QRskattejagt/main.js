@@ -30,6 +30,19 @@ function setCookie(cname, cvalue, exdays) {
     console.log( cname + "=" + cvalue + ";" + expires + ";path=/");
 }
 
+function deleteCookie(cname) {
+
+    document.cookie = cname + "=" + ";" + "expires=Thu, 01 Jan 1970 00:00:00 UTC;" + ";path=/";
+    console.log(cname + "=" + ";" + "expires=Thu, 01 Jan 1970 00:00:00 UTC;" + ";path=/");
+}
+
+function deleteName() {
+    
+    console.log("deleteName");
+    deleteCookie('navn');
+    deleteCookie('poster');
+}
+
 function getName() {
     
     console.log("getName");
@@ -56,6 +69,11 @@ function showState() {
 	document.getElementById("text3").innerHTML = "Du har allerede besøgt post " + posts + ".";
 	console.log(posts + post);
 	setCookie('poster', posts + post, 30);
+	    
+	const btn = document.createElement("button");
+        btn.innerHTML = "<b>Meld dig ud skattejagt</b>";
+        document.body.appendChild(btn);
+        btn.addEventListener("click",deleteName);
 	
     } else {
 	
