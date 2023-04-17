@@ -62,11 +62,19 @@ function showState() {
 
     var name  = getCookie('navn');
     var posts = getCookie('poster');
+    var showPosts = '';
     
     if ( name != "") {
 	
 	document.getElementById("text2").innerHTML = "Hej " + name + ",";
-	document.getElementById("text3").innerHTML = "Du har allerede besøgt post " + posts + ".";
+	for(var i = 0; i < posts.length; i++) {
+           var c = posts[i];
+           showPosts = showPosts + c;
+           if (i != posts.length-1 ) {
+	      showPosts = showPosts + ',';
+           }
+        }     
+	document.getElementById("text3").innerHTML = "Du har allerede besøgt post " + showPosts + ".";
 	console.log(posts + post);
 	setCookie('poster', posts + post, 30);
 	    
