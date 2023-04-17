@@ -54,6 +54,7 @@ function showState() {
 	
 	document.getElementById("text2").innerHTML = "Hej " + name + ",";
 	document.getElementById("text3").innerHTML = "Du har allerede besøgt post " + posts + ".";
+	console.log(posts + post);
 	setCookie('poster', posts + post, 30);
 	
     } else {
