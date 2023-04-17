@@ -47,11 +47,13 @@ function getName() {
 
 function showState() {
 
-    var name = getCookie('navn');
+    var name  = getCookie('navn');
+    var posts = getCookie('poster');
     
     if ( name != "") {
 	
-	document.getElementById("text2").innerHTML = "Du har allerede besøgt post";
+	document.getElementById("text2").innerHTML = "Hej " + name;
+	document.getElementById("text3").innerHTML = "Du har allerede besøgt post " + posts;
 	
     } else {
 	
