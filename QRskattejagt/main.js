@@ -6,7 +6,7 @@ function getCookie(cname) {
   var decodedCookie = decodeURIComponent(document.cookie);
   var ca = decodedCookie.split(';');
 
-  console.log('getCookie' + decodedCookie);
+  console.log('getCookie' + " " + decodedCookie);
   for(var i = 0; i < ca.length; i++) {
     var c = ca[i];
     console.log(c);
