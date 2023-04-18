@@ -87,17 +87,9 @@ function showState() {
 	document.getElementById("text2").innerHTML = "Hej " + name + ",";
 	    
 	var posts = getCookie('poster');
-        var showPosts = '';
 	    
-	for(var i = 0; i < posts.length; i++) {
-           var c = posts[i];
-           showPosts = showPosts + c;
-           if (i != posts.length-1 ) {
-	      showPosts = showPosts + ', ';
-           }
-        }     
-	document.getElementById("text3").innerHTML = "Du har allerede besøgt post " + showPosts + ".";
-	console.log(posts + post);
+        document.getElementById("text3").innerHTML = "Du har allerede besøgt post " + posts + ".";
+	console.log(posts + ", " + post);
 	setCookie('poster', posts + ", " + post, 30);
 	    
 	const btn = document.createElement("button");
