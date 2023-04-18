@@ -39,9 +39,20 @@ function deleteCookie(cname) {
 function deleteName() {
     
     console.log("deleteName");
+    var posts = getCookie('poster');
+    var showPosts = '';
+    document.getElementById("text1").innerHTML = "Hej name + ", du er nu meldt ud af skattejagten.";    
+    for(var i = 0; i < posts.length; i++) {
+        var c = posts[i];
+        showPosts = showPosts + c;
+        if (i != posts.length-1 ) {
+	      showPosts = showPosts + ', ';
+           }
+        }     
+    document.getElementById("text2").innerHTML = "Du har besøgt post " + showPosts + ".";
     deleteCookie('navn');
     deleteCookie('poster');
-    document.getElementById("text5").innerHTML = "Du er nu meldt ud af skattejagten.";
+
     const btn = document.querySelector("button");
     btn.remove();
     
@@ -69,12 +80,14 @@ function getName() {
 function showState() {
 
     var name  = getCookie('navn');
-    var posts = getCookie('poster');
-    var showPosts = '';
     
     if ( name != "") {
 	
 	document.getElementById("text2").innerHTML = "Hej " + name + ",";
+	    
+	var posts = getCookie('poster');
+        var showPosts = '';
+	    
 	for(var i = 0; i < posts.length; i++) {
            var c = posts[i];
            showPosts = showPosts + c;
