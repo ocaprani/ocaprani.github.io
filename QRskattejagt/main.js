@@ -57,6 +57,10 @@ function getName() {
     } else {
 	console.log(name);
         document.getElementById("text5").innerHTML = "Nu er du tilmeldt som "+ name + ".";
+	const btn = document.querySelector("button");
+        btn.remove();
+	const nameInput = document.querySelector("input");
+        nameInput.remove();
 	setCookie('navn', name, 30);
 	setCookie('poster', post, 30); 
     }
