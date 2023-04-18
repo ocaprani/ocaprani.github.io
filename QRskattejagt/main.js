@@ -98,7 +98,7 @@ function showState() {
         }     
 	document.getElementById("text3").innerHTML = "Du har allerede besøgt post " + showPosts + ".";
 	console.log(posts + post);
-	setCookie('poster', posts + post, 30);
+	setCookie('poster', posts + ", " + post, 30);
 	    
 	const btn = document.createElement("button");
         btn.innerHTML = "<b>Meld dig ud af løbet</b>";
