@@ -41,7 +41,7 @@ function deleteName() {
     console.log("deleteName");
     var posts = getCookie('poster');
     var showPosts = '';
-    document.getElementById("text1").innerHTML = "Hej name + ", du er nu meldt ud af skattejagten.";    
+    document.getElementById("text1").innerHTML = "Hej " + name + ", du er nu meldt ud af skattejagten.";    
     for(var i = 0; i < posts.length; i++) {
         var c = posts[i];
         showPosts = showPosts + c;
