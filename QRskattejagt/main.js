@@ -42,6 +42,8 @@ function deleteName() {
     deleteCookie('navn');
     deleteCookie('poster');
     document.getElementById("text5").innerHTML = "Du er nu meldt ud af skattejagten.";
+    const btn = document.querySelector("button");
+    btn.remove();
     
 }
 
