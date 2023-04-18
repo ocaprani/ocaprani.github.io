@@ -1,1 +1,32 @@
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8">
+    <title>QR skattejagt</title>
+  </head>
+  
+  <body onload="setVisited()">
+  <h1>QR skattejagt</h1>
 
+
+  <div id="text1"></div>
+  <p>
+  <div id="text2"></div>
+  <div id="text3"></div>
+  <div id="text4"></div>
+  <p>
+  <div id="text5"></div>
+  <p>
+
+  <script>
+    var post = "1";
+
+    function setVisited() {
+	document.getElementById("text1").innerHTML = "Du har nu besøgt post " + post + ".";
+    }
+  </script>
+
+  <script src="main.js"></script>
+  
+</body>
+</html> 
