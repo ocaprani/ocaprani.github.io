@@ -41,7 +41,7 @@ function deleteName() {
     console.log("deleteName");
     deleteCookie('navn');
     deleteCookie('poster');
-    document.getElementById("text4").innerHTML = "Du er nu meldt ud af skattejagten.";
+    document.getElementById("text5").innerHTML = "Du er nu meldt ud af skattejagten.";
     
 }
 
