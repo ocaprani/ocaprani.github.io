@@ -41,7 +41,7 @@ function deleteName() {
     console.log("deleteName");
     var posts = getCookie('poster');
     var showPosts = '';
-    document.getElementById("text1").innerHTML = "Hej " + name + ", du er nu meldt ud af skattejagten.";    
+    document.getElementById("text1").innerHTML = "Hej " + name + ", du er nu meldt ud af løbet.";    
     for(var i = 0; i < posts.length; i++) {
         var c = posts[i];
         showPosts = showPosts + c;
@@ -101,7 +101,7 @@ function showState() {
 	setCookie('poster', posts + post, 30);
 	    
 	const btn = document.createElement("button");
-        btn.innerHTML = "<b>Meld dig ud af skattejagt</b>";
+        btn.innerHTML = "<b>Meld dig ud af løbet</b>";
         document.body.appendChild(btn);
         btn.addEventListener("click",deleteName);
 	
@@ -109,7 +109,7 @@ function showState() {
 	
         document.getElementById("text2").innerHTML = "Da det er første gang du besøger en post,";
         document.getElementById("text3").innerHTML = "skal du skrive dit navn i firkanten og trykke";
-        document.getElementById("text4").innerHTML = "på knappen Tilmeld dig til skattejagten.";
+        document.getElementById("text4").innerHTML = "på knappen Tilmeld dig til løbet.";
 
         const nameInput = document.createElement("input");
         document.body.appendChild(nameInput);
@@ -118,7 +118,7 @@ function showState() {
         document.body.appendChild(p);
 
         const btn = document.createElement("button");
-        btn.innerHTML = "<b>Tilmeld dig til skattejagt</b>";
+        btn.innerHTML = "<b>Tilmeld dig til løbet</b>";
         document.body.appendChild(btn);
         btn.addEventListener("click",getName);
   }
