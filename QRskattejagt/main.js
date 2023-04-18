@@ -41,6 +41,8 @@ function deleteName() {
     console.log("deleteName");
     deleteCookie('navn');
     deleteCookie('poster');
+    document.getElementById("text4").innerHTML = "Du er nu meldt ud af skattejagten.";
+    
 }
 
 function getName() {
@@ -71,7 +73,7 @@ function showState() {
            var c = posts[i];
            showPosts = showPosts + c;
            if (i != posts.length-1 ) {
-	      showPosts = showPosts + ',';
+	      showPosts = showPosts + ', ';
            }
         }     
 	document.getElementById("text3").innerHTML = "Du har allerede besøgt post " + showPosts + ".";
@@ -79,7 +81,7 @@ function showState() {
 	setCookie('poster', posts + post, 30);
 	    
 	const btn = document.createElement("button");
-        btn.innerHTML = "<b>Meld dig ud skattejagt</b>";
+        btn.innerHTML = "<b>Meld dig ud af skattejagt</b>";
         document.body.appendChild(btn);
         btn.addEventListener("click",deleteName);
 	
