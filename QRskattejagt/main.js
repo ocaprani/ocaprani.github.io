@@ -40,16 +40,8 @@ function deleteName() {
     
     console.log("deleteName");
     var posts = getCookie('poster');
-    var showPosts = '';
-    document.getElementById("text1").innerHTML = "Hej " + name + ", du er nu meldt ud af løbet.";    
-    for(var i = 0; i < posts.length; i++) {
-        var c = posts[i];
-        showPosts = showPosts + c;
-        if (i != posts.length-1 ) {
-	      showPosts = showPosts + ', ';
-           }
-        }     
-    document.getElementById("text2").innerHTML = "Du har besøgt post " + showPosts + ".";
+   
+    document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
     document.getElementById("text3").innerHTML = "";
     deleteCookie('navn');
     deleteCookie('poster');
