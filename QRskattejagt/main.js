@@ -50,6 +50,7 @@ function deleteName() {
            }
         }     
     document.getElementById("text2").innerHTML = "Du har besøgt post " + showPosts + ".";
+    document.getElementById("text3").innerHTML = "";
     deleteCookie('navn');
     deleteCookie('poster');
 
