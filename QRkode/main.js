@@ -77,7 +77,7 @@ function showState() {
     
     if ( name != "") {
 	
-	document.getElementById("text2").innerHTML = "Hej " + name + ",";
+	document.getElementById("text2").innerHTML = "";
 	    
 	var posts = getCookie('poster');
 	    
