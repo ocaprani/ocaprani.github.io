@@ -41,6 +41,7 @@ function deleteName() {
     console.log("deleteName");
     var posts = getCookie('poster');
    
+    document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
     document.getElementById("text3").innerHTML = "";
     deleteCookie('navn');
