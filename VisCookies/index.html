@@ -3,12 +3,13 @@
    <html lang="da">
    <head>
     <meta charset="utf-8" name="viewport" content="width=1000, initial-scale=1">
-    <title>Vis cookies</title>     
+    <title>Cookies</title>     
    </head>
 
    <body>
       
-     <button onclick="showCookies()">Vis cookies</button>
+     <button onclick="showCookies()">Vis cookies</button>  <button onclick="deleteCookies()">Slet cookies</button>
+     
      <p>
      Viser cookies for hjemmesider på serveren <br>
      https://ocaprani.github.io/.
@@ -19,6 +20,10 @@
         
      function showCookies(){      
         document.getElementById("text").innerHTML = "Alle cookies = " + document.cookie;       
+     }
+        
+     function deleteCookies(){      
+        document.cookie = '';       
      }
         
      showCookies();
