@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html>
-  
-   <head>   
-     <script type = "text/javascript">
-
-       function showCookies(){      
-          alert("All cookies: " + document.cookie);      
-       }
-
-       document.cookie = "name=Steen";
-       document.cookie = "food=burger";
-      </script>      
+   <html lang="da">
+   <head>
+    <meta charset="utf-8" name="viewport" content="width=1000, initial-scale=1">
+    <title>Vis cookies</title>     
    </head>
 
    <body>
-     <button onclick="showCookies()">Show cookies</button>
-   </body>
-   
+     <button onclick="showCookies()">Vis cookies</button>
+     <p>
+     <div id="text"></div> 
+          
+     <script type = "text/javascript">
 
+       function showCookies(){           
+          document.getElementById("text").innerHTML = "Alle cookies = " + document.cookie;     
+       }
+
+      </script> 
+   </body>
 </html>
