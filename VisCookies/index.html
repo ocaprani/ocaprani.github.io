@@ -7,13 +7,21 @@
    </head>
 
    <body>
-     Vis cookies for hjemmesider på serveren <br>
+      
+     <button onclick="showCookies()">Vis cookies</button>
+     <p>
+     Viser cookies for hjemmesider på serveren <br>
      https://ocaprani.github.io/.
      <p>
      <div id="text"></div> 
           
      <script type = "text/javascript">  
-     document.getElementById("text").innerHTML = "Alle cookies = " + document.cookie;     
+        
+     function showCookies(){      
+        document.getElementById("text").innerHTML = "Alle cookies = " + document.cookie;       
+     }
+        
+     showCookies();
      </script> 
    </body>
 </html>
