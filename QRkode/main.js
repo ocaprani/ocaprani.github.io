@@ -39,7 +39,7 @@ function deleteCookie(cname) {
 function deleteName() {
     
     console.log("deleteName");
-    var name  = getCookie('navn');
+    var name  = getCookie('deltager');
     var posts = getCookie('poster');
    
     document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
