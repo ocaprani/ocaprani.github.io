@@ -74,7 +74,7 @@ function getName() {
 
 function showState() {
 
-    var name  = getCookie('navn');
+    var name  = getCookie('deltager');
     
     if ( name != "") {
 	
