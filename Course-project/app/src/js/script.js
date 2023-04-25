@@ -1,6 +1,6 @@
 
 const TESTING = false;
-console.log("Version 0.1.7")
+console.log("Version 0.1.9")
 
 
 
@@ -49,6 +49,7 @@ document.getElementById('myPeerText').textContent = "Dit person ID: " + myPeerId
 let peerConnections = [];
 let conn = null;
 let reconnectTimeout = null;
+let peerIdLength = 8;
 
 let logData = [];
 
@@ -63,10 +64,10 @@ let pathsUndone = [];
 let pathsDeleted = [];
 let points = [];
 let otherPeerPoints = {};
-let privateDrawingName = "Privat tegning";
-let firstPublicRoomName = "Tegning";
-let rooms = [{ name: privateDrawingName, owner: myPeerId, peers: [myPeerId] }];
-let roomPermissions = { privateDrawingName: true };
+// let privateDrawingName = "Tegning";
+// let firstPublicRoomName = "Tegning";
+let rooms = [{ name: "Tegning", owner: myPeerId, peers: [myPeerId] }];
+let roomPermissions = { "Tegning": true };
 let curRoomName = rooms[0].name;
 
 var mouse = { x: 0, y: 0 };
@@ -161,11 +162,14 @@ function init() {
 
 
     document.querySelector('#connect-btn').addEventListener('click', () => {
-        if (peerConnections.length == 0) {
-            rooms = [];
-            // updateRoomList();
-        }
-        onOpenConn(document.querySelector('#connect-input').value)
+        // if (peerConnections.length == 0) {
+        //     rooms = [];
+        //     // updateRoomList();
+        // }
+        let connectTo = document.querySelector('#connect-input').value;
+        onOpenConn(document.querySelector('#connect-input').value, true).then(() => {
+            document.getElementById('status-text').textContent = "Forbindelse oprettet til " + connectTo;
+        });
     });
 
     document.querySelector('#connect-input').addEventListener('keypress', (e) => {
@@ -325,19 +329,19 @@ function onMouseDown(e) {
             document.getElementById("canvas").style.cursor = "grabbing";            
         }
 
-
-
-        
     }
 
 }
 
-function onOpenConn(peerId) {
-    var peerIdList = peerConnections.map((conn) => conn.peer)
+function onOpenConn(peerId, toHigherPermissionNetwork) {
     if (peerId === myPeerId) { return; }
+    // let existingPeer = peerConnections.find((conn) => conn.peer === peerId);
+    // let existingPeer = otherPeerPoints[peerId];
+    // if (existingPeer === undefined || existingPeer.unconnected) {
+    let peerIdList = peerConnections.map((conn) => conn.peer);
     if (!peerIdList.includes(peerId)) {
         let newConn = peer.connect(peerId);
-
+        
         if (newConn === undefined) {
             console.log("Connection failed");
             document.getElementById('status-text').textContent = "Fejl ved forbindelse til " + peerId;
@@ -355,7 +359,10 @@ function onOpenConn(peerId) {
             peerConnections = peerConnections.filter((conn) => conn.peer !== peerId);
             let curRoom = rooms.find(room => room.name === curRoomName);
             if (curRoom !== undefined) {
-                curRoom.peers.splice(curRoom.peers.indexOf(peerId), 1);
+                let i = curRoom.peers.indexOf(peerId)
+                if (i !== -1) {
+                    curRoom.peers.splice(i, 1);
+                }
             }
             updatePeopleInRoom(curRoom);
 
@@ -363,29 +370,60 @@ function onOpenConn(peerId) {
             redrawCanvas();
         });
 
-        newConn.on("open", () => {
-            peerConnections.push(newConn);
 
-            // pathsDrawn.forEach((path) => {
-            //     if (path.room === privateDrawingName) {
+        // make promise which is resolved the connection is opened
+        let connPromise = new Promise((resolve, reject) => {
+            newConn.on("open", () => {
+                peerConnections.push(newConn);
+    
+                let showPeerInRoom = {};
+                rooms.forEach(room => {
+                    showPeerInRoom[room.name] = true;
+                });
+                
+                if (otherPeerPoints[peerId] === undefined) {
+                    otherPeerPoints[peerId] = {
+                        showInRoom: showPeerInRoom,
+                        paths: []
+                        // unconnected: false
+                    };
+                }
+    
+                // otherPeerPoints[peerId].unconnected = false;
+    
+                // pathsDrawn.forEach((path) => {
+                //     if (path.room === privateDrawingName) {
                 //         path.room = firstPublicRoomName;
                 //     }
-            // });
-            newConn.send({ msgType: "network", peerList: peerIdList, paths: extractImageData(pathsDrawn), rooms: rooms });
-            document.getElementById('status-text').textContent = "Forbindelse oprettet til " + newConn.peer;
-
-            let showPeerInRoom = {};
-            rooms.forEach(room => {
-                showPeerInRoom[room.name] = true;
+                // });
+    
+                let peersRoomsPermissions = {};
+                // for each peer, add its permissions for each room
+                peerIdList.forEach(peerId => {
+                    peersRoomsPermissions[peerId] = {};
+                    rooms.forEach(room => {
+                        if (otherPeerPoints[peerId] !== undefined && otherPeerPoints[peerId].showInRoom[room.name] !== undefined) {
+                            peersRoomsPermissions[peerId][room.name] = otherPeerPoints[peerId].showInRoom[room.name];
+                        } else {
+                            peersRoomsPermissions[peerId][room.name] = true;
+                        }
+                    });
+                });
+    
+                // add myself
+                peersRoomsPermissions[myPeerId] = {};
+                rooms.forEach(room => {
+                    peersRoomsPermissions[myPeerId][room.name] = roomPermissions[room.name];
+                });
+    
+                newConn.send({ msgType: "network", peerList: peerIdList, paths: extractImageData(pathsDrawn), 
+                            rooms: rooms, roomPermissions: peersRoomsPermissions, toHigherPermissionNetwork: toHigherPermissionNetwork });
+    
+                redrawCanvas();
+                resolve();
             });
-
-            otherPeerPoints[newConn.peer] = {
-                showInRoom: showPeerInRoom,
-                paths: []
-            };
-
-            redrawCanvas();
         });
+        return connPromise;
     } else if (TESTING) {
         christiansAlg(peerId);
         sendToAllPeers({ msgType: "logData", logData: logData});
@@ -620,8 +658,6 @@ function drawPath(path) {
         drawToCtx(path);
         return
     }
-
-
 
     ctx.strokeStyle = path.color;
     ctx.lineWidth = path.width;
@@ -872,15 +908,43 @@ function createRoom() {
 }
 
 
-function addRoom(roomToAdd) {
-    if (!rooms.map(r => { return r.name }).includes(roomToAdd.name)) {
+function addRoom(roomToAdd, roomToAddPermissions, newOwner = false) {
+    let existingRoom = rooms.find(r => { return r.name === roomToAdd.name });
+    if (existingRoom === undefined) {
         rooms.push(roomToAdd);
-        peerConnections.forEach(conn => {
-            otherPeerPoints[conn.peer].showInRoom[roomToAdd.name] = true;
-        });
         roomPermissions[roomToAdd.name] = true;
-    } else if (roomToAdd.name === curRoomName) {
-        addAllToRoom(roomToAdd.peers, curRoomName);
+        peerConnections.forEach(conn => {
+            let addPermission = true;
+            try {
+                addPermission = roomToAddPermissions[conn.peer][roomToAdd.name];
+            } catch {
+            }
+            otherPeerPoints[conn.peer].showInRoom[roomToAdd.name] = addPermission;
+        });
+    } 
+    // else if (roomToAdd.name === curRoomName) {
+    //     console.log("Room already exists, adding peers to room")
+    //     addAllToRoom(roomToAdd.peers, curRoomName);
+    // }
+    else {
+        console.log(roomToAdd, otherPeerPoints);
+        roomToAdd.peers.forEach(peer => {
+            if (!existingRoom.peers.includes(peer)) {
+                existingRoom.peers.push(peer);
+            }
+            let addPermission = true;
+            if (roomToAddPermissions[peer] !== undefined) {
+                addPermission = roomToAddPermissions[peer][roomToAdd.name];
+            }
+            if (peer !== myPeerId) {
+                otherPeerPoints[peer].showInRoom[roomToAdd.name] = addPermission;
+            }
+                
+        });
+
+        if (newOwner) {
+            existingRoom.owner = roomToAdd.owner;
+        }
     }
 }
 
@@ -977,7 +1041,7 @@ function updateRoomList() {
 }
 
 
-// called from HTML
+// (was) called from HTML
 function allPeerCheckbox(el) {
     let havePermission = rooms.filter(room => room.name === curRoomName)[0].owner === myPeerId;
     if (havePermission) {
@@ -1002,6 +1066,8 @@ function peerCheckbox(el) {
             peerName = myPeerId;
         } else {
             peerName = el.parentElement.children[1].textContent;
+            // take first 8 chars of peerName
+            peerName = peerName.substring(0, peerIdLength);
             otherPeerPoints[peerName].showInRoom[curRoomName] = el.checked;
         }
         sendToAllPeers({ msgType: "showPeer", show: el.checked, peer: peerName, room: curRoomName });
@@ -1037,7 +1103,7 @@ peer.on("disconnected", () => {
 })
 
 peer.on("error", (err) => {
-    console.log("Error: " + err);
+    console.log(err);
     document.querySelector('#status-text').textContent = "Fejl under oprettelse af forbindelse";
 })
 
@@ -1045,21 +1111,26 @@ peer.on("error", (err) => {
 peer.on("connection", (conn) => {
     console.log("connection made to " + conn.peer);
     document.querySelector('#status-text').textContent = "Oprettet forbindelse til " + conn.peer;
-    document.getElementById('cb0').checked = true;
-    let showPeerInRoom = {};
-    rooms.forEach(room => {
-        showPeerInRoom[room.name] = true;
-    });
 
-    otherPeerPoints[conn.peer] = {
-        showInRoom: showPeerInRoom,
-        paths: []
-    };
 
-    if (peerConnections.length == 0) {
-        rooms = [];
-        // updateRoomList();
-    }
+
+    // document.getElementById('cb0').checked = true;
+    // let showPeerInRoom = {};
+    // rooms.forEach(room => {
+    //     showPeerInRoom[room.name] = true;
+    // });
+
+    // otherPeerPoints[conn.peer] = {
+    //     showInRoom: showPeerInRoom,
+    //     paths: []
+    // };
+
+    // if (peerConnections.length == 0) {
+    //     rooms = [];
+    //     // updateRoomList();
+    // }
+
+
 
     // redrawPaths(false);
     // peerConnections.push(conn);
@@ -1073,12 +1144,14 @@ peer.on("connection", (conn) => {
                     .find(sendTo => { return sendTo.peer === conn.peer })
                     .send({ msgType: "timeResponse", timeRequest: data.timeRequest, timeResponse: Date.now() }); //t_1
                 break;
+
             case "timeResponse":
                 let t_1 = Date.now();
                 let newTime = data.timeResponse + ((t_1 - data.timeRequest) / 2); // T + ((t_1 - t_0) / 2)
                 latestTimerOffset = t_1 - newTime;
                 console.log("offset to " + conn.peer + " = " + latestTimerOffset);
                 break;
+
             case "logData":
                 data.logData.forEach(log => {
                     console.log(log);
@@ -1112,15 +1185,15 @@ peer.on("connection", (conn) => {
             case "paths":
                 data.paths.forEach(path => {
                     otherPeerPoints[conn.peer].paths.push(path);
-                    drawPath(path);
+                    if (otherPeerPoints[conn.peer].showInRoom[curRoomName]) {
+                        drawPath(path);
+                    }
                 });
-
                 break;
             
             case "deletePath":
                 otherPeerPoints[conn.peer].paths.splice(data.pathIndex, 1);
                 redrawCanvas();
-                
                 break;
 
             case "img":
@@ -1140,52 +1213,62 @@ peer.on("connection", (conn) => {
                 otherPeerPoints[conn.peer].paths[data.index].x = data.x;
                 otherPeerPoints[conn.peer].paths[data.index].y = data.y;
                 redrawCanvas();
-
                 break;
 
             case "network":
-                // console.log(myPeerId, "received network:", conn.peer);
-                console.log(myPeerId + " received network from " + conn.peer);
+                console.log(myPeerId + " received network from " + conn.peer + ":", data);
                 console.log("data.rooms:", data.rooms);
-                if (data.peerList.length === 0 && peerConnections.length === 0) {
-                    addRoom({ name: firstPublicRoomName, owner: myPeerId, peers: [] })
-                    //TODO add and send drawings?
-                }
+                // if (data.peerList.length === 0 && peerConnections.length === 0) {
+                //     addRoom({ name: firstPublicRoomName, owner: myPeerId, peers: [] })
+                // }
 
-                data.rooms.forEach(room => {
-                    addRoom(room);
-                    // TODO if roomname already exists?
-                });
+                let pl = data.peerList.concat([conn.peer]);
+                // console.log("pl:", pl)
+                let toHigherPermissionNetwork = !data.toHigherPermissionNetwork; // && peerConnections.includes(conn.peer);
+                // console.log("toHigherPermissionNetwork:", toHigherPermissionNetwork, "peerConnections:", peerConnections, "conn.peer:", conn.peer);
 
-                console.log("rooms:", rooms);
-                curRoomName = "Ingen valgt"
-                changeRoom(rooms[0].name);
-                updateRoomList();
-                let pl = data.peerList;
-                pl.push(conn.peer);
-                console.log("pl:", pl)
+                let connPromises = [];
                 pl.forEach(peerId => {
-                    onOpenConn(peerId);
+                    connPromises.push(onOpenConn(peerId, toHigherPermissionNetwork));
+                });
+                // wait for all promises to resolve
+                Promise.all(connPromises).then(() => {
+                    console.log(myPeerId + " - all connections made");
+                    data.rooms.forEach(roomToAdd => {
+                        addRoom(roomToAdd, data.roomPermissions, !data.toHigherPermissionNetwork);
+                    });
+                    
+                    // console.log("rooms:", rooms);
+                    // curRoomName = "Ingen valgt"
+                    // changeRoom(rooms[0].name);
+                    updatePeopleInRoom(rooms.find(room => { return room.name === curRoomName }));
+                    updateRoomList();
+                    
+    
+                    console.log("paths", data.paths);
+                    data.paths.forEach(path => {
+                        if (path.type === "img") {
+                            let img = new Image();
+                            img.src = path.img;
+                            img.onload = function () {
+                                img.width = path.scale * img.width;
+                                img.height = path.scale * img.height;
+                                path.img = img;
+                                otherPeerPoints[conn.peer].paths.push(path);
+                                drawPath(path);
+                                redrawCanvas();
+                            }
+                        } else {
+                            console.log(myPeerId + " - adding path:", path)
+                            otherPeerPoints[conn.peer].paths.push(path);
+                            // drawPath(path);
+                        }
+                    });
+                    redrawCanvas();
                 });
 
-                console.log("paths", data.paths);
-                data.paths.forEach(path => {
-                    if (path.type === "img") {
-                        let img = new Image();
-                        img.src = path.img;
-                        img.onload = function () {
-                            img.width = path.scale * img.width;
-                            img.height = path.scale * img.height;
-                            path.img = img;
-                            otherPeerPoints[conn.peer].paths.push(path);
-                            drawPath(path);
-                            redrawCanvas();
-                        }
-                    } else {
-                        otherPeerPoints[conn.peer].paths.push(path);
-                        drawPath(path);
-                    }
-                });
+
+
                 break;
 
             case "undo":
@@ -1206,7 +1289,7 @@ peer.on("connection", (conn) => {
             case "showPeer":
                 if (data.peer === myPeerId) {
                     roomPermissions[data.room] = data.show;
-                    document.getElementById('cb0').checked = data.show;
+                    // document.getElementById('cb0').checked = data.show;
                 } else {
                     otherPeerPoints[data.peer].showInRoom[data.room] = data.show;
                 }
@@ -1214,7 +1297,7 @@ peer.on("connection", (conn) => {
                     // update peerItem
                     let PeerItems = document.getElementsByClassName('peerItem')
                     for (let i = 0; i < PeerItems.length; i++) {
-                        if (PeerItems[i].children[1].textContent === data.peer) {
+                        if (PeerItems[i].children[1].textContent.substring(0, peerIdLength) === data.peer) {
                             PeerItems[i].children[0].checked = data.show;
                         }
                     }
@@ -1226,7 +1309,10 @@ peer.on("connection", (conn) => {
                 // rooms.find(room => room.name === data.toRoom).peers.push(conn.peer);
                 let oldRoomList = rooms.find(room => room.name === data.fromRoom);
                 if (oldRoomList !== undefined) {
-                    oldRoomList.peers.splice(oldRoomList.peers.indexOf(conn.peer), 1);
+                    let i = oldRoomList.peers.indexOf(conn.peer);
+                    if (i !== -1) {
+                        oldRoomList.peers.splice(i, 1);
+                    }
                 }
 
                 addAllToRoom([conn.peer], data.toRoom);
