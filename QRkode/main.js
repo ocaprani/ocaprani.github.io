@@ -39,11 +39,13 @@ function deleteCookie(cname) {
 function deleteName() {
     
     console.log("deleteName");
+    var name  = getCookie('deltager');
     var posts = getCookie('poster');
    
+    document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
     document.getElementById("text3").innerHTML = "";
-    deleteCookie('navn');
+    deleteCookie('deltager');
     deleteCookie('poster');
 
     const btn = document.querySelector("button");
@@ -65,18 +67,18 @@ function getName() {
         btn.remove();
 	const nameInput = document.querySelector("input");
         nameInput.remove();
-	setCookie('navn', name, 30);
+	setCookie('deltager', name, 30);
 	setCookie('poster', post, 30); 
     }
 }
 
 function showState() {
 
-    var name  = getCookie('navn');
+    var name  = getCookie('deltager');
     
     if ( name != "") {
 	
-	document.getElementById("text2").innerHTML = "Hej " + name + ",";
+	document.getElementById("text2").innerHTML = "";
 	    
 	var posts = getCookie('poster');
 	    

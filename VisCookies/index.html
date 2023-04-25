@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+   <html lang="da">
+   <head>
+    <meta charset="utf-8" name="viewport" content="width=1000, initial-scale=1">
+    <title>Cookies</title>     
+   </head>
+
+   <body>
+      
+     <button onclick="showCookies()">Vis cookies</button>  <button onclick="deleteCookies()">Slet cookies</button>
+     
+     <p>
+     Viser cookies for besøg på hjemmesider <br>
+     på serveren https://ocaprani.github.io/.
+     <p>
+     <div id="text"></div> 
+          
+     <script type = "text/javascript">  
+        
+     function showCookies(){      
+        document.getElementById("text").innerHTML = "Alle cookies: " + document.cookie;       
+     }
+      
+     function clearListCookies(){
+     var cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++){   
+            var spcook =  cookies[i].split("=");
+            document.cookie = spcook[0] + "=;expires=Thu, 21 Sep 1979 00:00:01 UTC;" + ";path=/";                                
+        }
+     }
+        
+     function deleteCookies(){      
+        clearListCookies(); 
+        showCookies(); 
+     }
+        
+     showCookies();
+     </script> 
+   </body>
+</html>
