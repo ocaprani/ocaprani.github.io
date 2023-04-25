@@ -10,7 +10,7 @@ En webserver, som indeholder websider, der knytter sig til bøger om digitale ne
 Bl.a. websider som:
 <ul>
  <li><a href="https://ocaprani.github.io/Kaldesystem/">Kaldesystem</a></li>
- <li><a href="https://ocaprani.github.io/TordenskjoldCookie/">Test POST 1</a></li>
+ <li><a href="https://ocaprani.github.io/QRkode/post1.html">Test POST 1</a></li>
  <li><a href="https://ocaprani.github.io/TordenskjoldCookie/">Tordenskjold</a></li>
- <li><a href="https://ocaprani.github.io/Kaldesystem/">Kaldesystem</a></li>
+ <li><a href="https://ocaprani.github.io/Course-project/app/src/">Tegneværktøj</a></li>
 </ul>
