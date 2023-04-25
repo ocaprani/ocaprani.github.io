@@ -1,3 +1,3 @@
 # ocaprani.github.io
-A server with example webpages like <a href="https://ocaprani.github.io/TordenskjoldCookie/">Tordenskjold</a>
+En webserver som indeholder websider der knytter sig til bøger <a href="https://ocaprani.github.io/TordenskjoldCookie/">Tordenskjold</a>
 
