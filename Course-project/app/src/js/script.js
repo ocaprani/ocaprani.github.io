@@ -92,11 +92,12 @@ function init() {
     // w = canvas.parentElement.clientWidth;
     // h = canvas.parentElement.clientHeight - 2;
     
-    // use whole screen size instead
     w = window.innerWidth;
     h = window.innerHeight;
     canvas.width = w;
     canvas.height = h - document.getElementById('top').clientHeight;
+    // TODO: if window is not wide enough for top, there will be a scrollbar,
+    // which pushes the canvas down, and out of the window
 
     canvas.style.cursor = defaultCursor;
 
@@ -295,6 +296,8 @@ function onMouseMove(e) {
 function onMouseDown(e) {
     // console.log("Mousedown:", Date.now());
     // console.log(e);
+
+    // TODO: If starts drawing while holding right click, the cursor image is wrong
 
     mouse = getMousePos(e);
     previous = { x: mouse.x, y: mouse.y };
@@ -1180,6 +1183,9 @@ peer.on("connection", (conn) => {
                     );
                     console.log(logData[logData.length - 1]);
                 }
+                // TODO: Moving canvas while another is drawing, will delete drawing
+                // until the other peer lets go of the mouse
+                
                 if (otherPeerPoints[conn.peer] !== undefined &&
                     otherPeerPoints[conn.peer].showInRoom[curRoomName] &&
                     data.room === curRoomName) {
