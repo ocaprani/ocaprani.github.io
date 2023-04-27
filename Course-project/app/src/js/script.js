@@ -1,6 +1,6 @@
 
 const TESTING = false;
-console.log("Version 0.1.9")
+console.log("Version 0.2.0")
 
 
 
@@ -89,10 +89,14 @@ let defaultCursor = drawCursor;
 function init() {
     let canvas = document.getElementById('canvas');
     ctx = canvas.getContext("2d");
-    w = canvas.parentElement.clientWidth;
-    h = canvas.parentElement.clientHeight - 2;
+    // w = canvas.parentElement.clientWidth;
+    // h = canvas.parentElement.clientHeight - 2;
+    
+    // use whole screen size instead
+    w = window.innerWidth;
+    h = window.innerHeight;
     canvas.width = w;
-    canvas.height = h;
+    canvas.height = h - document.getElementById('top').clientHeight;
 
     canvas.style.cursor = defaultCursor;
 
@@ -152,11 +156,13 @@ function init() {
         onMouseUp(e);
     });
 
-    window.addEventListener('resize', function(){
-        w = canvas.parentElement.clientWidth;
-        h = canvas.parentElement.clientHeight - 2;
+    window.addEventListener('resize', function() {
+        // w = canvas.parentElement.clientWidth;
+        // h = canvas.parentElement.clientHeight - 2;
+        w = window.innerWidth;
+        h = window.innerHeight;
         canvas.width = w;
-        canvas.height = h;
+        canvas.height = h - document.getElementById('top').clientHeight;
         redrawCanvas();
       });
 
@@ -295,6 +301,7 @@ function onMouseDown(e) {
     if (e.button == 0 || e.type == "touchstart") {
         if (e.touches != undefined && e.touches.length > 1) {
             onMouseUp({ type: "touchcancel" });
+            // TODO: Move image
             isDragging = true;
         } else {
             if (inDeleteMode) {
@@ -506,6 +513,7 @@ function getClosestPath(mousePos, deletePath) {
 
     if (deletePath && closestPath !== null) {
         let indexToDelete = pathsDrawn.indexOf(closestPath)
+        if (indexToDelete === -1) { return; }
         let deletedPath = pathsDrawn.splice(indexToDelete, 1);
         pathsDeleted.push(deletedPath);
         sendToAllPeers({ msgType: "deletePath", pathIndex: indexToDelete });
@@ -983,7 +991,10 @@ function changeRoom(newRoomName) {
 
     let curRoomObj = rooms.find(room => room.name === curRoomName);
     if (curRoomObj !== undefined) {
-        curRoomObj.peers.splice(curRoomObj.peers.indexOf(myPeerId), 1);
+        let i = curRoomObj.peers.indexOf(myPeerId);
+        if (i !== -1) {
+            curRoomObj.peers.splice(i, 1);
+        }
     }
 
     curRoomName = newRoomName;
