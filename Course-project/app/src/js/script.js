@@ -1,6 +1,6 @@
 
 const TESTING = false;
-console.log("Version 0.2.0")
+console.log("Version 0.2.1")
 
 
 
@@ -212,6 +212,7 @@ function onMouseUp(e) {
         var path = { points: [points], color: brushSettings.color, width: brushSettings.size, room: curRoomName, type: "path" };
         pathsDrawn.push(path);
         sendToAllPeers({ msgType: "paths", paths: [path] });
+        redrawCanvas();
     } else if (e.button === 2) {
         isDragging = false;
         movingImg = null;
@@ -607,26 +608,33 @@ function redrawCanvas() {
 
     // In order to draw the images first, we need to draw the paths in two passes
     let pathsToDrawn = [];
-    peerConnections.forEach(conn => {
-        let pp = otherPeerPoints[conn.peer]
-        if (pp !== undefined && pp.showInRoom[curRoomName]) {
-            pp.paths.forEach(path => {
+
+    let OrdpeerConnections = peerConnections.map(conn => conn.peer);
+    OrdpeerConnections.push(myPeerId);
+    OrdpeerConnections.sort();
+    OrdpeerConnections.forEach(peer => {
+        if (peer === myPeerId) {
+            pathsDrawn.forEach(path => {
                 if (path.type === "img" && path.room === curRoomName) {
                     drawToCtx(path);
                 } else {
                     pathsToDrawn.push(path);
                 }
             });
-        }
-    });
-
-    pathsDrawn.forEach(path => {
-        if (path.type === "img" && path.room === curRoomName) {
-            drawToCtx(path);
         } else {
-            pathsToDrawn.push(path);
+            let pp = otherPeerPoints[peer]
+            if (pp !== undefined && pp.showInRoom[curRoomName]) {
+                pp.paths.forEach(path => {
+                    if (path.type === "img" && path.room === curRoomName) {
+                        drawToCtx(path);
+                    } else {
+                        pathsToDrawn.push(path);
+                    }
+                });
+            }
         }
     });
+    
 
     pathsToDrawn.forEach(path => {
         drawPath(path);
@@ -942,15 +950,15 @@ function addRoom(roomToAdd, roomToAddPermissions, newOwner = false) {
         roomToAdd.peers.forEach(peer => {
             if (!existingRoom.peers.includes(peer)) {
                 existingRoom.peers.push(peer);
+                let addPermission = true;
+                if (roomToAddPermissions[peer] !== undefined) {
+                    addPermission = roomToAddPermissions[peer][roomToAdd.name];
+                }
+                if (peer !== myPeerId) {
+                    otherPeerPoints[peer].showInRoom[roomToAdd.name] = addPermission;
+                }
             }
-            let addPermission = true;
-            if (roomToAddPermissions[peer] !== undefined) {
-                addPermission = roomToAddPermissions[peer][roomToAdd.name];
-            }
-            if (peer !== myPeerId) {
-                otherPeerPoints[peer].showInRoom[roomToAdd.name] = addPermission;
-            }
-                
+            
         });
 
         if (newOwner) {
@@ -1185,7 +1193,7 @@ peer.on("connection", (conn) => {
                 }
                 // TODO: Moving canvas while another is drawing, will delete drawing
                 // until the other peer lets go of the mouse
-                
+
                 if (otherPeerPoints[conn.peer] !== undefined &&
                     otherPeerPoints[conn.peer].showInRoom[curRoomName] &&
                     data.room === curRoomName) {
@@ -1202,10 +1210,11 @@ peer.on("connection", (conn) => {
             case "paths":
                 data.paths.forEach(path => {
                     otherPeerPoints[conn.peer].paths.push(path);
-                    if (otherPeerPoints[conn.peer].showInRoom[curRoomName]) {
-                        drawPath(path);
-                    }
+                    // if (otherPeerPoints[conn.peer].showInRoom[curRoomName]) {
+                    //     drawPath(path);
+                    // }
                 });
+                redrawCanvas();
                 break;
             
             case "deletePath":

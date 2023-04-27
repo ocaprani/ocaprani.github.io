@@ -268,7 +268,7 @@ html,body {
 }
 
 .peerCheckbox {
-    margin-right: 20px;
+    margin-right: 18px;
 }
 
 #roomList {
@@ -279,7 +279,7 @@ html,body {
 }
 
 #peerInfoText {
-    padding-bottom: 0px;
+    padding-bottom: 4px;
     margin-bottom: 0px;
     border-bottom: 1px solid black;
 }
