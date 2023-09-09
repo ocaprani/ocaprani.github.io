@@ -15,4 +15,4 @@ Bl.a. websider som:
  <li><a href="https://ocaprani.github.io/TordenskjoldCookie/" target="_blank">Tordenskjold</a></li>
  <li><a href="https://ocaprani.github.io/Course-project/app/src/" target="_blank">Tegneværktøj</a></li>
 </ul>
-<a href="https://ocaprani.github.io/Stop op tid.llsp3" target="_blank">Stop Op Tid</a>
+
