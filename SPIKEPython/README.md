@@ -1,9 +1,15 @@
 # SPIKE Python
-En webserver, som indeholder websider, der knytter sig til bøger om digitale netværk:
+Bøger om Python programmering af LEGO modeller bygget ved brug af LEGO elementerne i LEGO® Education SPIKE™ Prime-sæt 45678.
+Tryk på bogen for at læse den i Skoletube. Tryk på programmerne for at downloade dem til brug i SPIKE App.
+<table>
+  <tr>
+    <td><img src="StopOp.png" alt="Undgå påkørsel" width="200"></td>
+    <td><a href="https://ocaprani.github.io/SPIKEPython/Stop op tid.llsp3" target="_blank">Stop op tid.llsp3</a><br>
+        <a href="https://ocaprani.github.io/SPIKEPython/Stop op afstand.llsp3" target="_blank">Stop op afstand.llsp3</a><br>
+    </td>
+  </tr>
+</table>
 
-<img src="StopOp.png" alt="Undgå påkørsel" width="200">
-Tryk på bogen for at læse den i Skoletube.
-<a href="https://ocaprani.github.io/SPIKEPython/Stop op tid.llsp3" target="_blank">Stop op tid.llsp3</a>
 
 <ul>
   <li><a href="https://www.skoletube.dk/video/8303847/a1254d72b9a436b53a3d0819ee8fad8e" target="_blank">Digitale netværk af micro:bit</a></li>
