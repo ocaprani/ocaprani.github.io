@@ -1,7 +1,21 @@
 # SPIKE Python
 En webserver, som indeholder websider, der knytter sig til bøger om digitale netværk:
+<div class="box">
+      
+  <div>
+  <img src="StopOp.png" alt="Undgå påkørsel" width="200">
+  </div>
 
-<img src="StopOp.png" alt="Undgå påkørsel" width="200">
+  <div class="space">
+	 &nbsp;
+  </div>
+  
+  <div class="text">
+    Tryk på bogen for at læse den i Skoletube.
+	</div>
+
+</div>
+
 <ul>
   <li><a href="https://www.skoletube.dk/video/8303847/a1254d72b9a436b53a3d0819ee8fad8e" target="_blank">Digitale netværk af micro:bit</a></li>
   <li><a href="https://www.skoletube.dk/video/8338419/f7c90ebcda330f6db15de795610a8dd3" target="_blank">QR orienteringsløb</a></li>
