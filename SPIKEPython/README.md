@@ -1,4 +1,4 @@
-# ocaprani.github.io
+# SPIKE Python
 En webserver, som indeholder websider, der knytter sig til bøger om digitale netværk:
  
 <ul>
