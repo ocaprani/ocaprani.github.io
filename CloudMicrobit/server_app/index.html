@@ -1,0 +1,44 @@
+<html>
+<head></head>
+
+<body>
+        <div id="plot1">
+            <a href="/api/v1/sensors/airquality/temperatur"><h2>Temperatur</h2></a>
+            <img src="/api/v1/sensors/airquality/temperatur" alt="plot1.png">
+        </div>
+        <div id="plot2">
+            <a href="/api/v1/sensors/airquality/luftfugtighed"><h2>Luftfugtighed</h2></a>
+            
+            <img src="/api/v1/sensors/airquality/luftfugtighed" alt="plot2.png">
+        </div>
+        <div id="plot3">
+            <a href="/api/v1/sensors/airquality/lufttryk"><h2>Lufttryk</h2></a>
+            <img src="/api/v1/sensors/airquality/lufttryk" alt="plot3.png">
+        </div>
+        <div id="plot4">
+            <a href="/api/v1/sensors/airquality/lydniveau"><h2>Lydniveau</h2></a>
+            <img src="/api/v1/sensors/airquality/lydniveau" alt="plot4.png">
+        </div>
+        
+
+<style>
+    #plot1 {
+        grid-area: 1 / 1 / 2 / 2;
+    }
+    #plot2 {
+        grid-area: 1 / 2 / 2 / 3;
+    }
+    #plot3 {
+        grid-area: 2 / 1 / 3 / 2;
+    }
+    #plot4 {
+        grid-area: 2 / 2 / 3 / 3;
+    }
+    body {
+        display: grid;
+    }
+
+</style>
+
+</body>
+</html>
