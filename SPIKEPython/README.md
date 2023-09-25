@@ -14,6 +14,9 @@ Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes 
       <img src="StopOp.png" alt="Undgå påkørsel" width="200"></a></td>
     <td><a href="https://ocaprani.github.io/SPIKEPython/Stop op tid.llsp3" target="_blank">Stop op tid.llsp3</a><br>
         <a href="https://ocaprani.github.io/SPIKEPython/Stop op afstand.llsp3" target="_blank">Stop op afstand.llsp3</a><br>
+        <a href="https://ocaprani.github.io/SPIKEPython/Stop op gradvist.llsp3" target="_blank">Stop op gradvist.llsp3</a><br>
+        <a href="https://ocaprani.github.io/SPIKEPython/Stop op Preg.llsp3" target="_blank">Stop op Preg.llsp3</a><br>
+        <a href="https://ocaprani.github.io/SPIKEPython/Hold afstand.llsp3" target="_blank">Hold afstand.llsp3</a><br>
     </td>
   </tr>
   
