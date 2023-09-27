@@ -66,6 +66,10 @@ function connectClicked(e) {
         [rx, tx] = rxandtx;
         ourMicrobitUART = new MicroBitUART(rx, tx);
         appendToLog("Made a UART!!");
+
+        let userColor = colors[userIDfield.value.charCodeAt(0) % colors.length];
+        addUser(userIDfield.value, userColor, []);
+
         startReadingFromUART(ourMicrobitUART);
     }).catch(error => {
         console.log(error);
@@ -81,12 +85,12 @@ function startReadingFromUART(mbit) {
 let canvas = document.querySelector("#canvas");
 console.log("CANVAS", canvas)
 let context = canvas.getContext('2d');
-context.fillStyle  = "Red";
+context.fillStyle  = "white";
 
+let userIDfield = document.getElementById("inputField");
+userIDfield.value = Math.floor(Math.random() * 10000);
 
-let users = {};
-
-
+let colors = ["red", "blue", "green", "yellow", "purple"];
 
 
 
@@ -99,13 +103,34 @@ function handleData(message) {
     let data = message.split(",");
     let x = Number(data[0]);
     let y = Number(data[1]);
-    let z = Number(data[2]);
-    let speed = Number(data[3]);
-    context.clearRect(0, 0, canvas.width, canvas.height);
     x = (canvas.width / 2) + (x / 1024) * canvas.width;
     y = (canvas.height / 2) + (y / 1024) * canvas.height;
-    context.fillRect(x, y, 10, 10);
+
+    let userID = userIDfield.value;
+    addCoord(userID, {x: x, y: y});
+    postCoordinates(userID, {x: x, y: y});
   }
 }
 
+
+
 connectButton.onclick = connectClicked;
+
+
+
+
+
+const server_ip = "http://127.0.0.1:5000";
+// const server_ip = "https://webbluetoothapp.azurewebsites.net";
+
+
+function postCoordinates(userID, coords) {
+    console.log("Posting coordinates: ", coords);
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", server_ip + "/post", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ userID: userID, coords: coords }));
+}
+
+
