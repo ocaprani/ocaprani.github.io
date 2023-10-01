@@ -22,8 +22,7 @@ Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes 
   <tr>
     <td><a href="https://www.skoletube.dk/video/8526286/86e8beb86d62005f5184242d1e3df053" target="_blank">
       <img src="DJSPIKE.png" alt="DJSPIKE" width="200"></a></td>
-    <td><a href="https://ocaprani.github.io/SPIKEPython/Stop op tid.llsp3" target="_blank">Stop op tid.llsp3</a><br>
-        <a href="https://ocaprani.github.io/SPIKEPython/Stop op afstand.llsp3" target="_blank">Stop op afstand.llsp3</a><br>
+    <td><a href="https://ocaprani.github.io/SPIKEPython/Tin 1.llsp3" target="_blank">Trin 1.llsp3</a><br>
     </td>
   </tr>
 
