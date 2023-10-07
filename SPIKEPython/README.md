@@ -10,6 +10,7 @@ Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes 
     <td><a href="https://ocaprani.github.io/SPIKEPython/Tegning 1.llsp3" target="_blank">Tegning 1.llsp3</a><br>
         <a href="https://ocaprani.github.io/SPIKEPython/Tegning 2.llsp3" target="_blank">Tegning 2.llsp3</a><br>
         <a href="https://ocaprani.github.io/SPIKEPython/Tegning 3.llsp3" target="_blank">Tegning 3.llsp3</a><br>
+        <a href="https://ocaprani.github.io/SPIKEPython/Tegning 4.llsp3" target="_blank">Tegning 4.llsp3</a><br>
     </td>
     <td><a href="https://www.skoletube.dk/video/8554674/e362a363f2209cf91ce9cb6822ab79ac" target="_blank">
       <img src="StopOp.png" alt="Undgå påkørsel" width="200"></a></td>
