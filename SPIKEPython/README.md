@@ -26,6 +26,7 @@ Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes 
     <td><a href="https://www.skoletube.dk/video/8651561/78d6c78e7c6bd324de8bb454a159a924" target="_blank">
       <img src="DJSPIKE.png" alt="DJSPIKE" width="200"></a></td>
     <td><a href="https://ocaprani.github.io/SPIKEPython/Trin 1.llsp3" target="_blank">Trin 1.llsp3</a><br>
+        <a href="https://ocaprani.github.io/SPIKEPython/Trin 2.llsp3" target="_blank">Trin 2.llsp3</a><br>
     </td>
   </tr>
 
