@@ -28,6 +28,7 @@ Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes 
     <td><a href="https://ocaprani.github.io/SPIKEPython/Trin 1.llsp3" target="_blank">Trin 1.llsp3</a><br>
         <a href="https://ocaprani.github.io/SPIKEPython/Trin 2.llsp3" target="_blank">Trin 2.llsp3</a><br>
         <a href="https://ocaprani.github.io/SPIKEPython/Trin 2 random frequencies.llsp3" target="_blank">Trin 2 random frequencies.llsp3</a><br>
+        <a href="https://ocaprani.github.io/SPIKEPython/Trin 3.llsp3" target="_blank">Trin 3.llsp3</a><br>
     </td>
   </tr>
 
