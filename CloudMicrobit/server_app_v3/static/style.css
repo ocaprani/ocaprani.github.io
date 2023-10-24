@@ -1,0 +1,12 @@
+/* Center canvas */
+#main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* margin: 0 auto;
+    background-color: rgb(207, 207, 207);
+    border: 1px solid black; */
+}
+
+
