@@ -84,6 +84,11 @@ function drawTail(user) {
         let coords = user.coords[(i + user.indexOfHead + 1) % user.coords.length];
         context.lineWidth = tailWidth * ((i / user.coords.length));
         
+        // draw circle at joint with diameter of lineWidth
+        context.beginPath();
+        context.arc(coords.x, coords.y, context.lineWidth / 2, 0, 2 * Math.PI);
+        context.fill();
+        
         context.beginPath();
         context.moveTo(prevCoords.x, prevCoords.y);
         context.lineTo(coords.x, coords.y);

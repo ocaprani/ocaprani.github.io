@@ -6,7 +6,10 @@ let colors = ["red", "blue", "green", "yellow", "purple"];
 
 // create a new WebSocket connection
 // var socket = new WebSocket('ws://127.0.0.1:8080');
-var socket = new WebSocket('ws://192.168.1.166:8080');
+// var socket = new WebSocket('ws://0.0.0.0:8080');
+// var socket = new WebSocket('ws://172.17.0.2:8080');
+// var socket = new WebSocket('ws://192.168.1.166:8080');
+var socket = new WebSocket('ws://cloudmicrobit.azurewebsites.net');
 
     
 // callback function for when the WebSocket connection is opened
@@ -40,3 +43,13 @@ socket.onclose = function (event) {
 socket.onerror = function (event) {
     console.error('WebSocket error:', event);
 };
+
+
+// Download canvas as an image
+function saveCanvasImg() {
+    console.log("Saving canvas image");
+    let link = document.createElement('a');
+    link.download = 'canvas.png';
+    link.href = canvas.toDataURL();
+    link.click();
+}

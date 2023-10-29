@@ -7,4 +7,16 @@
     justify-content: center;
 }
 
+#connect {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+
+#inputField {
+    margin: 10px;
+    width: 100px;
+}
 

@@ -2,16 +2,10 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-RUN pip install flask
-RUN pip install flask-cors
-RUN pip install flask-socketio
+RUN pip install asyncio websockets
 
-COPY app.py .
-COPY index.html .
-COPY static static/
+COPY socket_server.py .
 
 EXPOSE 8080
 
-CMD ["python", "app.py"]
-
-
+CMD ["python", "socket_server.py"]

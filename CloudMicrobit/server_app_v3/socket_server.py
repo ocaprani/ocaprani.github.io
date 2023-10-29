@@ -4,7 +4,8 @@ import websockets
 servers = []
 clients = []
 
-HOST = "127.0.0.1"
+PRINT_MESSAGES = False
+HOST = "0.0.0.0"
 PORT = 8080
 
 async def handle_connections(websocket):
@@ -32,11 +33,13 @@ async def handle_connections(websocket):
                 servers.remove(websocket)
             return
         
-        print(f"Received: {message}")
+        if PRINT_MESSAGES:
+            print(f"Received: {message}")
 
         if websocket in clients:
             for server in servers:
-                print(f">>> {message} sent to server {server.remote_address}        ", end="\r")
+                if PRINT_MESSAGES:
+                    print(f">>> {message} sent to server {server.remote_address}        ", end="\r")
                 await server.send(message)
 
 
