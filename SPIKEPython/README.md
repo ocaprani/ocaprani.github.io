@@ -32,6 +32,7 @@ Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes 
         <a href="https://ocaprani.github.io/SPIKEPython/Trin 4.llsp3" target="_blank">Trin 4.llsp3</a><br>
         <a href="https://ocaprani.github.io/SPIKEPython/Trin 5.llsp3" target="_blank">Trin 5.llsp3</a><br>
         <a href="https://ocaprani.github.io/SPIKEPython/Trin 6.llsp3" target="_blank">Trin 6.llsp3</a><br>
+        <a href="https://ocaprani.github.io/SPIKEPython/DJSPIKE.llsp3" target="_blank">DJSPIKE.llsp3</a><br>
     </td>
   </tr>
 
