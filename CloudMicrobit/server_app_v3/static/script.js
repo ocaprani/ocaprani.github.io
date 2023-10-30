@@ -9,7 +9,7 @@ let colors = ["red", "blue", "green", "yellow", "purple"];
 // var socket = new WebSocket('ws://0.0.0.0:8080');
 // var socket = new WebSocket('ws://172.17.0.2:8080');
 // var socket = new WebSocket('ws://192.168.1.166:8080');
-var socket = new WebSocket('ws://cloudmicrobit.azurewebsites.net');
+var socket = new WebSocket('wss://cloudmicrobit.azurewebsites.net');
 
     
 // callback function for when the WebSocket connection is opened
