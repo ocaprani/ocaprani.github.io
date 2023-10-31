@@ -9,8 +9,7 @@ Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes 
       <a href="https://www.skoletube.dk/video/8651552/cfc34d7aad4da3644b07450eed32c275" target="_blank">
       <img src="Streger.png" alt="Robotter følger streger" width="200"></a></td>
     <td>
-      <!--<a href="https://ocaprani.github.io/SPIKEPython/Tegning 1.llsp3" target="_blank">Tegning 1.llsp3</a><br>
-      --!> 
+      <a href="https://ocaprani.github.io/SPIKE/FølgKant.llsp3" target="_blank">FølgKant.llsp3</a><br> 
     </td>
   </tr>
 </table>
