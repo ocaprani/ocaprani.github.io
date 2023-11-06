@@ -11,6 +11,7 @@ Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes 
     <td>
       <a href="https://ocaprani.github.io/SPIKE/FølgKant.llsp3" target="_blank">FølgKant.llsp3</a><br> 
       <a href="https://ocaprani.github.io/SPIKE/FølgKantLysprocent.llsp3" target="_blank">FølgKantLysprocent.llsp3</a><br>
+            <a href="https://ocaprani.github.io/SPIKE/FølgKantPreg.llsp3" target="_blank">FølgKantPreg.llsp3</a><br>
     </td>
   </tr>
 </table>
