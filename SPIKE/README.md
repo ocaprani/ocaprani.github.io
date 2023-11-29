@@ -6,7 +6,7 @@ Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes 
 <table>
   <tr>
     <td>
-      <a href="https://www.skoletube.dk/video/8651552/cfc34d7aad4da3644b07450eed32c275" target="_blank">
+      <a href="https://www.skoletube.dk/video/8756686/1a66ca2dc1928832f37a89d2d48c9863" target="_blank">
       <img src="Streger.png" alt="Robotter følger streger" width="200"></a></td>
     <td>
       <a href="https://ocaprani.github.io/SPIKE/FølgKant.llsp3" target="_blank" download>FølgKant.llsp3</a><br> 
