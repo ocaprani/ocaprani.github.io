@@ -1,7 +1,7 @@
 # SPIKE Prime
 Bøger om blokprogrammering af LEGO modeller bygget ved brug af LEGO elementerne i <a href="https://www.lego.com/da-dk/product/lego-education-spike-prime-set-45678" target="_blank">
 LEGO® Education SPIKE™ Prime-sæt 45678</a>.
-Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes en liste af blokprogrammer brugt i bogen. Tryk på programmerne for at downloade dem til brug i 
+Tryk på bogen for at læse den i Skoletube. For nogle bøger er der ved siden af bogens forside en liste af blokprogrammer brugt i bogen. Tryk på programmerne for at downloade dem til brug i 
 <a href="https://education.lego.com/da-dk/downloads/spike-app/software/" target="_blank">SPIKE App</a>.
 <table>
   <tr>
