@@ -27,7 +27,6 @@ Tryk på bogen for at læse den i Skoletube. For nogle bøger er der ved siden a
     </td>
     <td>
       <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Toner.llsp3" target="_blank" download>Toner.llsp3</a><br> 
-      <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Toner.llsp3" target="_blank" download>Toner.llsp3</a><br>
       <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 1.llsp3" target="_blank" download>Trin 1.llsp3</a><br>
       <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 2.llsp3" target="_blank" download>Trin 2.llsp3</a><br>
       <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 3.llsp3" target="_blank" download>Trin 3.llsp3</a><br>
