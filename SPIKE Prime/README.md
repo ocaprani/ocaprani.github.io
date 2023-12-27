@@ -18,11 +18,11 @@ Tryk på bogen for at læse den i Skoletube. For nogle bøger er der ved siden a
   </tr>
   <tr>
     <td>
-      <a href="https://www.skoletube.dk/video/8756686/1a66ca2dc1928832f37a89d2d48c9863" target="_blank">
+      <a href="https://www.skoletube.dk/video/7035103/98d8e58d4e3286e3bb089ebae9f91481" target="_blank">
       <img src="DJSPIKE/DJSPIKESamle.png" alt="DJ SPIKE samle" width="200"></a>
     </td>
     <td>
-      <a href="https://www.skoletube.dk/video/8756686/1a66ca2dc1928832f37a89d2d48c9863" target="_blank">
+      <a href="https://www.skoletube.dk/video/7035096/9fbbd353fb4836e02236c3b2cdfe8882" target="_blank">
       <img src="DJSPIKE/DJSPIKE.png" alt="DJ SPIKE" width="200"></a>
     </td>
     <td>
