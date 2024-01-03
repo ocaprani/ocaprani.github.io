@@ -42,10 +42,13 @@ function deleteName() {
     var name  = getCookie('deltager');
     var posts = getCookie('poster');
     var time  = Math.floor(Date.now()/1000) - getCookie('starttid');
-   
+    var hour  = Math.floor(time/(60*60));
+    var min   = Math.floor((time - hour*60*60)/60);
+    var sec   = time - hour*60*60 - min*60;
+	
     document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
-    document.getElementById("text3").innerHTML = "Du har brugt " + time + " sekunder.";
+    document.getElementById("text3").innerHTML = "Du har brugt " + hour + " timer " + min + " minuter og " + sec + " sekunder.";
     deleteCookie('deltager');
     deleteCookie('poster');
     deleteCookie('starttid');
