@@ -83,9 +83,15 @@ function getName() {
         btn.remove();
 	const nameInput = document.querySelector("input");
         nameInput.remove();
+	
 	setCookie('deltager', name, 30);
 	setCookie('poster', post, 30);
 	setCookie('starttid', Math.floor(Date.now()/1000), 30);
+
+	const btn1 = document.createElement("button");
+        btn1.innerHTML = "<b>Meld dig ud af løbet</b>";
+        document.body.appendChild(btn1);
+        btn1.addEventListener("click",deleteName);
 	
     }
 }
