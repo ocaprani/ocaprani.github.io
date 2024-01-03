@@ -57,7 +57,7 @@ function deleteName() {
 	tid = tid + min + " minuter ";
     }
     if ( sec != 0 ) {
-	tid = tid + sec + " sekunder ";
+	tid = tid + " og " + sec + " sekunder ";
     }
     document.getElementById("text3").innerHTML = "Du har brugt " + tid;
     document.getElementById("text4").innerHTML = "";
