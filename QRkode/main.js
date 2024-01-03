@@ -52,25 +52,23 @@ function deleteName() {
 
     if ( hour != 0 ) {
 	if ( hour == 1 ) {
-	   tid = tid + hour + " time ";
+	   tid = tid + hour + " time, ";
 	} else {
-	   tid = tid + hour + " timer ";
+	   tid = tid + hour + " timer, ";
 	}
     }
     if ( min != 0 ) {
 	if ( min == 1 ) {
-	   tid = tid + min + " minut ";
+	   tid = tid + min + " minut, ";
 	} else {
-	   tid = tid + min + " minuter ";
+	   tid = tid + min + " minuter, ";
 	}
     }
-    if ( sec != 0 ) {
-	if ( sec == 1 ) {
-	   tid = tid + " og " + sec + " sekund ";
-	} else {
-	   tid = tid + " og " + sec + " sekunder ";
-	}	
-    }
+    if ( sec == 1 ) {
+	tid = tid + sec + " sekund ";
+    } else {
+	tid = tid + sec + " sekunder ";
+    }	
     document.getElementById("text3").innerHTML = "Du har brugt " + tid;
     document.getElementById("text4").innerHTML = "";
     document.getElementById("text5").innerHTML = "";
