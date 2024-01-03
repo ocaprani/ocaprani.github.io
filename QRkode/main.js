@@ -51,11 +51,11 @@ function deleteName() {
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
 
     if ( hour != 0 ) {
-	tid = tid + hour + " timer ";
+	tid = tid + hour + " timer ";}
     if ( min != 0 ) {
-	tid = tid + min + " minuter ";
+	tid = tid + min + " minuter ";}
     if ( sec != 0 ) {
-	tid = tid + sec + " sekunder ";
+	tid = tid + sec + " sekunder ";}
     document.getElementById("text3").innerHTML = "Du har brugt " + tid;
     deleteCookie('deltager');
     deleteCookie('poster');
