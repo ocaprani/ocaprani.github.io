@@ -56,7 +56,7 @@ function deleteName() {
 	tid = tid + min + " minuter ";
     if ( sec != 0 ) {
 	tid = tid + sec + " sekunder ";
-    document.getElementById("text3").innerHTML = "Du har brugt " + hour + " timer " + min + " minuter og " + sec + " sekunder.";
+    document.getElementById("text3").innerHTML = "Du har brugt " + tid;
     deleteCookie('deltager');
     deleteCookie('poster');
     deleteCookie('starttid');
