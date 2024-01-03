@@ -45,9 +45,17 @@ function deleteName() {
     var hour  = Math.floor(time/(60*60));
     var min   = Math.floor((time - hour*60*60)/60);
     var sec   = time - hour*60*60 - min*60;
+    var tid   = "Du har brugt ";
 	
     document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
+
+    if ( hour != 0 ) {
+	tid = tid + hour + " timer ";
+    if ( min != 0 ) {
+	tid = tid + min + " minuter ";
+    if ( sec != 0 ) {
+	tid = tid + sec + " sekunder ";
     document.getElementById("text3").innerHTML = "Du har brugt " + hour + " timer " + min + " minuter og " + sec + " sekunder.";
     deleteCookie('deltager');
     deleteCookie('poster');
