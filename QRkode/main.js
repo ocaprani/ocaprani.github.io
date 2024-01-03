@@ -126,10 +126,10 @@ function showState() {
         document.body.appendChild(btn);
         btn.addEventListener("click",getName);
 
-	const btn = document.createElement("button");
-        btn.innerHTML = "<b>Meld dig ud af løbet</b>";
-        document.body.appendChild(btn);
-        btn.addEventListener("click",deleteName);
+	const btn1 = document.createElement("button");
+        btn1.innerHTML = "<b>Meld dig ud af løbet</b>";
+        document.body.appendChild(btn1);
+        btn1.addEventListener("click",deleteName);
   }
 }
 
