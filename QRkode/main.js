@@ -125,11 +125,6 @@ function showState() {
         btn.innerHTML = "<b>Tilmeld dig til løbet</b>";
         document.body.appendChild(btn);
         btn.addEventListener("click",getName);
-
-	const btn1 = document.createElement("button");
-        btn1.innerHTML = "<b>Meld dig ud af løbet</b>";
-        document.body.appendChild(btn1);
-        btn1.addEventListener("click",deleteName);
   }
 }
 
