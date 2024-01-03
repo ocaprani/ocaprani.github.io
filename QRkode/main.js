@@ -68,7 +68,9 @@ function getName() {
 	const nameInput = document.querySelector("input");
         nameInput.remove();
 	setCookie('deltager', name, 30);
-	setCookie('poster', post, 30); 
+	setCookie('poster', post, 30);
+	setCookie('starttid', Date.now(), 30);
+	
     }
 }
 
