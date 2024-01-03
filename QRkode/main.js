@@ -69,7 +69,7 @@ function getName() {
         nameInput.remove();
 	setCookie('deltager', name, 30);
 	setCookie('poster', post, 30);
-	setCookie('starttid', Date.now(), 30);
+	setCookie('starttid', Math.floor(Date.now()/1000), 30);
 	
     }
 }
