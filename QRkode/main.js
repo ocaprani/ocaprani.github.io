@@ -47,8 +47,8 @@ function deleteName() {
     var sec   = time - hour*60*60 - min*60;
     var tid   = "Du har brugt ";
 	
-    document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
-    document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
+    document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet";
+    document.getElementById("text2").innerHTML = "Du har besøgt post " + posts;
 
     if ( hour != 0 ) {
 	tid = tid + hour + " timer ";
@@ -59,7 +59,7 @@ function deleteName() {
     if ( sec != 0 ) {
 	tid = tid + sec + " sekunder ";
     }
-    document.getElementById("text3").innerHTML = "Du har brugt " + tid;
+    document.getElementById("text3").innerHTML = tid;
     deleteCookie('deltager');
     deleteCookie('poster');
     deleteCookie('starttid');
