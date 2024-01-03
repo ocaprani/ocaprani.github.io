@@ -80,6 +80,10 @@ function getName() {
 	document.getElementById("text5").innerHTML = "<b>Skriv navn i firkant</b>";
     } else {
 	console.log(name);
+	document.getElementById("text2").innerHTML = "";
+	document.getElementById("text3").innerHTML = "";
+        document.getElementById("text4").innerHTML = "";
+        
         document.getElementById("text5").innerHTML = "Nu er du tilmeldt som "+ name + ".";
 	const btn = document.querySelector("button");
         btn.remove();
