@@ -60,6 +60,8 @@ function deleteName() {
 	tid = tid + sec + " sekunder ";
     }
     document.getElementById("text3").innerHTML = tid;
+    document.getElementById("text4").innerHTML = "";
+    document.getElementById("text5").innerHTML = "";
     deleteCookie('deltager');
     deleteCookie('poster');
     deleteCookie('starttid');
