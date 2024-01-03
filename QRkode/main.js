@@ -51,13 +51,25 @@ function deleteName() {
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts;
 
     if ( hour != 0 ) {
-	tid = tid + hour + " timer ";
+	if ( hour == 1 ) {
+	   tid = tid + hour + " time ";
+	} else {
+	   tid = tid + hour + " timer ";
+	}
     }
     if ( min != 0 ) {
-	tid = tid + min + " minuter ";
+	if ( min == 1 ) {
+	   tid = tid + min + " minut ";
+	} else {
+	   tid = tid + min + " minuter ";
+	}
     }
     if ( sec != 0 ) {
-	tid = tid + " og " + sec + " sekunder ";
+	if ( sec == 1 ) {
+	   tid = tid + " og " + sec + " sekund ";
+	} else {
+	   tid = tid + " og " + sec + " sekunder ";
+	}	
     }
     document.getElementById("text3").innerHTML = "Du har brugt " + tid;
     document.getElementById("text4").innerHTML = "";
