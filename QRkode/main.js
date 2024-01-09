@@ -90,6 +90,7 @@ function getName() {
 	document.getElementById("text5").innerHTML = "<b>Skriv navn i firkant</b>";
     } else {
 	console.log(name);
+	document.getElementById("text1").innerHTML = "Du har besøgt post " + post;
 	document.getElementById("text2").innerHTML = "";
 	document.getElementById("text3").innerHTML = "";
         document.getElementById("text4").innerHTML = "";
@@ -151,7 +152,7 @@ function showState() {
 }
 
 
-console.log("Du har nu besøgt post "+ post + ".");
+console.log("Du har nu besøgt post "+ post);
 showState();
 
 
