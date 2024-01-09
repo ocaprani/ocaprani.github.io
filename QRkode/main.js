@@ -47,8 +47,8 @@ function deleteName() {
     var sec   = time - hour*60*60 - min*60;
     var tid   = "";
 	
-    document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet";
-    document.getElementById("text2").innerHTML = "Du har besøgt post " + posts;
+    document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
+    document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
 
     if ( hour != 0 ) {
 	if ( hour == 1 ) {
@@ -65,11 +65,11 @@ function deleteName() {
 	}
     }
     if ( sec == 1 ) {
-	tid = tid + sec + " sekund ";
+	tid = tid + sec + " sekund";
     } else {
-	tid = tid + sec + " sekunder ";
+	tid = tid + sec + " sekunder";
     }	
-    document.getElementById("text3").innerHTML = "Du har brugt " + tid;
+    document.getElementById("text3").innerHTML = "Du har brugt " + tid + ".";
     document.getElementById("text4").innerHTML = "";
     document.getElementById("text5").innerHTML = "";
     deleteCookie('deltager');
@@ -90,7 +90,7 @@ function getName() {
 	document.getElementById("text5").innerHTML = "<b>Skriv navn i firkant</b>";
     } else {
 	console.log(name);
-	document.getElementById("text1").innerHTML = "Du har besøgt post " + post;
+	document.getElementById("text1").innerHTML = "Du har besøgt post " + post + ".";
 	document.getElementById("text2").innerHTML = "";
 	document.getElementById("text3").innerHTML = "";
         document.getElementById("text4").innerHTML = "";
