@@ -103,8 +103,9 @@ function getName() {
         nameInput.remove();
 	
 	setCookie('deltager', name, 30);
-	setCookie('poster', post, 30);
 	setCookie('starttid', timeAtPost, 30);
+	setCookie('poster', post, 30);
+	
 
 	const btn1 = document.createElement("button");
         btn1.innerHTML = "<b>Meld dig ud af løbet</b>";
