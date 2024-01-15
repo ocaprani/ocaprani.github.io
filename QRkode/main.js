@@ -1,5 +1,17 @@
 var name;
 var timeAtPost;
+    
+// Convert H:M:S to seconds
+function hmsToSeconds(s) {
+   var b = s.split(':');
+   return parseInt(b[0])*3600 + parseInt(b[1])*60 + parseInt(b[2]);
+}
+   
+// Convert seconds to hh:mm:ss
+function secondsToHMS(secs) {
+   function z(n){return (n<10?'0':'') + n;}
+   return z(Math.floor(secs/3600)) + ':' + z(Math.floor((secs%3600) / 60)) + ':' + z(secs%60);
+}
 
 function getCookie(cname) {
     
@@ -155,7 +167,8 @@ function showState() {
 
 
 console.log("Du har nu besøgt post "+ post);
-timeAtPost = Math.floor(Date.now()/1000);
+timeAtPost = new Date().toLocaleTimeString();
+console.log(timeAtPost);
 showState();
 
 
