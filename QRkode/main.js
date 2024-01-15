@@ -54,35 +54,12 @@ function deleteName() {
     console.log("deleteName");
     var name  = getCookie('deltager');
     var posts = getCookie('poster');
-    var time  = Math.floor(Date.now()/1000) - getCookie('starttid');
-    var hour  = Math.floor(time/(60*60));
-    var min   = Math.floor((time - hour*60*60)/60);
-    var sec   = time - hour*60*60 - min*60;
-    var tid   = "";
+    var time  = secondsToHMS(hmsToSeconds(new Date().toLocaleTimeString())-
+			     hmsToSeconds(getCookie('starttid')));
 	
     document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
-
-    if ( hour != 0 ) {
-	if ( hour == 1 ) {
-	   tid = tid + hour + " time, ";
-	} else {
-	   tid = tid + hour + " timer, ";
-	}
-    }
-    if ( min != 0 ) {
-	if ( min == 1 ) {
-	   tid = tid + min + " minut, ";
-	} else {
-	   tid = tid + min + " minuter, ";
-	}
-    }
-    if ( sec == 1 ) {
-	tid = tid + sec + " sekund";
-    } else {
-	tid = tid + sec + " sekunder";
-    }	
-    document.getElementById("text3").innerHTML = "Du har brugt " + tid + ".";
+    document.getElementById("text3").innerHTML = "Du har brugt " + time + ".";
     document.getElementById("text4").innerHTML = "";
     document.getElementById("text5").innerHTML = "";
     deleteCookie('deltager');
