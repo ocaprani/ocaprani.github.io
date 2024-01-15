@@ -59,7 +59,7 @@ function deleteName() {
 	
     document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
-    document.getElementById("text3").innerHTML = "Du har brugt " + time + ".";
+    document.getElementById("text3").innerHTML = "Din tid er " + time + ".";
     document.getElementById("text4").innerHTML = "";
     document.getElementById("text5").innerHTML = "";
     deleteCookie('deltager');
