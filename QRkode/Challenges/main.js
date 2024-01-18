@@ -75,7 +75,7 @@ function deleteName() {
     // textNode.remove();
 
     for (let i = 1; i < 7; i++) {
-       	textNode1 = document.createTextNode("Svar "+ i + ":  ");
+       	textNode1 = document.createTextNode("Post "+ i + ":  ");
 	document.body.appendChild(textNode1);
 
 	svar = getCookie('Svar'+i);
