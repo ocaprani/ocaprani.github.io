@@ -79,7 +79,7 @@ function deleteName() {
 	document.body.appendChild(textNode1);
 
 	svar = getCookie('Svar'+i);
-	textNode2 = document.createTextNode("Svar "+ svar);
+	textNode2 = document.createTextNode(svar);
 	document.body.appendChild(textNode2);
 
 	const para = document.createElement("p");
