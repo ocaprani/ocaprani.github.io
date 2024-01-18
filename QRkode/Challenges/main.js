@@ -185,6 +185,12 @@ function showState() {
         answer.innerHTML = "<b>Svar på udfordring</b>";
         document.body.appendChild(answer);
         answer.addEventListener("click",getAnswer);
+	    
+	const p = document.createElement("p");
+        document.body.appendChild(p);
+	    
+	const answerInput = document.createElement("input");
+        document.body.appendChild(answerInput);
 
 	const p = document.createElement("p");
         document.body.appendChild(p);
