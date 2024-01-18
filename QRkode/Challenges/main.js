@@ -182,7 +182,7 @@ function showState() {
 	setCookie('poster', posts + ", " + post, 30);
 
 	const answer = document.createElement("button");
-        answer.innerHTML = "<b>Svar på udfordring</b>";
+        answer.innerHTML = "<b>Svar på udfordring"  + " post " + post +  </b>";
         document.body.appendChild(answer);
         answer.addEventListener("click",getAnswer);
 	    
