@@ -72,7 +72,7 @@ function deleteName() {
     document.getElementById("text4").innerHTML = "";
     document.getElementById("text5").innerHTML = "Dine svar på udfordringerne:";
 
-    textNode.remove();
+    // textNode.remove();
 
     for (let i = 1; i < 7; i++) {
        	textNode1 = document.createTextNode("Svar "+ i + ":  ");
