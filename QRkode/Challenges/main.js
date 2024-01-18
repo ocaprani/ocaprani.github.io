@@ -50,6 +50,14 @@ function deleteCookie(cname) {
     console.log(cname + "=" + ";" + "expires=Thu, 01 Jan 1970 00:00:00 UTC;" + ";path=/");
 }
 
+function clearListCookies(){
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++){   
+        var spcook =  cookies[i].split("=");
+        document.cookie = spcook[0] + "=;expires=Thu, 21 Sep 1979 00:00:01 UTC;" + ";path=/";                                
+    }
+}
+
 function deleteName() {
     
     console.log("deleteName");
@@ -81,6 +89,7 @@ function deleteName() {
     deleteCookie('deltager');
     deleteCookie('poster');
     deleteCookie('starttid');
+    clearListCookies();
 
     const btn = document.querySelector("button");
     btn.remove();
