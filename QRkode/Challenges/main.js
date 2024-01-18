@@ -192,8 +192,8 @@ function showState() {
 	const answerInput = document.createElement("input");
         document.body.appendChild(answerInput);
 
-	const p = document.createElement("p");
-        document.body.appendChild(p);
+	const p1 = document.createElement("p");
+        document.body.appendChild(p1);
 	    
 	const btn = document.createElement("button");
         btn.innerHTML = "<b>Meld dig ud af løbet</b>";
