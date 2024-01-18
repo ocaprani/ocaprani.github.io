@@ -176,6 +176,9 @@ function showState() {
         answer.innerHTML = "<b>Svar på udfordring</b>";
         document.body.appendChild(answer);
         answer.addEventListener("click",getAnswer);
+
+	const p = document.createElement("p");
+        document.body.appendChild(p);
 	    
 	const btn = document.createElement("button");
         btn.innerHTML = "<b>Meld dig ud af løbet</b>";
