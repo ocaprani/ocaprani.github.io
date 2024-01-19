@@ -115,6 +115,7 @@ function logInName() {
 	document.getElementById("text2").innerHTML = "";
 	document.getElementById("text3").innerHTML = "";
         document.getElementById("text4").innerHTML = "";
+	document.getElementById("text5").innerHTML = "";
 
 	const btn = document.querySelector("button");
         btn.remove();
