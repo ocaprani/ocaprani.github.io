@@ -82,7 +82,7 @@ function logOutName() {
     textInput = document.querySelector("input");
     if ( textInput != null) textInput.remove();
    
-    textNode.remove();
+    if (textNode != null) textNode.remove();
 
     for (let i = 1; i < 7; i++) {
        	textNode1 = document.createTextNode("Post "+ i + ":  ");
