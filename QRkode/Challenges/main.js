@@ -72,7 +72,17 @@ function logOutName() {
     document.getElementById("text4").innerHTML = "";
     document.getElementById("text5").innerHTML = "Dine svar på udfordringerne:";
 
-    // textNode.remove();
+    
+    btn = document.querySelector("button");
+    if (btn != null) btn.remove();
+
+    btn = document.querySelector("button");
+    if (btn != null) btn.remove();
+
+    textInput = document.querySelector("input");
+    if ( textInput != null) textInput.remove();
+   
+    textNode.remove();
 
     for (let i = 1; i < 7; i++) {
        	textNode1 = document.createTextNode("Post "+ i + ":  ");
@@ -89,11 +99,7 @@ function logOutName() {
     deleteCookie('deltager');
     deleteCookie('poster');
     deleteCookie('starttid');
-    clearListCookies();
-
-    const btn = document.querySelector("button");
-    btn.remove();
-    
+    clearListCookies();   
 }
 
 function logInName() {
