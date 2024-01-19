@@ -110,6 +110,11 @@ function logInName() {
 	document.getElementById("text3").innerHTML = "";
         document.getElementById("text4").innerHTML = "";
 
+	const btn = document.querySelector("button");
+        btn.remove();
+	const nameInput = document.querySelector("input");
+        nameInput.remove();
+
 	const answer = document.createElement("button");
         answer.innerHTML = "<b>" + "Svar på udfordring" + " post " + post + "</b>";
         document.body.appendChild(answer);
@@ -123,11 +128,6 @@ function logInName() {
 
         const p = document.createElement("p");
         document.body.appendChild(p);
-        
-	const btn = document.querySelector("button");
-        btn.remove();
-	const nameInput = document.querySelector("input");
-        nameInput.remove();
 	
 	setCookie('deltager', name, 30);
 	setCookie('starttid', timeAtPost, 30);
