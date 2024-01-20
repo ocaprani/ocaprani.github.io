@@ -6,11 +6,16 @@ function hmsToSeconds(s) {
    var b = s.split(':');
    return parseInt(b[0])*3600 + parseInt(b[1])*60 + parseInt(b[2]);
 }
-   
+
+function z(n){return (n<10?'0':'') + n;}   
 // Convert seconds to hh:mm:ss
 function secondsToHMS(secs) {
-   function z(n){return (n<10?'0':'') + n;}
    return z(Math.floor(secs/3600)) + ':' + z(Math.floor((secs%3600) / 60)) + ':' + z(secs%60);
+}
+
+function timeToHMS() {
+   var d = new Date();
+   return( z(d.getHour())+":"+z(d.getMinutes()+":"+z(d.getSeconds()) )
 }
 
 function getCookie(cname) {
@@ -54,7 +59,8 @@ function deleteName() {
     console.log("deleteName");
     var name  = getCookie('deltager');
     var posts = getCookie('poster');
-    var time  = secondsToHMS(hmsToSeconds(new Date().toLocaleTimeString())-
+    var 
+    var time  = secondsToHMS(hmsToSeconds(timeToHMS())-
 			     hmsToSeconds(getCookie('starttid')));
 	
     document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
