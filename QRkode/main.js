@@ -15,7 +15,7 @@ function secondsToHMS(secs) {
 
 function timeToHMS() {
    var d = new Date();
-   return( z(d.getHour())+":"+z(d.getMinutes())+":"+z(d.getSeconds()) )
+   return( z(d.getHours())+":"+z(d.getMinutes())+":"+z(d.getSeconds()) )
 }
 
 function getCookie(cname) {
