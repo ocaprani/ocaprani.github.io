@@ -7,7 +7,8 @@ function hmsToSeconds(s) {
    return parseInt(b[0])*3600 + parseInt(b[1])*60 + parseInt(b[2]);
 }
 
-function z(n){return (n<10?'0':'') + n;}   
+function z(n){return (n<10?'0':'') + n;} 
+
 // Convert seconds to hh:mm:ss
 function secondsToHMS(secs) {
    return z(Math.floor(secs/3600)) + ':' + z(Math.floor((secs%3600) / 60)) + ':' + z(secs%60);
@@ -65,7 +66,7 @@ function deleteName() {
     document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
     document.getElementById("text3").innerHTML = "Din tid er " + time + ".";
-    document.getElementById("text4").innerHTML = "";
+    document.getElementById("text4").innerHTML = "Tid " + timeToHMS();
     document.getElementById("text5").innerHTML = "";
     deleteCookie('deltager');
     deleteCookie('poster');
