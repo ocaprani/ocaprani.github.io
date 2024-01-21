@@ -59,7 +59,6 @@ function deleteName() {
     console.log("deleteName");
     var name  = getCookie('deltager');
     var posts = getCookie('poster');
-    var 
     var time  = secondsToHMS(hmsToSeconds(timeToHMS())-
 			     hmsToSeconds(getCookie('starttid')));
 	
