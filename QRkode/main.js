@@ -67,7 +67,7 @@ function deleteName() {
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
     document.getElementById("text3").innerHTML = "Din tid er " + time + ".";
     document.getElementById("text4").innerHTML = "Tid " + timeToHMS();
-    document.getElementById("text5").innerHTML = "";
+    document.getElementById("text5").innerHTML = "Starttid " + getCookie('starttid'));
     deleteCookie('deltager');
     deleteCookie('poster');
     deleteCookie('starttid');
@@ -150,7 +150,7 @@ function showState() {
 
 
 console.log("Du har nu besøgt post "+ post);
-timeAtPost = new Date().toLocaleTimeString();
+timeAtPost = timeToHMS();
 console.log(timeAtPost);
 showState();
 
