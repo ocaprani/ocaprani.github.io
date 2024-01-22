@@ -74,8 +74,8 @@ function logOutName() {
     deleteCookie('starttid');    
 }
 
-function getName() {    
-    console.log("getName");
+function logInName() {    
+    console.log("logInName");
     name = document.querySelector("input").value;
 
     if ( name == "" ) {
@@ -97,17 +97,15 @@ function getName() {
 	setCookie('starttid', timeAtPost, 30);
 	setCookie('poster', post, 30);
 	
-
 	const btn1 = document.createElement("button");
         btn1.innerHTML = "<b>Meld dig ud af løbet</b>";
         document.body.appendChild(btn1);
-        btn1.addEventListener("click",deleteName);
+        btn1.addEventListener("click",logOutName);
 	
     }
 }
 
 function showState() {
-
     var name  = getCookie('deltager');
     
     if ( name != "") {
@@ -123,7 +121,7 @@ function showState() {
 	const btn = document.createElement("button");
         btn.innerHTML = "<b>Meld dig ud af løbet</b>";
         document.body.appendChild(btn);
-        btn.addEventListener("click",deleteName);
+        btn.addEventListener("click", logOutName);
 	
     } else {
 	
@@ -140,7 +138,7 @@ function showState() {
         const btn = document.createElement("button");
         btn.innerHTML = "<b>Tilmeld dig til løbet</b>";
         document.body.appendChild(btn);
-        btn.addEventListener("click",getName);
+        btn.addEventListener("click", logInName);
   }
 }
 
