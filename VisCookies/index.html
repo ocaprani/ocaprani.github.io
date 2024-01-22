@@ -36,6 +36,11 @@
                c = c.substring(1);
            }
            console.log(c);
+           var para = document.createElement("p");
+           document.body.appendChild(para);
+           
+	        var textNode = document.createTextNode(c);
+	        document.body.appendChild(textNode);
          }
      }
         
