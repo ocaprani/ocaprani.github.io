@@ -54,13 +54,15 @@ function deleteCookie(cname) {
     console.log(cname + "=" + ";" + "expires=Thu, 01 Jan 1970 00:00:00 UTC;" + ";path=/");
 }
 
-function logoutName() {
-    
-    console.log("deleteName");
+function logOutName() {   
+    console.log("logOutName");
     var name  = getCookie('deltager');
     var posts = getCookie('poster');
     var time  = secondsToHMS(hmsToSeconds(timeToHMS())-
 			     hmsToSeconds(getCookie('starttid')));
+
+    const btn = document.querySelector("button");
+    btn.remove();
 	
     document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
     document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
@@ -69,15 +71,10 @@ function logoutName() {
     document.getElementById("text5").innerHTML = "";
     deleteCookie('deltager');
     deleteCookie('poster');
-    deleteCookie('starttid');
-
-    const btn = document.querySelector("button");
-    btn.remove();
-    
+    deleteCookie('starttid');    
 }
 
-function getName() {
-    
+function getName() {    
     console.log("getName");
     name = document.querySelector("input").value;
 
