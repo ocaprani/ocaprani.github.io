@@ -7,6 +7,7 @@ function hmsToSeconds(s) {
    return parseInt(b[0])*3600 + parseInt(b[1])*60 + parseInt(b[2]);
 }
 
+// Convert digit to text with leading 0 
 function z(n){return (n<10?'0':'') + n;} 
 
 // Convert seconds to hh:mm:ss
@@ -14,13 +15,13 @@ function secondsToHMS(secs) {
    return z(Math.floor(secs/3600)) + ':' + z(Math.floor((secs%3600) / 60)) + ':' + z(secs%60);
 }
 
+// Convert Date to hh:mm:ss
 function timeToHMS() {
    var d = new Date();
    return( z(d.getHours())+":"+z(d.getMinutes())+":"+z(d.getSeconds()) )
 }
 
-function getCookie(cname) {
-    
+function getCookie(cname) {   
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
   var ca = decodedCookie.split(';');
@@ -40,8 +41,7 @@ function getCookie(cname) {
 }
 
 
-function setCookie(cname, cvalue, exdays) {
-    
+function setCookie(cname, cvalue, exdays) {   
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires=" + d.toGMTString();
@@ -50,12 +50,11 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 function deleteCookie(cname) {
-
     document.cookie = cname + "=" + ";" + "expires=Thu, 01 Jan 1970 00:00:00 UTC;" + ";path=/";
     console.log(cname + "=" + ";" + "expires=Thu, 01 Jan 1970 00:00:00 UTC;" + ";path=/");
 }
 
-function deleteName() {
+function logoutName() {
     
     console.log("deleteName");
     var name  = getCookie('deltager');
