@@ -57,22 +57,34 @@ function deleteCookie(cname) {
 function logOutName() {   
     console.log("logOutName");
     var name  = getCookie('deltager');
-    var posts = getCookie('poster');
-    var time  = secondsToHMS(hmsToSeconds(timeToHMS())-
+
+    if ( name == "" ) {
+	var btn = document.querySelector("button");
+        btn.remove();
+	    
+	document.getElementById("text1").innerHTML = "Du er ikke tilmeldt løbet.";
+        document.getElementById("text2").innerHTML = "";
+        document.getElementById("text3").innerHTML = "";
+        document.getElementById("text4").innerHTML = "";
+        document.getElementById("text5").innerHTML = "";
+    } else {
+        var posts = getCookie('poster');
+        var time  = secondsToHMS(hmsToSeconds(timeToHMS())-
 			     hmsToSeconds(getCookie('starttid')));
 
-    var btn = document.querySelector("button");
-    btn.remove();
+        var btn = document.querySelector("button");
+        btn.remove();
 	
-    document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
-    document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
-    document.getElementById("text3").innerHTML = "Din tid er " + time + ".";
-    document.getElementById("text4").innerHTML = "";
-    document.getElementById("text5").innerHTML = "";
+        document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
+        document.getElementById("text2").innerHTML = "Du har besøgt post " + posts + ".";
+        document.getElementById("text3").innerHTML = "Din tid er " + time + ".";
+        document.getElementById("text4").innerHTML = "";
+        document.getElementById("text5").innerHTML = "";
 	
-    deleteCookie('deltager');
-    deleteCookie('poster');
-    deleteCookie('starttid');    
+        deleteCookie('deltager');
+        deleteCookie('poster');
+        deleteCookie('starttid'); 
+    }
 }
 
 function logInName() {    
