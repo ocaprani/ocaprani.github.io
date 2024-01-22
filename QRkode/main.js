@@ -88,19 +88,19 @@ function logInName() {
         document.getElementById("text4").innerHTML = "";
         
         document.getElementById("text5").innerHTML = "Nu er du tilmeldt som "+ name + ".";
-	const btn = document.querySelector("button");
+	var btn = document.querySelector("button");
         btn.remove();
-	const nameInput = document.querySelector("input");
+	var nameInput = document.querySelector("input");
         nameInput.remove();
+
+	btn = document.createElement("button");
+        btn.innerHTML = "<b>Meld dig ud af løbet</b>";
+        document.body.appendChild(btn);
+        btn.addEventListener("click",logOutName);
 	
 	setCookie('deltager', name, 30);
 	setCookie('starttid', timeAtPost, 30);
 	setCookie('poster', post, 30);
-	
-	const btn1 = document.createElement("button");
-        btn1.innerHTML = "<b>Meld dig ud af løbet</b>";
-        document.body.appendChild(btn1);
-        btn1.addEventListener("click",logOutName);
 	
     }
 }
