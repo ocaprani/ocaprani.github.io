@@ -78,7 +78,7 @@ function logOutName() {
         document.getElementById("text5").innerHTML = "";
     } else {
         var posts = getCookie('poster');
-        var time  = secondsToHMS(hmsToSeconds(hmsToSeconds(timeToHMS())-
+        var time  = secondsToHMS(hmsToSeconds(timeToHMS())-
 			     hmsToSeconds(getCookie('starttid')));
 	
 	var btn = document.querySelector("button");
