@@ -61,7 +61,7 @@ function logOutName() {
     var time  = secondsToHMS(hmsToSeconds(timeToHMS())-
 			     hmsToSeconds(getCookie('starttid')));
 
-    const btn = document.querySelector("button");
+    var btn = document.querySelector("button");
     btn.remove();
 	
     document.getElementById("text1").innerHTML = "Hej " + name + ", du er meldt ud af løbet.";
