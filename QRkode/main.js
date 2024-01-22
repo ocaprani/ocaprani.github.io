@@ -69,6 +69,7 @@ function logOutName() {
     document.getElementById("text3").innerHTML = "Din tid er " + time + ".";
     document.getElementById("text4").innerHTML = "";
     document.getElementById("text5").innerHTML = "";
+	
     deleteCookie('deltager');
     deleteCookie('poster');
     deleteCookie('starttid');    
@@ -118,7 +119,7 @@ function showState() {
 	console.log(posts + ", " + post);
 	setCookie('poster', posts + ", " + post, 30);
 	    
-	const btn = document.createElement("button");
+	var btn = document.createElement("button");
         btn.innerHTML = "<b>Meld dig ud af løbet</b>";
         document.body.appendChild(btn);
         btn.addEventListener("click", logOutName);
@@ -129,13 +130,13 @@ function showState() {
         document.getElementById("text3").innerHTML = "skal du skrive dit navn i firkanten og trykke";
         document.getElementById("text4").innerHTML = "på knappen Tilmeld dig til løbet.";
 
-        const nameInput = document.createElement("input");
+        var nameInput = document.createElement("input");
         document.body.appendChild(nameInput);
 
-        const p = document.createElement("p");
+        var p = document.createElement("p");
         document.body.appendChild(p);
 
-        const btn = document.createElement("button");
+        var btn = document.createElement("button");
         btn.innerHTML = "<b>Tilmeld dig til løbet</b>";
         document.body.appendChild(btn);
         btn.addEventListener("click", logInName);
