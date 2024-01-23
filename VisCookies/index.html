@@ -22,6 +22,10 @@
      function showCookies(){      
         document.getElementById("text").innerHTML = "Alle cookies:"; 
 	console.log(document.cookie);
+	const element = document.getElementById("text");
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
         getCookies();
      }
 
