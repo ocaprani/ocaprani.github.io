@@ -34,22 +34,24 @@
         var ca = decodedCookie.split(';');
 
         console.log('getCookie' + " " + decodedCookie);
-        for(var i = 0; i < ca.length; i++) {
-           var c = ca[i];
-           console.log(c);
-           while (c.charAt(0) == ' ') {
-               c = c.substring(1);
-           }
-	   c = c + "; "
-           console.log(c);
-	   var element = document.getElementById("text");
-           if (i%3 == 0 ) {
-	       var para = document.createElement("p");
-               element.appendChild(para);
-           }
-	   var textNode = document.createTextNode(c);
-	   element.appendChild(textNode);
-         }
+	if ( ca[0] != "" ) { 
+            for(var i = 0; i < ca.length; i++) {
+               var c = ca[i];
+               console.log(c);
+               while (c.charAt(0) == ' ') {
+                   c = c.substring(1);
+               }
+	       c = c + "; "
+               console.log(c);
+	       var element = document.getElementById("text");
+               if (i%3 == 0 ) {
+	           var para = document.createElement("p");
+                   element.appendChild(para);
+                }
+	        var textNode = document.createTextNode(c);
+	        element.appendChild(textNode);
+             }
+	}
      }
         
      function clearListCookies(){
