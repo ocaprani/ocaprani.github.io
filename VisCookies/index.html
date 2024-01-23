@@ -42,12 +42,13 @@
            }
 	   c = c + "; "
            console.log(c);
+	   var element = document.getElementById("text");
            if (i%3 == 0 ) {
 	       var para = document.createElement("p");
-               document.body.appendChild(para);
+               element.appendChild(para);
            }
 	   var textNode = document.createTextNode(c);
-	   document.body.appendChild(textNode);
+	   element.appendChild(textNode);
          }
      }
         
