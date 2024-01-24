@@ -5,7 +5,7 @@ LEGO® Education SPIKE™ Essential-sæt 45345</a> kan programeres med ikon blok
 <table>
   <tr>
     <td>
-      <img src="karrusel.png" alt="karrusel" width="200"></td>
+      <img src="karrusel/karrusel.png" alt="karrusel" width="200"></td>
     <td>
       <a href="https://ocaprani.github.io/SPIKE/FølgKant.llsp3" target="_blank" download>FølgKant.llsp3</a><br> 
       <a href="https://ocaprani.github.io/SPIKE/FølgKantLysprocent.llsp3" target="_blank" download>FølgKantLysprocent.llsp3</a><br>
