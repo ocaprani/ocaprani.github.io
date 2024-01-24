@@ -1,8 +1,7 @@
 # SPIKE Essential
-Bøger om blokprogrammering af LEGO modeller bygget ved brug af LEGO elementerne i <a href="https://www.lego.com/da-dk/product/lego-education-spike-prime-set-45678" target="_blank">
-LEGO® Education SPIKE™ Prime-sæt 45678</a>.
-Tryk på bogen for at læse den i Skoletube. Ved siden af bogens forside findes en liste af blokprogrammer brugt i bogen. Tryk på programmerne for at downloade dem til brug i 
-<a href="https://education.lego.com/da-dk/downloads/spike-app/software/" target="_blank">SPIKE App</a>.
+LEGO modeller bygget ved brug af LEGO elementerne i <a href="https://www.lego.com/da-dk/product/lego-education-spike-prime-set-45678" target="_blank">
+LEGO® Education SPIKE™ Essential-sæt 45345</a> kan programeres med ikon blokke i 
+<a href="https://education.lego.com/da-dk/downloads/spike-app/software/" target="_blank">SPIKE App</a>. Nogle af modellerne i SPIKE App kan også styres direkte ved at bruge en af hjemmesiderne nedenfor
 <table>
   <tr>
     <td>
