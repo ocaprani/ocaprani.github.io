@@ -5,7 +5,7 @@ LEGO® Education SPIKE™ Essential-sæt 45345</a> kan programeres med ikon blok
 <table>
   <tr>
     <td>
-      <img src="karrusel/karrusel.png" alt="karrusel" width="200">
+      <img src="karrusel/karrusel.png" alt="karrusel" width="200"><br>
       <a href="karrusel/index.html" target="_blank">Karrusel styring</a>
     </td>
     <td>
