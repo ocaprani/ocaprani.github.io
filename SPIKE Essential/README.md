@@ -6,12 +6,8 @@ LEGO® Education SPIKE™ Essential-sæt 45345</a> kan programeres med ikon blok
   <tr>
     <td>
       <img src="karrusel/karrusel.png" alt="karrusel" width="200"></td>
+      <a href="karrusel/index.html">
     <td>
-      <a href="https://ocaprani.github.io/SPIKE/FølgKant.llsp3" target="_blank" download>FølgKant.llsp3</a><br> 
-      <a href="https://ocaprani.github.io/SPIKE/FølgKantLysprocent.llsp3" target="_blank" download>FølgKantLysprocent.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE/FølgKantPreg.llsp3" target="_blank" download>FølgKantPreg.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE/FølgKantPregData.llsp3" target="_blank" download>FølgKantPregData.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE/FølgKantPDreg.llsp3" target="_blank" download>FølgKantPDreg.llsp3</a><br>
-    </td>
+      <img src="snescooter/snescooter.png" alt="snescooter" width="200"></td>
   </tr>
 </table>
