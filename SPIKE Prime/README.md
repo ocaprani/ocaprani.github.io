@@ -32,6 +32,8 @@ Tryk på bogen for at læse den i Skoletube. For nogle bøger er der ved siden a
       <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 3.llsp3" target="_blank" download>Trin 3.llsp3</a><br>
       <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 4 Pentaton.llsp3" target="_blank" download>Trin 4 Pentaton.llsp3</a><br>
       <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 5 Burp Lyde.llsp3" target="_blank" download>Trin 5 Burp Lyde.llsp3</a><br>
+      <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/lydbil1.llsp3" target="_blank" download>lydbil1.llsp3</a><br>
+      <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/lydbil2.llsp3" target="_blank" download>lydbil2.llsp3</a><br>
     </td>
   </tr>
 </table>
