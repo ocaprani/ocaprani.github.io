@@ -1,6 +1,6 @@
  .box {
      display: flex;
-     justify-content: fles-start;
+     justify-content: flex-start;
  }
 
 .space  {
