@@ -1,0 +1,27 @@
+
+
+#main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#connect {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+#inputField {
+    /* margin: 10px;
+    margin-right: 5px; */
+    width: 100px;
+}
+
+#load_button {
+    margin-right: 5px;
+}

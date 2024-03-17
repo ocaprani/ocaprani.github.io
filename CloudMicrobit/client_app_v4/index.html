@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Client App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="main">
+        <h1 style="margin-bottom: 10px;">Client App</h1>
+        <!-- <a href="https://makecode.microbit.org/#pub:S51633-21919-71174-57275" target="_blank">Download MakeCode program her!</a> -->
+        <div id="connect">
+            <!-- <input type="text" id="inputField" style="margin-right: 10px;" placeholder="Skriv unikt ID"><br> -->
+            <button id="connectButton" style="margin-right: 5px;">Connect to micro:bit</button><br>
+            <input type="button" value="Indlæs billede" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();" />
+            <input type="file" style="display: none;" id="load_element" accept="image/png, image/jpeg" onchange="load_img(event)">
+            <a href="https://makecode.microbit.org/#pub:_6LTfaRVo4L5s" target="_blank">Download micro:bit program</a>
+            <br>
+            <!-- Dropdown -->
+            <select id="dropdown" style="margin: 5px;">
+                <option value="0">Ternet</option>
+                <option value="1">Haletudse</option>
+                <option value="2">Server</option>
+            </select>
+        </div>
+        <canvas id="canvas" width=600px height=600px style="background-color: rgb(207, 207, 207);"></canvas>
+        <br>
+    </div>
+
+    <script type="text/javascript" src="../server_app_v4/static/canvasGame.js"></script>
+    <script type="text/javascript" src="grid.js"></script>
+    <script type="text/javascript" src="wb_connect.js"></script>
+    <script type="text/javascript" src="ws_script.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>

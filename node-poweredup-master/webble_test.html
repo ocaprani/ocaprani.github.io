@@ -23,7 +23,10 @@ const scan = async function () {
                 services: [
                     LPF2_HUB            
                 ]
-            }
+            },
+            {
+                namePrefix: '27',
+            },
         ]
     });
     const server = await device.gatt.connect();
