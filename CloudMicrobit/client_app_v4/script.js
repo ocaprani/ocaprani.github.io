@@ -15,6 +15,11 @@ let dropdown = document.getElementById("dropdown");
 dropdown.value = "0";
 dropdown.onchange = changeMode;
 
+let dropdownEmoji = document.getElementById("dropdown-emoji");
+dropdownEmoji.value = "0";
+dropdownEmoji.onchange = changeEmoji;
+
+
 let socket = null;
 let myUserID = String(Math.floor(Math.random() * 10000));
 let userIDfield = document.getElementById("inputField");
@@ -28,6 +33,16 @@ addUser(myUserID, userColor);
 addDataToUser(myUserID, {x: canvas.width / 2, y: canvas.height / 2}, 20)
 
 changeMode();
+changeEmoji();
+
+
+
+// remove empty option from dropdown when opened
+// dropdownEmoji.onclick = function() {
+//     if (dropdownEmoji.options[dropdownEmoji.options.length - 1].value === "") {
+//         dropdownEmoji.remove(dropdownEmoji.options.length - 1);
+//     }
+// }
 
 
 
@@ -73,7 +88,7 @@ function redrawCanvas() {
         drawTail(users[myUserID]);
     } else if (value === "2") {
         for (let userID in users) {
-            drawImage(users[userID]);
+            drawFigure(users[userID]);
         }
     }
     
@@ -101,6 +116,25 @@ function changeMode(event) {
     }
 
 };
+
+
+function changeEmoji(event) {
+    let value = dropdown.value;
+
+    // if chosen value is the last in the list, load an image
+    // if (value === dropdownEmoji.options[dropdownEmoji.options.length - 1].value) {
+    //     load_img(event);
+    // }
+
+    if (dropdownEmoji.options[dropdownEmoji.options.length - 1].value === "") {
+        dropdownEmoji.remove(dropdownEmoji.options.length - 1);
+    }
+
+    users[myUserID].emoji = dropdownEmoji.options[dropdownEmoji.selectedIndex].text;
+    users[myUserID].img = null;
+
+    redrawCanvas();
+}
 
 
 
@@ -153,6 +187,35 @@ function getScaleFromTemp(temperature) {
 }
 
 
+function drawFigure(user) {
+    if (user.img !== null) {
+        drawImage(user);
+    }
+    else if (user.emoji !== null) {
+        drawEmoji(user);
+    }
+    else {
+        drawHead(user);
+    }
+}
+
+
+function drawEmoji(user) {
+    // Draw emoji at head
+    let coords = user.coords[user.indexOfHead];
+    let scale = getScaleFromTemp(user.temperature);
+    let emoji = user.emoji;
+    if (emoji !== null) {
+        emoji.width = scale.width;
+        emoji.height = scale.height;
+        // Draw emoji centered at head (as text)
+        context.font = `${scale.width}px Arial`;
+        context.fillText(emoji, coords.x - scale.width / 2, coords.y + scale.height / 2);
+        
+    } else {
+        console.log("Error: No emoji selected");
+    }
+}
 
 
 function drawImage(user) {
@@ -171,6 +234,16 @@ function drawImage(user) {
 
 
 function load_img(event) {
+    users[myUserID].emoji = null;
+    // Add empty option to dropdown
+    if (dropdownEmoji.options[dropdownEmoji.options.length - 1].value !== "") {
+        let option = document.createElement("option");
+        option.text = "";
+        option.value = "";
+        dropdownEmoji.add(option);
+        dropdownEmoji.value = "";
+    }
+
     var file = event.target.files[0];
     if (file.type == "image/png" || file.type == "image/jpeg") {
         var reader = new FileReader();

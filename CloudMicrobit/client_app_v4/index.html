@@ -11,16 +11,23 @@
         <div id="connect">
             <!-- <input type="text" id="inputField" style="margin-right: 10px;" placeholder="Skriv unikt ID"><br> -->
             <button id="connectButton" style="margin-right: 5px;">Connect to micro:bit</button><br>
+            <select id="dropdown-emoji" style="margin-right: 5px;">
+                <option value="0">😎</option>
+                <option value="1">😁</option>
+                <option value="2">🤖</option>
+                <option value="3">🐶</option>
+                <option value="4">🦒</option>
+            </select>
             <input type="button" value="Indlæs billede" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();" />
             <input type="file" style="display: none;" id="load_element" accept="image/png, image/jpeg" onchange="load_img(event)">
-            <a href="https://makecode.microbit.org/#pub:_6LTfaRVo4L5s" target="_blank">Download micro:bit program</a>
             <br>
-            <!-- Dropdown -->
-            <select id="dropdown" style="margin: 5px;">
+            <select id="dropdown" style="margin-right: 5px;">
                 <option value="0">Ternet</option>
                 <option value="1">Haletudse</option>
                 <option value="2">Server</option>
             </select>
+
+            <a href="https://makecode.microbit.org/#pub:_6LTfaRVo4L5s" target="_blank">Download micro:bit program</a>
         </div>
         <canvas id="canvas" width=600px height=600px style="background-color: rgb(207, 207, 207);"></canvas>
         <br>
