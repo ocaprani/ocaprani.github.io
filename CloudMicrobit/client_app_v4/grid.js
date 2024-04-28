@@ -68,11 +68,6 @@ function drawGrid() {
     context.lineTo(canvas.width / 2 + 5, canvas.height - 10);
     context.stroke();
 
-
-
-    
-
-
 }
 
 

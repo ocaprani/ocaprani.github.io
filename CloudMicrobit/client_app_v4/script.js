@@ -6,9 +6,6 @@ console.log("CANVAS", canvas)
 let context = canvas.getContext('2d');
 context.fillStyle  = "white";
 
-let imgSizes = {widthLow: 20, heightLow: 20, widthHigh: 150, heightHigh: 150};
-let tempRange = {low: 20, high: 30};
-
 connectButton.onclick = connectClicked;
 
 let dropdown = document.getElementById("dropdown");
@@ -27,6 +24,8 @@ if (userIDfield !== null) {
     userIDfield.value = myUserID;
 }
 
+let fileEl = document.getElementById("load_element");
+
 let colors = ["red", "blue", "green", "yellow", "purple"];
 let userColor = colors[myUserID.charCodeAt(0) % colors.length];
 addUser(myUserID, userColor);
@@ -34,6 +33,7 @@ addDataToUser(myUserID, {x: canvas.width / 2, y: canvas.height / 2}, 20)
 
 changeMode();
 changeEmoji();
+connectToServer();
 
 
 
@@ -62,7 +62,7 @@ function handleData(message) {
     addDataToUser(myUserID, {x: x, y: y}, temperature);
 
     if (socket !== null && socket.readyState === 1 && dropdown.value === "2") {
-      postCoordinates(myUserID, {x: x, y: y});
+      postCoordinates(myUserID, {x: x, y: y}, temperature);
     }
 
   }
@@ -87,11 +87,9 @@ function redrawCanvas() {
         drawHead(users[myUserID]);
         drawTail(users[myUserID]);
     } else if (value === "2") {
-        for (let userID in users) {
-            drawFigure(users[userID]);
-        }
+        drawFigure(users[myUserID]);
     }
-    
+
 }
 
 
@@ -102,6 +100,10 @@ function changeMode(event) {
     
     context.clearRect(0, 0, canvas.width, canvas.height);
     redrawCanvas();
+
+    if (socket !== null && socket.readyState === 1) {
+        postDrawOnServer(myUserID, value === "2");
+    }
     
     // if (value === "0") {
     //     drawGrid();
@@ -111,16 +113,16 @@ function changeMode(event) {
     //     connectToServer();
     // }
 
-    if (value === "2") {
-        connectToServer();
-    }
+    // if (value === "2") {
+    //     connectToServer();
+    // }
 
-};
+}
 
 
 function changeEmoji(event) {
-    let value = dropdown.value;
-
+    
+    // let value = dropdown.value;
     // if chosen value is the last in the list, load an image
     // if (value === dropdownEmoji.options[dropdownEmoji.options.length - 1].value) {
     //     load_img(event);
@@ -130,10 +132,17 @@ function changeEmoji(event) {
         dropdownEmoji.remove(dropdownEmoji.options.length - 1);
     }
 
-    users[myUserID].emoji = dropdownEmoji.options[dropdownEmoji.selectedIndex].text;
+    let emoji = dropdownEmoji.options[dropdownEmoji.selectedIndex].text;
+    users[myUserID].emoji = emoji;
     users[myUserID].img = null;
 
     redrawCanvas();
+
+    fileEl.value = null;
+
+    if (socket !== null && socket.readyState === 1) {
+        postEmoji(myUserID, emoji);
+    }
 }
 
 
@@ -178,74 +187,32 @@ function drawTail(user) {
 }
 
 
-function getScaleFromTemp(temperature) {
-    // Scale image based on temperature
-    let scale = (temperature - tempRange.low) / (tempRange.high - tempRange.low);
-    let width = imgSizes.widthLow + scale * (imgSizes.widthHigh - imgSizes.widthLow);
-    let height = imgSizes.heightLow + scale * (imgSizes.heightHigh - imgSizes.heightLow);
-    return {width: width, height: height};
-}
-
-
-function drawFigure(user) {
-    if (user.img !== null) {
-        drawImage(user);
-    }
-    else if (user.emoji !== null) {
-        drawEmoji(user);
-    }
-    else {
-        drawHead(user);
-    }
-}
-
-
-function drawEmoji(user) {
-    // Draw emoji at head
-    let coords = user.coords[user.indexOfHead];
-    let scale = getScaleFromTemp(user.temperature);
-    let emoji = user.emoji;
-    if (emoji !== null) {
-        emoji.width = scale.width;
-        emoji.height = scale.height;
-        // Draw emoji centered at head (as text)
-        context.font = `${scale.width}px Arial`;
-        context.fillText(emoji, coords.x - scale.width / 2, coords.y + scale.height / 2);
-        
-    } else {
-        console.log("Error: No emoji selected");
-    }
-}
-
-
-function drawImage(user) {
-    // Draw image at head
-    let coords = user.coords[user.indexOfHead];
-    let scale = getScaleFromTemp(user.temperature);
-    let img = user.img;
-    if (img !== null) {
-        img.width = scale.width;
-        img.height = scale.height;
-        context.drawImage(img, coords.x - img.width / 2, coords.y - img.height / 2, img.width, img.height);
-    } else {
-        drawHead(user, scale.width / 2);
-    }
-}
-
-
 function load_img(event) {
     users[myUserID].emoji = null;
+    
     // Add empty option to dropdown
-    if (dropdownEmoji.options[dropdownEmoji.options.length - 1].value !== "") {
-        let option = document.createElement("option");
-        option.text = "";
-        option.value = "";
-        dropdownEmoji.add(option);
-        dropdownEmoji.value = "";
-    }
+    // if (dropdownEmoji.options[dropdownEmoji.options.length - 1].value !== "") {
+        // let option = document.createElement("option");
+        // option.text = "";
+        // option.value = "";
+        // dropdownEmoji.value = "";
+        // dropdownEmoji.add(option);
+        
+        // Set to filename
+    // }
 
     var file = event.target.files[0];
+    
+    let option = document.createElement("option");
+    option.style.display = "none";
+    option.text = file.name;
+    option.value = "";
+    dropdownEmoji.add(option);
+    dropdownEmoji.value = "";
+
+
     if (file.type == "image/png" || file.type == "image/jpeg") {
+        console.log("Image file selected:", file.name);
         var reader = new FileReader();
         reader.onload = function (event) {
             console.log("Image loaded");
@@ -253,7 +220,9 @@ function load_img(event) {
             img.src = event.target.result;
             img.onload = function () {
                 users[myUserID].img = img;
+                users[myUserID].emoji = null;
                 redrawCanvas();
+                postImage(myUserID, img);
             }
         }
         reader.readAsDataURL(file);
