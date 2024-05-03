@@ -125,7 +125,7 @@ function changeEmoji(event) {
     // let value = dropdown.value;
     // if chosen value is the last in the list, load an image
     // if (value === dropdownEmoji.options[dropdownEmoji.options.length - 1].value) {
-    //     load_img(event);
+    //     loadImg(event);
     // }
 
     if (dropdownEmoji.options[dropdownEmoji.options.length - 1].value === "") {
@@ -187,7 +187,7 @@ function drawTail(user) {
 }
 
 
-function load_img(event) {
+function loadImg(event) {
     users[myUserID].emoji = null;
     
     // Add empty option to dropdown
