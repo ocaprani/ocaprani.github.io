@@ -107,10 +107,18 @@ function drawImage(user) {
     if (img !== null) {
         img.width = scale.width;
         img.height = scale.height;
-        context.drawImage(img, coords.x - img.width / 2, coords.y - img.height / 2, img.width, img.height);
+        // Draw img as circle
+        context.save();
+        context.beginPath();
+        context.arc(coords.x, coords.y, scale.width / 2, 0, 2 * Math.PI);
+        context.closePath();
+        context.clip();
+        context.drawImage(img, coords.x - scale.width / 2, coords.y - scale.height / 2, scale.width, scale.height);
+        context.restore();
     } else {
         drawHead(user, scale.width / 2);
     }
 }
+
 
 
