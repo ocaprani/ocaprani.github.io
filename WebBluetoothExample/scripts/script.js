@@ -86,11 +86,12 @@ function handleData(message) {
     return;
   } else {
     let data = message.split(",");
-      console.log(data);
+   
     let x = Number(data[0]);
     let y = Number(data[1]);
     let z = Number(data[2]);
     let speed = Number(data[3]);
+      console.log(data[0], data[1]);
     context.clearRect(0, 0, canvas.width, canvas.height);
     x = (canvas.width / 2) + (x / 1024) * canvas.width;
     y = (canvas.height / 2) + (y / 1024) * canvas.height;
