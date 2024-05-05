@@ -86,6 +86,7 @@ function handleData(message) {
     return;
   } else {
     let data = message.split(",");
+      console.log(data);
     let x = Number(data[0]);
     let y = Number(data[1]);
     let z = Number(data[2]);
