@@ -91,7 +91,7 @@ function handleData(message) {
     let y = Number(data[1]);
     let z = Number(data[2]);
     let speed = Number(data[3]);
-      console.log(data[0], data[1]);
+      console.log(x, y);
     context.clearRect(0, 0, canvas.width, canvas.height);
     x = (canvas.width / 2) + (x / 1024) * canvas.width;
     y = (canvas.height / 2) + (y / 1024) * canvas.height;
