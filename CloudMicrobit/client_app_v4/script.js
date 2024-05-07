@@ -6,6 +6,9 @@ console.log("CANVAS", canvas)
 let context = canvas.getContext('2d');
 context.fillStyle  = "white";
 
+coordText = document.getElementById("coord");
+tempText = document.getElementById("temp");
+
 connectButton.onclick = connectClicked;
 
 let dropdown = document.getElementById("dropdown");
@@ -60,6 +63,7 @@ function handleData(message) {
     y = (canvas.height / 2) + (y / 1024) * canvas.height;
 
     addDataToUser(myUserID, {x: x, y: y}, temperature);
+    updateCoordText(x, y, temperature);
 
     if (socket !== null && socket.readyState === 1 && dropdown.value === "2") {
       postCoordinates(myUserID, {x: x, y: y}, temperature);
@@ -91,6 +95,13 @@ function redrawCanvas() {
     }
 
 }
+
+
+function updateCoordText(x, y, temperature) {
+    coordText.textContent = `Koordinater (x: ${x.toFixed(0)}, y: ${y.toFixed(0)})`;
+    tempText.textContent = `Temperatur: ${temperature.toFixed(0)}°C`;
+}
+
 
 
 

@@ -24,3 +24,19 @@
 #load_button {
     margin-right: 5px;
 }
+
+/* #canvas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+#canvasContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#coord, #temp {
+    margin: 10px;
+}
