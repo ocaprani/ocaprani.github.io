@@ -2,7 +2,7 @@
 
 
 let canvas = document.querySelector("#canvas");
-console.log("CANVAS", canvas)
+// console.log("CANVAS", canvas)
 let context = canvas.getContext('2d');
 context.fillStyle  = "white";
 
@@ -98,7 +98,7 @@ function redrawCanvas() {
 
 
 function updateCoordText(x, y, temperature) {
-    coordText.textContent = `Koordinater (x: ${x.toFixed(0)}, y: ${y.toFixed(0)})`;
+    coordText.textContent = `Koordinater: (x: ${x.toFixed(0)}, y: ${y.toFixed(0)})`;
     tempText.textContent = `Temperatur: ${temperature.toFixed(0)}°C`;
 }
 
@@ -113,6 +113,9 @@ function changeMode(event) {
     redrawCanvas();
 
     if (socket !== null && socket.readyState === 1) {
+        if (value === "2") {
+            postEmoji(myUserID, users[myUserID].emoji);
+        }
         postDrawOnServer(myUserID, value === "2");
     }
     

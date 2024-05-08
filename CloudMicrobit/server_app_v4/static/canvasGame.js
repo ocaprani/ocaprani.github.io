@@ -3,8 +3,8 @@
 // map of userID to user object which contain color and list of x,y coordinates
 let users = {};
 
-let maxTailLength = 8;
-let tailWidth = 10;
+let maxTailLength = 10;
+let tailWidth = 12;
 
 let tempRange = {low: 20, high: 30};
 let imgSizes = {widthLow: 20, heightLow: 20, widthHigh: 150, heightHigh: 150};

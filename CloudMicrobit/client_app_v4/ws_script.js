@@ -39,8 +39,13 @@ function connectToServer() {
     socket.onopen = function(event) {
         console.log("Connected to server");
         socket.send('client');
-        postEmoji(myUserID, users[myUserID].emoji);
+        // postEmoji(myUserID, users[myUserID].emoji);
     };
+
+    socket.onmessage = function(event) {
+        let jsonData = JSON.parse(event.data);
+        console.log("Received: ", jsonData);
+    }
 
     socket.onclose = function (event) {
         console.log('WebSocket connection closed');
