@@ -4,7 +4,6 @@
 let canvas = document.querySelector("#canvas");
 // console.log("CANVAS", canvas)
 let context = canvas.getContext('2d');
-context.fillStyle  = "white";
 
 coordText = document.getElementById("coord");
 tempText = document.getElementById("temp");
@@ -16,7 +15,7 @@ dropdown.value = "0";
 dropdown.onchange = changeMode;
 
 let dropdownEmoji = document.getElementById("dropdown-emoji");
-dropdownEmoji.value = "0";
+dropdownEmoji.value = "default";
 dropdownEmoji.onchange = changeEmoji;
 
 
@@ -31,11 +30,27 @@ let fileEl = document.getElementById("load_element");
 
 let colors = ["red", "blue", "green", "yellow", "purple"];
 let userColor = colors[myUserID.charCodeAt(0) % colors.length];
+context.fillStyle = userColor;
+
 addUser(myUserID, userColor);
 addDataToUser(myUserID, {x: canvas.width / 2, y: canvas.height / 2}, 20)
 
+let colorPicker = document.getElementById("colorPicker");
+colorPicker.value = context.fillStyle;
+colorPicker.oninput = function(event) {
+    // context.fillStyle = event.target.value;
+    users[myUserID].color = event.target.value;
+    redrawCanvas();
+}
+
+colorPicker.onchange = function(event) {
+    if (isSocketOpen()) {
+        postColor(myUserID, event.target.value);
+    }
+}
+
 changeMode();
-changeEmoji();
+// changeEmoji();
 connectToServer();
 
 
@@ -47,6 +62,10 @@ connectToServer();
 //     }
 // }
 
+
+function isSocketOpen() {
+    return socket !== null && socket.readyState === 1;
+}
 
 
 function handleData(message) {
@@ -65,7 +84,7 @@ function handleData(message) {
     addDataToUser(myUserID, {x: x, y: y}, temperature);
     updateCoordText(x, y, temperature);
 
-    if (socket !== null && socket.readyState === 1 && dropdown.value === "2") {
+    if (isSocketOpen() && dropdown.value === "2") {
       postCoordinates(myUserID, {x: x, y: y}, temperature);
     }
 
@@ -91,6 +110,7 @@ function redrawCanvas() {
         drawHead(users[myUserID]);
         drawTail(users[myUserID]);
     } else if (value === "2") {
+        drawTail(users[myUserID]);
         drawFigure(users[myUserID]);
     }
 
@@ -112,7 +132,7 @@ function changeMode(event) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     redrawCanvas();
 
-    if (socket !== null && socket.readyState === 1) {
+    if (isSocketOpen()) {
         if (value === "2") {
             postEmoji(myUserID, users[myUserID].emoji);
         }
@@ -146,7 +166,14 @@ function changeEmoji(event) {
         dropdownEmoji.remove(dropdownEmoji.options.length - 1);
     }
 
-    let emoji = dropdownEmoji.options[dropdownEmoji.selectedIndex].text;
+    let emoji;
+    if (dropdownEmoji.value === "default") {
+        emoji = null;
+    }
+    else {
+        emoji = dropdownEmoji.options[dropdownEmoji.selectedIndex].text;
+    }
+
     users[myUserID].emoji = emoji;
     users[myUserID].img = null;
 
@@ -154,51 +181,12 @@ function changeEmoji(event) {
 
     fileEl.value = null;
 
-    if (socket !== null && socket.readyState === 1) {
+    if (isSocketOpen()) {
         postEmoji(myUserID, emoji);
     }
 }
 
 
-
-
-function drawHead(user, size=10) {
-    if (user.coords.length < 1) {
-        return;
-    }
-    let coords = user.coords[user.indexOfHead];
-    context.fillStyle = user.color;
-    context.beginPath();
-    context.arc(coords.x, coords.y, size, 0, 2 * Math.PI);
-    context.fill();
-}
-
-
-function drawTail(user) {
-    if (user.coords.length < maxTailLength) {
-        return;
-    }
-    context.fillStyle = user.color;
-    context.strokeStyle = user.color;
-    let prevCoords = user.coords[(user.indexOfHead+1) % user.coords.length];
-    for (let i = 1; i < user.coords.length; i++) {
-        let coords = user.coords[(i + user.indexOfHead + 1) % user.coords.length];
-        context.lineWidth = tailWidth * ((i / user.coords.length));
-        
-        // draw circle at joint with diameter of lineWidth
-        context.beginPath();
-        context.arc(coords.x, coords.y, context.lineWidth / 2, 0, 2 * Math.PI);
-        context.fill();
-        
-        context.beginPath();
-        context.moveTo(prevCoords.x, prevCoords.y);
-        context.lineTo(coords.x, coords.y);
-        context.stroke();
-        context.closePath();
-        prevCoords = coords;
-    }
-
-}
 
 
 function loadImg(event) {

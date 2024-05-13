@@ -5,7 +5,6 @@ function postCoordinates(userID, coords, temperature) {
     socket.send(JSON.stringify({ userID: userID, coords: coords, t: temperature }));
 }
 
-
 function postImage(userID, img) {
     console.log("Posting image");
     socket.send(JSON.stringify({ userID: userID, img: img.src })); // img.data is a Uint8Array
@@ -20,6 +19,12 @@ function postDrawOnServer(userID, value) {
     console.log("Posting draw mode: ", value);
     socket.send(JSON.stringify({ userID: userID, draw: value }));
 }
+
+function postColor(userID, color) {
+    console.log("Posting color: ", color);
+    socket.send(JSON.stringify({ userID: userID, color: color }));
+}
+
 
 function postCloseConnection() {
     socket.send(JSON.stringify({ userID: myUserID, close: true }));

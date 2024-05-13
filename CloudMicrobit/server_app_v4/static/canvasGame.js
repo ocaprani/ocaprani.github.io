@@ -7,7 +7,7 @@ let maxTailLength = 10;
 let tailWidth = 12;
 
 let tempRange = {low: 20, high: 30};
-let imgSizes = {widthLow: 20, heightLow: 20, widthHigh: 150, heightHigh: 150};
+let imgSizes = {widthLow: 15, heightLow: 15, widthHigh: 150, heightHigh: 150};
 
 
 
@@ -56,6 +56,48 @@ function addDataToUser(userID, coords, temperature) {
 
 
 
+function drawHead(user, size=10) {
+    if (user.coords.length < 1) {
+        return;
+    }
+    let coords = user.coords[user.indexOfHead];
+    context.fillStyle = user.color;
+    context.beginPath();
+    context.arc(coords.x, coords.y, size, 0, 2 * Math.PI);
+    context.fill();
+}
+
+
+function drawTail(user) {
+    if (user.coords.length < maxTailLength) {
+        return;
+    }
+    context.fillStyle = user.color;
+    context.strokeStyle = user.color;
+    let prevCoords = user.coords[(user.indexOfHead+1) % user.coords.length];
+    for (let i = 1; i < user.coords.length; i++) {
+        let coords = user.coords[(i + user.indexOfHead + 1) % user.coords.length];
+        // context.lineWidth = tailWidth * ((i / user.coords.length));
+        context.lineWidth = getScaleFromTemp(user.temperature).width * ((i / user.coords.length));
+        
+        // draw circle at joint with diameter of lineWidth
+        context.beginPath();
+        context.arc(coords.x, coords.y, context.lineWidth / 2, 0, 2 * Math.PI);
+        context.fill();
+        
+        context.beginPath();
+        context.moveTo(prevCoords.x, prevCoords.y);
+        context.lineTo(coords.x, coords.y);
+        context.stroke();
+        context.closePath();
+        prevCoords = coords;
+    }
+
+}
+
+
+
+
 function getScaleFromTemp(temperature) {
     // Scale image based on temperature
     let scale = (temperature - tempRange.low) / (tempRange.high - tempRange.low);
@@ -77,7 +119,8 @@ function drawFigure(user) {
         drawEmoji(user);
     }
     else {
-        console.log("No image or emoji selected");
+        drawHead(user);
+        // console.log("No image or emoji selected");
     }
 }
 
@@ -92,7 +135,8 @@ function drawEmoji(user) {
         emoji.height = scale.height;
         // Draw emoji centered at head (as text)
         context.font = `${scale.width}px Arial`;
-        context.fillText(emoji, coords.x - scale.width / 2, coords.y + scale.height / 2);
+        context.fillText(emoji, coords.x - scale.width / 1.5, coords.y + scale.height / 2.9);
+        // context.fillText(emoji, coords.x, coords.y);
     } else {
         console.log("Error: No emoji selected");
     }

@@ -22,17 +22,26 @@ socket.onopen = function(event) {
 socket.onmessage = function(event) {
     // console.log("Received: " + event.data);
     let jsonData = JSON.parse(event.data);
-
-    // draw color based on first letter of userID
-    let userColor = colors[jsonData.userID.charCodeAt(0) % colors.length];
-
-    // TODO: only add user if not already in users (and find color)
-    addUser(jsonData.userID, userColor, []);
+    
+    if (!(jsonData.userID in users)) {
+        let userColor;
+        if ("color" in jsonData) {
+            userColor = jsonData.color;
+        }
+        else {
+            userColor = colors[jsonData.userID.charCodeAt(0) % colors.length];
+        }
+        addUser(jsonData.userID, userColor, []);
+    }
 
     let fromUser = users[jsonData.userID];
-
-
-    if ("coords" in jsonData) {
+    
+    if ("color" in jsonData) {
+        console.log("Received color: ", jsonData.color);
+        fromUser.color = jsonData.color;
+        redrawCanvas();
+    }
+    else if ("coords" in jsonData) {
         addDataToUser(jsonData.userID, {x: jsonData["coords"]["x"], y: jsonData["coords"]["y"]}, jsonData["t"]);
     }
     else if ("img" in jsonData) {
@@ -96,6 +105,7 @@ function redrawCanvas() {
     
     for (let userID in users) {
         let user = users[userID];
+        drawTail(user);
         drawFigure(user);
         
         // if (user.img !== null) {

@@ -1,10 +1,20 @@
-
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    /* background-image: linear-gradient(to bottom, #f0f0f0, #47474786); */
+    height: 100vh;
+    width: 100vw;
+}
 
 #main {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-top: 50px;
+    /* height: 70vh;
+    width: 100vw; */
 }
 
 #connect {
@@ -25,11 +35,12 @@
     margin-right: 5px;
 }
 
-/* #canvas {
-    display: flex;
+#canvas {
+    /* display: flex;
     justify-content: center;
-    align-items: center;
-} */
+    align-items: center; */
+    border: 1px solid black;
+}
 
 #canvasContainer {
     display: flex;
@@ -44,7 +55,7 @@
     border-color: black;
     border-width: 1px;
     border-style: solid;
-    border-radius: 10px;
+    border-radius: 10px;;
     width: 250px;
     right: -260px;
 }
