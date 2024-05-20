@@ -4,42 +4,41 @@
 let cellWidth = 25;
 let cellHeight = 25;
 
-function drawGrid() {
+coordBoxColor = "rgb(225, 225, 225)";
+
+function drawGrid(x, y) {
     context.strokeStyle = "black";
     context.lineWidth = 0.25;
+    context.beginPath();
     for (let i = 0; i < canvas.width; i += cellWidth) {
-        context.beginPath();
         context.moveTo(i, 0);
         context.lineTo(i, canvas.height);
-        context.stroke();
     }
     for (let i = 0; i < canvas.height; i += cellHeight) {
-        context.beginPath();
         context.moveTo(0, i);
         context.lineTo(canvas.width, i);
-        context.stroke();
     }
-
+    context.stroke();
+    
     // Draw axis ticks
     context.lineWidth = 1;
     let cellsPerTick = 2;
+    context.beginPath();
     for (let i = cellWidth; i < canvas.width; i += cellWidth*cellsPerTick) {
-        context.beginPath();
         context.moveTo(i, canvas.height / 2 - 5);
         context.lineTo(i, canvas.height / 2 + 5);
-        context.stroke();
     }
 
     for (let i = cellWidth; i < canvas.height; i += cellHeight*cellsPerTick) {
-        context.beginPath();
         context.moveTo(canvas.width / 2 - 5, i);
         context.lineTo(canvas.width / 2 + 5, i);
-        context.stroke();
     }
 
+
     // Draw axes with arrows at both ends
-    context.lineWidth = 1;
-    context.beginPath();
+    // context.lineWidth = 1;
+    // context.beginPath();
+
     // x axis
     context.moveTo(0, canvas.height / 2);
     context.lineTo(canvas.width, canvas.height / 2);
@@ -66,8 +65,24 @@ function drawGrid() {
     context.lineTo(canvas.width / 2 - 5, canvas.height - 10);
     context.moveTo(canvas.width / 2, canvas.height);
     context.lineTo(canvas.width / 2 + 5, canvas.height - 10);
-    context.stroke();
+    
+    // Type the current xy coordinates
+    if (x !== undefined && y !== undefined){
+        // Fill the background of the text with same color as canvas background
+        // context.fillStyle = canvasColor;
+        context.fillStyle = coordBoxColor;
+        context.fillRect(canvas.width - 64, canvas.height / 2 + 13, 63, 25);
+        context.fillRect(canvas.width / 2 + 11, 3, 62, 25);
+        
+        // Draw the text
+        context.font = "16px Arial";
+        context.fillStyle = "black";
+        context.fillText(`x: ${x}`, canvas.width - 60, canvas.height / 2 + 30);
+        context.fillText(`y: ${y}`, canvas.width / 2 + 14, 20);
 
+    }
+    
+    context.stroke();
 }
 
 

@@ -11,7 +11,7 @@ let colors = ["red", "blue", "green", "yellow", "purple"];
 // var socket = new WebSocket('ws://192.168.1.166:8080');
 var socket = new WebSocket('wss://cloudmicrobit.azurewebsites.net');
 
-    
+
 // callback function for when the WebSocket connection is opened
 socket.onopen = function(event) {
     console.log("Connected to server");
@@ -40,11 +40,9 @@ socket.onmessage = function(event) {
         console.log("Received color: ", jsonData.color);
         fromUser.color = jsonData.color;
         redrawCanvas();
-    }
-    else if ("coords" in jsonData) {
+    } else if ("coords" in jsonData) {
         addDataToUser(jsonData.userID, {x: jsonData["coords"]["x"], y: jsonData["coords"]["y"]}, jsonData["t"]);
-    }
-    else if ("img" in jsonData) {
+    } else if ("img" in jsonData) {
         console.log("Received image");
         fromUser.emoji = null;
         // Create a new Image object
@@ -55,26 +53,26 @@ socket.onmessage = function(event) {
             redrawCanvas();
         };
         
-    }
-    else if ("emoji" in jsonData) {
+    } else if ("emoji" in jsonData) {
         console.log("Received emoji: ", jsonData.emoji);
         fromUser.img = null;
         fromUser.emoji = jsonData.emoji;
         redrawCanvas();
-    }
-    else if ("draw" in jsonData) {
+    } else if ("draw" in jsonData) {
         console.log("Received draw mode: ", jsonData.draw);
         if (jsonData.draw === false) {
             fromUser.coords = [];
             fromUser.indexOfHead = 0;
             redrawCanvas();
         }
-    }
-    else if ("close" in jsonData && jsonData.close === true) {
+    } else if ("drawTail" in jsonData) {
+        console.log("Received draw tail: ", jsonData.drawTail);
+        fromUser.drawTail = jsonData.drawTail;
+        redrawCanvas();
+    } else if ("close" in jsonData && jsonData.close === true) {
         console.log("Received close connection");
         removeUser(jsonData.userID);
-    }
-    else {
+    } else {
         console.error("Unknown message type");
     }
 };
@@ -87,6 +85,12 @@ socket.onclose = function (event) {
 // callback function for when there is an error with the WebSocket connection
 socket.onerror = function (event) {
     console.error('WebSocket error:', event);
+};
+
+
+// callback function for when the window is closed
+window.onbeforeunload = function() {
+    socket.close();
 };
 
 
@@ -105,17 +109,11 @@ function redrawCanvas() {
     
     for (let userID in users) {
         let user = users[userID];
-        drawTail(user);
+
+        if (user.drawTail) {
+            drawTail(user);
+        }
         drawFigure(user);
-        
-        // if (user.img !== null) {
-        //     drawImage(user);
-        // }
-        // else if (user.emoji !== null) {
-        //     drawEmoji(user);
-        // }
-        // else {
-        // }
     }
 
 }

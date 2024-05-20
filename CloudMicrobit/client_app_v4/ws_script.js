@@ -25,13 +25,18 @@ function postColor(userID, color) {
     socket.send(JSON.stringify({ userID: userID, color: color }));
 }
 
+function postDrawTail(userID, shouldDraw) {
+    console.log("Posting draw tail: ", shouldDraw);
+    socket.send(JSON.stringify({ userID: userID, drawTail: shouldDraw }));
+}
+
 
 function postCloseConnection() {
     socket.send(JSON.stringify({ userID: myUserID, close: true }));
 }
 
 
-function connectToServer() {
+function connectToServer(onSuccess) {
     
     // const server_ip = "ws://127.0.0.1:8080";
     // const server_ip = "ws://172.17.0.2:8080";
@@ -44,7 +49,7 @@ function connectToServer() {
     socket.onopen = function(event) {
         console.log("Connected to server");
         socket.send('client');
-        // postEmoji(myUserID, users[myUserID].emoji);
+        onSuccess();
     };
 
     socket.onmessage = function(event) {

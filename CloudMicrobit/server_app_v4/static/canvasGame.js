@@ -4,10 +4,10 @@
 let users = {};
 
 let maxTailLength = 10;
-let tailWidth = 12;
+// let tailWidth = 8;
 
-let tempRange = {low: 20, high: 30};
-let imgSizes = {widthLow: 15, heightLow: 15, widthHigh: 150, heightHigh: 150};
+let tempRange = {low: 20, high: 35};
+let imgSizes = {widthLow: 10, heightLow: 10, widthHigh: 80, heightHigh: 80};
 
 
 
@@ -22,6 +22,7 @@ function addUser(userID, color) {
         coords: [],
         indexOfHead: 0,
         temperature: 0,
+        drawTail: false,
         img: null,
         emoji: null
     };
@@ -60,7 +61,7 @@ function drawHead(user, size=10) {
     if (user.coords.length < 1) {
         return;
     }
-    let coords = user.coords[user.indexOfHead];
+    let coords =  getCurrentUserCoords(user);
     context.fillStyle = user.color;
     context.beginPath();
     context.arc(coords.x, coords.y, size, 0, 2 * Math.PI);
@@ -69,9 +70,9 @@ function drawHead(user, size=10) {
 
 
 function drawTail(user) {
-    if (user.coords.length < maxTailLength) {
-        return;
-    }
+    // if (user.coords.length < maxTailLength) {
+    //     return;
+    // }
     context.fillStyle = user.color;
     context.strokeStyle = user.color;
     let prevCoords = user.coords[(user.indexOfHead+1) % user.coords.length];
@@ -120,14 +121,13 @@ function drawFigure(user) {
     }
     else {
         drawHead(user);
-        // console.log("No image or emoji selected");
     }
 }
 
 
 function drawEmoji(user) {
     // Draw emoji at head
-    let coords = user.coords[user.indexOfHead];
+    let coords =  getCurrentUserCoords(user);
     let scale = getScaleFromTemp(user.temperature);
     let emoji = user.emoji;
     if (emoji !== null) {
@@ -145,7 +145,7 @@ function drawEmoji(user) {
 
 function drawImage(user) {
     // Draw image at head
-    let coords = user.coords[user.indexOfHead];
+    let coords =  getCurrentUserCoords(user);
     let scale = getScaleFromTemp(user.temperature);
     let img = user.img;
     if (img !== null) {
@@ -162,6 +162,10 @@ function drawImage(user) {
     } else {
         drawHead(user, scale.width / 2);
     }
+}
+
+function getCurrentUserCoords(user) {
+    return user.coords[user.indexOfHead];
 }
 
 

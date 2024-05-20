@@ -4,27 +4,43 @@
 let canvas = document.querySelector("#canvas");
 // console.log("CANVAS", canvas)
 let context = canvas.getContext('2d');
+// let canvasColor = canvas.style.backgroundColor;
 
-coordText = document.getElementById("coord");
 tempText = document.getElementById("temp");
 
-connectButton.onclick = connectClicked;
+let microbitConnected = false;
+connectMicroButton.onclick = connectMicroClicked;
 
-let dropdown = document.getElementById("dropdown");
-dropdown.value = "0";
-dropdown.onchange = changeMode;
+let connectServerButton = document.getElementById("connectServerButton");
+connectServerButton.onclick = connectToServerClicked;
+
+let serverStuffDiv = document.getElementById("onSeverStuff");
+
+// let dropdown = document.getElementById("dropdown");
+// dropdown.value = "0";
+// dropdown.onchange = changeMode;
 
 let dropdownEmoji = document.getElementById("dropdown-emoji");
 dropdownEmoji.value = "default";
 dropdownEmoji.onchange = changeEmoji;
 
+let ternCheckbox = document.getElementById("ternCheckbox");
+ternCheckbox.onchange = redrawCanvas;
+let haleCheckbox = document.getElementById("haleCheckbox");
+haleCheckbox.onchange = function(event) {
+    if (isSocketOpen()) {
+        postDrawTail(myUserID, event.target.checked);
+    }
+    redrawCanvas();
+}
 
+let onServer = false;
 let socket = null;
 let myUserID = String(Math.floor(Math.random() * 10000));
-let userIDfield = document.getElementById("inputField");
-if (userIDfield !== null) {
-    userIDfield.value = myUserID;
-}
+// let userIDfield = document.getElementById("inputField");
+// if (userIDfield !== null) {
+//     userIDfield.value = myUserID;
+// }
 
 let fileEl = document.getElementById("load_element");
 
@@ -49,9 +65,9 @@ colorPicker.onchange = function(event) {
     }
 }
 
-changeMode();
+// changeMode();
 // changeEmoji();
-connectToServer();
+// connectToServer();
 
 
 
@@ -80,11 +96,13 @@ function handleData(message) {
     let temperature = Number(data[2]);
     x = (canvas.width / 2) + (x / 1024) * canvas.width;
     y = (canvas.height / 2) + (y / 1024) * canvas.height;
+    x = Math.round(x);
+    y = Math.round(y);
 
     addDataToUser(myUserID, {x: x, y: y}, temperature);
-    updateCoordText(x, y, temperature);
+    updateTextbox(temperature);
 
-    if (isSocketOpen() && dropdown.value === "2") {
+    if (isSocketOpen() && onServer) {
       postCoordinates(myUserID, {x: x, y: y}, temperature);
     }
 
@@ -94,64 +112,51 @@ function handleData(message) {
 
 function redrawCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
-    let value = dropdown.value;
-    
-    if (value === "0") {
-        drawGrid();
-    }
-
-    if (users[myUserID] === undefined) {
+    let myUser = users[myUserID];
+    if (myUser === undefined || !microbitConnected) {
+        if (ternCheckbox.checked && !onServer) {
+            drawGrid();
+        }
         return;
     }
-
-    if (value === "0") {
-        drawHead(users[myUserID]);
-    } else if (value === "1") {
-        drawHead(users[myUserID]);
-        drawTail(users[myUserID]);
-    } else if (value === "2") {
-        drawTail(users[myUserID]);
-        drawFigure(users[myUserID]);
+    
+    if (onServer) {
+        if (haleCheckbox.checked) {
+            drawTail(myUser);
+        }
+        drawFigure(myUser);
+    } else {
+        if (ternCheckbox.checked) {
+            let coords = getCurrentUserCoords(myUser);
+            drawGrid(coords.x, coords.y);
+        }
+        if (haleCheckbox.checked) {
+            drawTail(myUser);
+        }
+        drawHead(myUser);
     }
-
 }
 
 
-function updateCoordText(x, y, temperature) {
-    coordText.textContent = `Koordinater: (x: ${x.toFixed(0)}, y: ${y.toFixed(0)})`;
+function updateTextbox(temperature) {
     tempText.textContent = `Temperatur: ${temperature.toFixed(0)}°C`;
 }
 
 
-
-
 // Callback when the dropdown changes
-function changeMode(event) {
-    let value = dropdown.value;
+// function changeMode(event) {
+//     let value = dropdown.value;
     
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    redrawCanvas();
+//     context.clearRect(0, 0, canvas.width, canvas.height);
+//     redrawCanvas();
 
-    if (isSocketOpen()) {
-        if (value === "2") {
-            postEmoji(myUserID, users[myUserID].emoji);
-        }
-        postDrawOnServer(myUserID, value === "2");
-    }
-    
-    // if (value === "0") {
-    //     drawGrid();
-    // } else if (value === "1") {
-    //     console.log("Not implemented");
-    // } else if (value === "2") {
-    //     connectToServer();
-    // }
-
-    // if (value === "2") {
-    //     connectToServer();
-    // }
-
-}
+//     if (isSocketOpen()) {
+//         if (value === "2") {
+//             postEmoji(myUserID, users[myUserID].emoji);
+//         }
+//         postDrawOnServer(myUserID, value === "2");
+//     }
+// }
 
 
 function changeEmoji(event) {
@@ -207,7 +212,13 @@ function loadImg(event) {
     
     let option = document.createElement("option");
     option.style.display = "none";
-    option.text = file.name;
+    // Cut off and add dots if too long
+    let fileName = file.name;
+    let maxNameLength = 10;
+    if (fileName.length > maxNameLength) {
+        fileName = fileName.substring(0, maxNameLength - 3) + "...";
+    }
+    option.text = fileName;
     option.value = "";
     dropdownEmoji.add(option);
     dropdownEmoji.value = "";
@@ -231,5 +242,65 @@ function loadImg(event) {
     }
 }
 
+
+
+function connectMicroClicked(event) {
+    if (microbitConnected) {
+        if (disconnectMicrobit()) {
+            connectMicroButton.textContent = "Tilslut micro:bit";
+            microbitConnected = false;
+            redrawCanvas();
+            if (isSocketOpen()) {
+                postDrawOnServer(myUserID, false);
+            }
+        }
+    } else {
+        connectToMicrobit(() => {
+            connectMicroButton.textContent = "Afbryd micro:bit";
+            microbitConnected = true;
+            if (isSocketOpen() && onServer) {
+                postDrawOnServer(myUserID, true);
+            }
+        });
+            
+    }
+}
+
+
+function connectToServerClicked(event) {
+    if (onServer) {
+        connectServerButton.textContent = "Tilslut server";
+        onServer = false;
+        serverStuffDiv.style.display = "none";
+        ternCheckbox.parentElement.style.display = "block";
+        redrawCanvas();
+        if (isSocketOpen()) {
+            postDrawOnServer(myUserID, false);
+        }
+    } else {
+        if (!isSocketOpen()) {
+            connectServerButton.textContent = "Forbinder...";
+            connectServerButton.setAttribute("disabled", "true");
+            connectToServer(() => {
+                connectServerButton.textContent = "Afbryd server";
+                serverStuffDiv.style.display = "block";
+                ternCheckbox.parentElement.style.display = "none";
+                onServer = true;
+                connectServerButton.removeAttribute("disabled");
+                redrawCanvas();
+                postDrawOnServer(myUserID, true);
+                postColor(myUserID, colorPicker.value);
+                postDrawTail(myUserID, haleCheckbox.checked);
+                // postEmoji(myUserID, users[myUserID].emoji);
+            });
+        } else {
+            connectServerButton.textContent = "Afbryd server";
+            serverStuffDiv.style.display = "block";
+            ternCheckbox.parentElement.style.display = "none";
+            onServer = true;
+            redrawCanvas();
+        }
+    }
+}
 
 

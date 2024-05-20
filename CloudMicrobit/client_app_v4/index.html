@@ -8,38 +8,45 @@
     <div id="main">
         <h1 style="margin-bottom: 10px;">Client App</h1>
         <!-- <a href="https://makecode.microbit.org/#pub:S51633-21919-71174-57275" target="_blank">Download MakeCode program her!</a> -->
-        <div id="connect">
+        <div id="stuffAbove">
             <!-- <input type="text" id="inputField" style="margin-right: 10px;" placeholder="Skriv unikt ID"><br> -->
-            <button id="connectButton" style="margin-right: 10px;">Tilslut micro:bit</button><br>
-            
+            <button id="connectMicroButton" style="margin-right: 10px;">Tilslut micro:bit</button><br>
             <a href="https://makecode.microbit.org/#pub:_6LTfaRVo4L5s" target="_blank">Download micro:bit program</a>
+            <button id="connectServerButton" style="margin-left: 10px;">Tilslut server</button><br>
         </div>
         <div id="canvasContainer">
             <canvas id="canvas" width=600px height=600px style="background-color: rgb(207, 207, 207);"></canvas>
             <div id="coordTempText">
-                <p id="coord">Koordinater: </p>
                 <p id="temp">Temperatur: </p>
             </div>
         </div>
-        <div id="connect">
+        <div id="optionsBelow">
             <input type="color" value="#ff7e25" style="height: 23px; margin-right: 5px;" id="colorPicker">
-            <select id="dropdown-emoji" style="margin-right: 5px;">
-                <option value="default">Vælg Emoji</option>
-                <option value="0">😎</option>
-                <option value="1">😁</option>
-                <option value="2">🤖</option>
-                <option value="3">🐶</option>
-                <option value="4">🦒</option>
-            </select>
-            <input type="button" value="Indlæs billede" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();" />
-            <input type="file" style="display: none;"  id="load_element" accept="image/png, image/jpeg" onchange="loadImg(event)">
-            <br>
-            <select id="dropdown" style="margin-right: 5px;">
+            <div id="onSeverStuff" style="display: none;">
+                <select id="dropdown-emoji" style="margin-right: 5px;">
+                    <option value="default">Vælg Emoji</option>
+                    <option value="0">😎</option>
+                    <option value="1">😁</option>
+                    <option value="2">🤖</option>
+                    <option value="3">🐶</option>
+                    <option value="4">🦒</option>
+                </select>
+                <input type="button" value="Indlæs billede" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();" />
+                <input type="file" style="display: none;"  id="load_element" accept="image/png, image/jpeg" onchange="loadImg(event)">
+            </div>
+            <!-- <select id="dropdown" style="margin-right: 5px;">
                 <option value="0">Ternet</option>
                 <option value="1">Haletudse</option>
                 <option value="2">Server</option>
-            </select>
-
+            </select> -->
+            <div>
+                <input type="checkbox" id="ternCheckbox" style="margin-right: 3px;" checked>
+                <label for="ternCheckbox" style="user-select: none; margin-right: 5px;">Akser</label>
+            </div>
+            <div>
+                <input type="checkbox" id="haleCheckbox" style="margin-right: 3px;">
+                <label for="haleCheckbox" style="user-select: none; margin-right: 5px;">Hale</label>
+            </div>
         </div>
         <br>
     </div>
