@@ -93,8 +93,8 @@ function handleData(message) {
     let speed = Number(data[3]);
     console.log(x,y);
     context.clearRect(0, 0, canvas.width, canvas.height);
-    x = (canvas.width / 2) + (x / 1024) * canvas.width;
-    y = (canvas.height / 2) + (y / 1024) * canvas.height;
+    x = (canvas.width / 2) + (x / 1000) * canvas.width/2;
+    y = (canvas.height / 2) + (y / 1000) * canvas.height/2;
     context.fillRect(x, y, 10, 10);
   }
 }
