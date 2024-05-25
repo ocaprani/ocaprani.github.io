@@ -99,7 +99,7 @@ function handleData(message) {
     x = Math.round(x);
     y = Math.round(y);
 
-    addDataToUser(myUserID, {x: x, y: y}, temperature);
+    addDataToUser(myUserID, {x: x-(canvas.width / 2), y: y-(canvas.height / 2)}, temperature);
     updateTextbox(temperature);
 
     if (isSocketOpen() && onServer) {
