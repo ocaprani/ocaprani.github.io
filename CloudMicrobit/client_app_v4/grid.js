@@ -77,8 +77,8 @@ function drawGrid(x, y) {
         // Draw the text
         context.font = "16px Arial";
         context.fillStyle = "black";
-        context.fillText(`x: ${x}`, canvas.width - 60, canvas.height / 2 + 30);
-        context.fillText(`y: ${y}`, canvas.width / 2 + 14, 20);
+        context.fillText(`x: ${x - canvas.width / 2}`, canvas.width - 60, canvas.height / 2 + 30);
+        context.fillText(`y: ${y - canvas.height / 2}`, canvas.width / 2 + 14, 20);
 
     }
     
