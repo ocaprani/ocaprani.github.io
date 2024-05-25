@@ -93,12 +93,13 @@ function handleData(message) {
     let data = message.split(",");
     let x = Number(data[0]);
     let y = Number(data[1]);
-    console.log(x,y);
+   
     let temperature = Number(data[2]);
     x = (canvas.width / 2) + (x / 1000) * canvas.width/2;
     y = (canvas.height / 2) + (y / 1000) * canvas.height/2;
     x = Math.round(x);
     y = Math.round(y);
+    console.log(x,y);
 
     addDataToUser(myUserID, {x: x, y: y}, temperature);
     updateTextbox(temperature);
