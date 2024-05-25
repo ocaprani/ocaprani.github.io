@@ -93,6 +93,7 @@ function handleData(message) {
     let data = message.split(",");
     let x = Number(data[0]);
     let y = Number(data[1]);
+    console.log(x,y);
     let temperature = Number(data[2]);
     x = (canvas.width / 2) + (x / 1000) * canvas.width/2;
     y = (canvas.height / 2) + (y / 1000) * canvas.height/2;
