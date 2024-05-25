@@ -95,7 +95,7 @@ function handleData(message) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     x = (canvas.width / 2) + (x / 1000) * canvas.width/2;
     y = (canvas.height / 2) + (y / 1000) * canvas.height/2;
-    context.fillRect(x, y, 10, 10);
+    context.fillRect(x-5, y-5, 10, 10);
   }
 }
 
