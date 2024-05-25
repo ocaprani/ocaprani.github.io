@@ -94,8 +94,8 @@ function handleData(message) {
     let x = Number(data[0]);
     let y = Number(data[1]);
     let temperature = Number(data[2]);
-    x = (canvas.width / 2) + (x / 1024) * canvas.width;
-    y = (canvas.height / 2) + (y / 1024) * canvas.height;
+    x = (canvas.width / 2) + (x / 1000) * canvas.width/2;
+    y = (canvas.height / 2) + (y / 1000) * canvas.height/2;
     x = Math.round(x);
     y = Math.round(y);
 
