@@ -7,7 +7,14 @@ function postCoordinates(userID, coords, temperature) {
 
 function postImage(userID, img) {
     console.log("Posting image");
-    socket.send(JSON.stringify({ userID: userID, img: img.src })); // img.data is a Uint8Array
+    let imgData;
+    if (img === null) {
+        imgData = null;
+    } else {
+        imgData = img.src;
+    }
+
+    socket.send(JSON.stringify({ userID: userID, img: imgData })); // img.data is a Uint8Array
 }
 
 function postEmoji(userID, emoji) {

@@ -45,13 +45,18 @@ socket.onmessage = function(event) {
     } else if ("img" in jsonData) {
         console.log("Received image");
         fromUser.emoji = null;
-        // Create a new Image object
-        let img = new Image();
-        img.src = jsonData.img;
-        img.onload = function() {
-            fromUser.img = img;
+        if (jsonData.img === null) {
+            fromUser.img = null;
             redrawCanvas();
-        };
+            return;
+        } else {
+            let img = new Image();
+            img.src = jsonData.img;
+            img.onload = function() {
+                fromUser.img = img;
+                redrawCanvas();
+            };
+        }
         
     } else if ("emoji" in jsonData) {
         console.log("Received emoji: ", jsonData.emoji);

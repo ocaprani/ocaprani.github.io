@@ -3,10 +3,11 @@
 <head>
     <title>Client App</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div id="main">
-        <h1 style="margin-bottom: 10px;">Client App</h1>
+        <h1 style="margin-bottom: 10px; margin-top: 5px;">Client App</h1>
         <!-- <a href="https://makecode.microbit.org/#pub:S51633-21919-71174-57275" target="_blank">Download MakeCode program her!</a> -->
         <div id="stuffAbove">
             <!-- <input type="text" id="inputField" style="margin-right: 10px;" placeholder="Skriv unikt ID"><br> -->
@@ -18,6 +19,7 @@
             <canvas id="canvas" width=600px height=600px style="background-color: rgb(207, 207, 207);"></canvas>
             <div id="coordTempText">
                 <p id="temp">Temperatur: </p>
+                <p id="lys">Lysstyrke: </p>
             </div>
         </div>
         <div id="optionsBelow">
@@ -30,6 +32,10 @@
                     <option value="2">🤖</option>
                     <option value="3">🐶</option>
                     <option value="4">🦒</option>
+                    <option value="5">🐸</option>
+                </select>
+                <select id="dropdown-img" style="margin-right: 5px;">
+                    <option value="default">Vælg billede</option>
                 </select>
                 <input type="button" value="Indlæs billede" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();" />
                 <input type="file" style="display: none;"  id="load_element" accept="image/png, image/jpeg" onchange="loadImg(event)">

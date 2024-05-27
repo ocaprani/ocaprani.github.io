@@ -1,5 +1,4 @@
 body {
-    overflow: hidden;
     margin: 0;
     padding: 0;
     /* background-image: linear-gradient(to bottom, #f0f0f0, #47474786); */
@@ -11,10 +10,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin-top: 50px;
-    /* height: 70vh;
-    width: 100vw; */
+    justify-content: flex-start;
+    margin-top: 2vh;
+    /* margin-top: calc(5vh - 30px); */
+    overflow: auto;
 }
 
 #optionsBelow, #stuffAbove {
@@ -60,6 +59,6 @@ body {
     right: -260px;
 }
 
-#coord, #temp {
+#temp, #lys {
     margin: 10px;
 }

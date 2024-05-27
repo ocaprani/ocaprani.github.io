@@ -7,6 +7,7 @@ let context = canvas.getContext('2d');
 // let canvasColor = canvas.style.backgroundColor;
 
 tempText = document.getElementById("temp");
+lightText = document.getElementById("lys");
 
 let microbitConnected = false;
 connectMicroButton.onclick = connectMicroClicked;
@@ -16,13 +17,16 @@ connectServerButton.onclick = connectToServerClicked;
 
 let serverStuffDiv = document.getElementById("onSeverStuff");
 
-// let dropdown = document.getElementById("dropdown");
-// dropdown.value = "0";
-// dropdown.onchange = changeMode;
-
 let dropdownEmoji = document.getElementById("dropdown-emoji");
 dropdownEmoji.value = "default";
 dropdownEmoji.onchange = changeEmoji;
+
+let dropdownImg = document.getElementById("dropdown-img");
+dropdownEmoji.value = "default";
+dropdownImg.onchange = changeDropdownImg;
+
+let allLoadedImgs = [];
+
 
 let ternCheckbox = document.getElementById("ternCheckbox");
 ternCheckbox.onchange = redrawCanvas;
@@ -99,10 +103,16 @@ function handleData(message) {
     y = (canvas.height / 2) - (y / 1000) * canvas.height/2;
     x = Math.round(x);
     y = Math.round(y);
-    console.log(x,y);
-
+    // console.log(x,y);
+    
     addDataToUser(myUserID, {x: x, y: y}, temperature);
-    updateTextbox(temperature);
+    
+    
+    let light = data[3];
+    if (light !== undefined) {
+        light = "...";
+    }
+    updateTextbox(temperature, light);
 
     if (isSocketOpen() && onServer) {
       postCoordinates(myUserID, {x: x, y: y}, temperature);
@@ -140,8 +150,9 @@ function redrawCanvas() {
 }
 
 
-function updateTextbox(temperature) {
+function updateTextbox(temperature, light) {
     tempText.textContent = `Temperatur: ${temperature.toFixed(0)}°C`;
+    lightText.textContent = `Lysstyrke: ${light}`;
 }
 
 
@@ -162,16 +173,8 @@ function updateTextbox(temperature) {
 
 
 function changeEmoji(event) {
-    
-    // let value = dropdown.value;
-    // if chosen value is the last in the list, load an image
-    // if (value === dropdownEmoji.options[dropdownEmoji.options.length - 1].value) {
-    //     loadImg(event);
-    // }
 
-    if (dropdownEmoji.options[dropdownEmoji.options.length - 1].value === "") {
-        dropdownEmoji.remove(dropdownEmoji.options.length - 1);
-    }
+    dropdownImg.value = "default";
 
     let emoji;
     if (dropdownEmoji.value === "default") {
@@ -179,15 +182,12 @@ function changeEmoji(event) {
     }
     else {
         emoji = dropdownEmoji.options[dropdownEmoji.selectedIndex].text;
+        users[myUserID].img = null;
     }
 
     users[myUserID].emoji = emoji;
-    users[myUserID].img = null;
 
     redrawCanvas();
-
-    fileEl.value = null;
-
     if (isSocketOpen()) {
         postEmoji(myUserID, emoji);
     }
@@ -195,35 +195,52 @@ function changeEmoji(event) {
 
 
 
+function changeDropdownImg(event) {
+
+    dropdownEmoji.value = "default";
+
+    let img;
+    if (dropdownImg.value === "default") {
+        img = null;
+    }
+    else {
+        let imgIndex = dropdownImg.selectedIndex;
+        console.log("Selected img index: ", imgIndex)
+        img = allLoadedImgs[imgIndex-1];
+        users[myUserID].emoji = null;
+    }
+
+    users[myUserID].img = img;
+
+    redrawCanvas();
+
+    if (isSocketOpen()) {
+        postImage(myUserID, img);
+    }
+}
+
+
 
 function loadImg(event) {
     users[myUserID].emoji = null;
-    
-    // Add empty option to dropdown
-    // if (dropdownEmoji.options[dropdownEmoji.options.length - 1].value !== "") {
-        // let option = document.createElement("option");
-        // option.text = "";
-        // option.value = "";
-        // dropdownEmoji.value = "";
-        // dropdownEmoji.add(option);
-        
-        // Set to filename
-    // }
 
     var file = event.target.files[0];
     
     let option = document.createElement("option");
-    option.style.display = "none";
+    // option.style.display = "none";
+    
     // Cut off and add dots if too long
     let fileName = file.name;
-    let maxNameLength = 10;
+    let maxNameLength = dropdownImg.options[0].text.length;
     if (fileName.length > maxNameLength) {
         fileName = fileName.substring(0, maxNameLength - 3) + "...";
     }
     option.text = fileName;
-    option.value = "";
-    dropdownEmoji.add(option);
-    dropdownEmoji.value = "";
+    // option.value = "";
+    dropdownImg.add(option);
+    dropdownImg.value = fileName;
+
+    dropdownEmoji.value = "default";
 
 
     if (file.type == "image/png" || file.type == "image/jpeg") {
@@ -234,10 +251,15 @@ function loadImg(event) {
             var img = new Image();
             img.src = event.target.result;
             img.onload = function () {
+                img.width = imgSizes.widthHigh * figSizeMult;
+                img.height = imgSizes.heightHigh * figSizeMult;
+                // console.log("Image loaded: ", img.src);
                 users[myUserID].img = img;
                 users[myUserID].emoji = null;
                 redrawCanvas();
                 postImage(myUserID, img);
+                allLoadedImgs.push(img);
+                fileEl.value = null;
             }
         }
         reader.readAsDataURL(file);
@@ -283,25 +305,28 @@ function connectToServerClicked(event) {
         if (!isSocketOpen()) {
             connectServerButton.textContent = "Forbinder...";
             connectServerButton.setAttribute("disabled", "true");
-            connectToServer(() => {
-                connectServerButton.textContent = "Afbryd server";
-                serverStuffDiv.style.display = "block";
-                ternCheckbox.parentElement.style.display = "none";
-                onServer = true;
-                connectServerButton.removeAttribute("disabled");
-                redrawCanvas();
-                postDrawOnServer(myUserID, true);
-                postColor(myUserID, colorPicker.value);
-                postDrawTail(myUserID, haleCheckbox.checked);
-                // postEmoji(myUserID, users[myUserID].emoji);
-            });
+            connectToServer(onSuccessfulServerConnect);
         } else {
-            connectServerButton.textContent = "Afbryd server";
-            serverStuffDiv.style.display = "block";
-            ternCheckbox.parentElement.style.display = "none";
-            onServer = true;
-            redrawCanvas();
+            onSuccessfulServerConnect()
         }
+    }
+}
+
+function onSuccessfulServerConnect() {
+    connectServerButton.textContent = "Afbryd server";
+    serverStuffDiv.style.display = "block";
+    ternCheckbox.parentElement.style.display = "none";
+    onServer = true;
+    connectServerButton.removeAttribute("disabled");
+    redrawCanvas();
+    postDrawOnServer(myUserID, true);
+    postColor(myUserID, colorPicker.value);
+    postDrawTail(myUserID, haleCheckbox.checked);
+    if (users[myUserID].emoji !== null) {
+        postEmoji(myUserID, users[myUserID].emoji);
+    }
+    if (users[myUserID].img !== null) {
+        postImage(myUserID, users[myUserID].img);
     }
 }
 
