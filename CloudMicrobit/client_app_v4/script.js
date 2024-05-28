@@ -108,10 +108,7 @@ function handleData(message) {
     addDataToUser(myUserID, {x: x, y: y}, temperature);
     
     
-    let light = data[3];
-    if (light !== undefined) {
-        light = "...";
-    }
+    let light = Number(data[3]);
     updateTextbox(temperature, light);
 
     if (isSocketOpen() && onServer) {
@@ -266,7 +263,7 @@ function loadImg(event) {
     }
 }
 
-
+    
 
 function connectMicroClicked(event) {
     if (microbitConnected) {
