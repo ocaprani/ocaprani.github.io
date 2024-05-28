@@ -6,7 +6,7 @@ let users = {};
 let maxTailLength = 10;
 // let tailWidth = 8;
 
-let tempRange = {low: 20, high: 35};
+let tempRange = {low: 0, high: 100};
 let imgSizes = {widthLow: 10, heightLow: 10, widthHigh: 80, heightHigh: 80};
 
 let figSizeMult = 1.2;
@@ -23,6 +23,7 @@ function addUser(userID, color) {
         coords: [],
         indexOfHead: 0,
         temperature: 0,
+        light: 0,
         drawTail: false,
         img: null,
         emoji: null
@@ -42,7 +43,7 @@ function updateUser(userID, coords) {
 }
 
 
-function addDataToUser(userID, coords, temperature) {
+function addDataToUser(userID, coords, temperature, light) {
     let user = users[userID];
     if (user.coords.length < maxTailLength) {
         user.coords.push(coords);
@@ -51,6 +52,7 @@ function addDataToUser(userID, coords, temperature) {
         user.coords[user.indexOfHead] = coords;
     }
     user.temperature = temperature;
+    user.light = light;
 
     redrawCanvas();
 }
@@ -59,7 +61,7 @@ function addDataToUser(userID, coords, temperature) {
 
 
 function drawHead(user) {
-    let size = getScaleFromTemp(user.temperature).width / 2;
+    let size = getScaleFromTemp(user.light).width / 2;
     if (user.coords.length < 1) {
         return;
     }
@@ -82,7 +84,7 @@ function drawTail(user) {
     for (let i = 1; i < user.coords.length; i++) {
         let coords = user.coords[(i + user.indexOfHead + 1) % user.coords.length];
         // context.lineWidth = tailWidth * ((i / user.coords.length));
-        context.lineWidth = getScaleFromTemp(user.temperature).width * ((i / user.coords.length)) * 0.8;
+        context.lineWidth = getScaleFromTemp(user.light).width * ((i / user.coords.length)) * 0.8;
         
         // draw circle at joint with diameter of lineWidth
         context.beginPath();
@@ -102,9 +104,9 @@ function drawTail(user) {
 
 
 
-function getScaleFromTemp(temperature) {
+function getScaleFromTemp(lightlevel) {
     // Scale image based on temperature
-    let scale = (temperature - tempRange.low) / (tempRange.high - tempRange.low);
+    let scale = (lightlevel - tempRange.low) / (tempRange.high - tempRange.low);
     let width = imgSizes.widthLow + scale * (imgSizes.widthHigh - imgSizes.widthLow);
     let height = imgSizes.heightLow + scale * (imgSizes.heightHigh - imgSizes.heightLow);
     return {width: width, height: height};
@@ -131,7 +133,7 @@ function drawFigure(user) {
 function drawEmoji(user) {
     // Draw emoji at head
     let coords =  getCurrentUserCoords(user);
-    let scale = getScaleFromTemp(user.temperature);
+    let scale = getScaleFromTemp(user.light);
     scale.width *= figSizeMult;
     scale.height *= figSizeMult;
     let emoji = user.emoji;
@@ -151,7 +153,7 @@ function drawEmoji(user) {
 function drawImage(user) {
     // Draw image at head
     let coords =  getCurrentUserCoords(user);
-    let scale = getScaleFromTemp(user.temperature);
+    let scale = getScaleFromTemp(user.light);
     let img = user.img;
     scale.width *= figSizeMult;
     scale.height *= figSizeMult;

@@ -99,15 +99,15 @@ function handleData(message) {
     let y = Number(data[1]);
    
     let temperature = Number(data[2]);
+    let light = Number(data[3]);
     x = (canvas.width / 2) + (x / 1000) * canvas.width/2;
     y = (canvas.height / 2) - (y / 1000) * canvas.height/2;
     x = Math.round(x);
     y = Math.round(y);
     
-    addDataToUser(myUserID, {x: x, y: y}, temperature);
+    addDataToUser(myUserID, {x: x, y: y}, temperature, light);
     
     
-    let light = Number(data[3]);
     // console.log(x,y,temperature,light);
     console.log(light);
     updateTextbox(temperature, light);
