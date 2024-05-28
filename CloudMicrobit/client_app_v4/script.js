@@ -103,12 +103,13 @@ function handleData(message) {
     y = (canvas.height / 2) - (y / 1000) * canvas.height/2;
     x = Math.round(x);
     y = Math.round(y);
-    // console.log(x,y);
     
     addDataToUser(myUserID, {x: x, y: y}, temperature);
     
     
     let light = Number(data[3]);
+    // console.log(x,y,temperature,light);
+    console.log(light);
     updateTextbox(temperature, light);
 
     if (isSocketOpen() && onServer) {
