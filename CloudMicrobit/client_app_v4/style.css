@@ -2,8 +2,8 @@ body {
     margin: 0;
     padding: 0;
     /* background-image: linear-gradient(to bottom, #f0f0f0, #47474786); */
-    height: 100vh;
-    width: 100vw;
+    /* height: 100vh;
+    width: 100vw; */
 }
 
 #main {

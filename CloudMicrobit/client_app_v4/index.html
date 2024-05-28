@@ -23,9 +23,9 @@
             </div>
         </div>
         <div id="optionsBelow">
-            <input type="color" value="#ff7e25" style="height: 23px; margin-right: 5px;" id="colorPicker">
-            <div id="onSeverStuff" style="display: none;">
-                <select id="dropdown-emoji" style="margin-right: 5px;">
+            <input type="color" value="#ff7e25" style="height: 23px; margin-right: 10px;" id="colorPicker">
+            <div id="onServerStuff">
+                <select id="dropdown-emoji" style="margin-right: 5px; width: 95px; height: 24px;">
                     <option value="default">Vælg Emoji</option>
                     <option value="0">😎</option>
                     <option value="1">😁</option>
@@ -34,10 +34,10 @@
                     <option value="4">🦒</option>
                     <option value="5">🐸</option>
                 </select>
-                <select id="dropdown-img" style="margin-right: 5px;">
+                <select id="dropdown-img" style="margin-right: 5px; margin-top: 1px; width: 111px; height: 23px;">
                     <option value="default">Vælg billede</option>
                 </select>
-                <input type="button" value="Indlæs billede" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();" />
+                <input type="button" value="Indlæs billede" id="load_button" class="buttons" onclick="document.getElementById('load_element').click();">
                 <input type="file" style="display: none;"  id="load_element" accept="image/png, image/jpeg" onchange="loadImg(event)">
             </div>
             <!-- <select id="dropdown" style="margin-right: 5px;">
@@ -46,12 +46,16 @@
                 <option value="2">Server</option>
             </select> -->
             <div>
-                <input type="checkbox" id="ternCheckbox" style="margin-right: 3px;" checked>
-                <label for="ternCheckbox" style="user-select: none; margin-right: 5px;">Akser</label>
+                <label for="haleCheckbox" style="user-select: none; margin-right: 8px;">
+                    <input type="checkbox" id="haleCheckbox" style="margin-right: 1px;">
+                    Hale
+                </label>
             </div>
-            <div>
-                <input type="checkbox" id="haleCheckbox" style="margin-right: 3px;">
-                <label for="haleCheckbox" style="user-select: none; margin-right: 5px;">Hale</label>
+            <div id="onClientStuff">
+                <label for="ternCheckbox" style="user-select: none; margin-right: 5px;">
+                    <input type="checkbox" id="ternCheckbox" style="margin-right: 1px;" checked>
+                    Akser
+                </label>
             </div>
         </div>
         <br>
