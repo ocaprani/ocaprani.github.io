@@ -1,8 +1,8 @@
 
 
 
-let cellWidth = 25;
-let cellHeight = 25;
+let cellWidth = 30;
+let cellHeight = 30;
 
 coordBoxColor = "rgb(225, 225, 225)";
 
