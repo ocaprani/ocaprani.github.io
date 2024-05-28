@@ -41,7 +41,7 @@ socket.onmessage = function(event) {
         fromUser.color = jsonData.color;
         redrawCanvas();
     } else if ("coords" in jsonData) {
-        addDataToUser(jsonData.userID, {x: jsonData["coords"]["x"], y: jsonData["coords"]["y"]}, jsonData["t"]);
+        addDataToUser(jsonData.userID, {x: jsonData["coords"]["x"], y: jsonData["coords"]["y"]}, jsonData["t"], jsonData["l"]);
     } else if ("img" in jsonData) {
         console.log("Received image");
         fromUser.emoji = null;

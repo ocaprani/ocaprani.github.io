@@ -1,8 +1,8 @@
 
 
-function postCoordinates(userID, coords, temperature) {
+function postCoordinates(userID, coords, temperature, light) {
     // console.log("Posting coordinates: ", coords);
-    socket.send(JSON.stringify({ userID: userID, coords: coords, t: temperature }));
+    socket.send(JSON.stringify({ userID: userID, coords: coords, t: temperature, l: light}));
 }
 
 function postImage(userID, img) {

@@ -113,7 +113,7 @@ function handleData(message) {
     updateTextbox(temperature, light);
 
     if (isSocketOpen() && onServer) {
-      postCoordinates(myUserID, {x: x, y: y}, temperature);
+      postCoordinates(myUserID, {x: x, y: y}, temperature, light);
     }
 
   }
