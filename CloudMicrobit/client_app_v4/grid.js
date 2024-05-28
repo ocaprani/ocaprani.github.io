@@ -48,10 +48,10 @@ function drawGrid(x, y) {
     context.moveTo(canvas.width, canvas.height / 2);
     context.lineTo(canvas.width - 10, canvas.height / 2 + 5);
     // x axis left arrow
-    context.moveTo(0, canvas.height / 2);
-    context.lineTo(10, canvas.height / 2 - 5);
-    context.moveTo(0, canvas.height / 2);
-    context.lineTo(10, canvas.height / 2 + 5);
+    // context.moveTo(0, canvas.height / 2);
+    // context.lineTo(10, canvas.height / 2 - 5);
+    // context.moveTo(0, canvas.height / 2);
+    // context.lineTo(10, canvas.height / 2 + 5);
     // y axis
     context.moveTo(canvas.width / 2, 0);
     context.lineTo(canvas.width / 2, canvas.height);
@@ -61,10 +61,10 @@ function drawGrid(x, y) {
     context.moveTo(canvas.width / 2, 0);
     context.lineTo(canvas.width / 2 + 5, 10);
     // y axis bottom arrow
-    context.moveTo(canvas.width / 2, canvas.height);
-    context.lineTo(canvas.width / 2 - 5, canvas.height - 10);
-    context.moveTo(canvas.width / 2, canvas.height);
-    context.lineTo(canvas.width / 2 + 5, canvas.height - 10);
+    // context.moveTo(canvas.width / 2, canvas.height);
+    // context.lineTo(canvas.width / 2 - 5, canvas.height - 10);
+    // context.moveTo(canvas.width / 2, canvas.height);
+    // context.lineTo(canvas.width / 2 + 5, canvas.height - 10);
     
     // Type the current xy coordinates
     if (x !== undefined && y !== undefined){
