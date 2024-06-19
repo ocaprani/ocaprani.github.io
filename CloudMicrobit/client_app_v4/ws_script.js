@@ -49,7 +49,8 @@ function connectToServer(onSuccess) {
     // const server_ip = "ws://172.17.0.2:8080";
     // const server_ip = "ws://0.0.0.0:8080";
     // const server_ip = "ws://192.168.1.166:8080";
-    const server_ip = "wss://cloudmicrobit.azurewebsites.net";
+    // const server_ip = "wss://cloudmicrobit.azurewebsites.net";
+    const server_ip = "wss://cloudservermicrobit.azurewebsites.net";
     
     socket = new WebSocket(server_ip);
     
