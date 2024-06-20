@@ -6,8 +6,10 @@ let users = {};
 let maxTailLength = 10;
 // let tailWidth = 8;
 
-let tempRange = {low: 0, high: 100};
-let imgSizes = {widthLow: 10, heightLow: 10, widthHigh: 80, heightHigh: 80};
+let defaultSize = {w: 30, h: 30};
+let lightRange = {low: 0, high: 100};
+let tempRange = {low: 25, high: 30};
+let figSizeRange = {widthLow: 15, heightLow: 15, widthHigh: 80, heightHigh: 80};
 
 let figSizeMult = 1.2;
 
@@ -22,8 +24,9 @@ function addUser(userID, color) {
         color: color,
         coords: [],
         indexOfHead: 0,
-        temperature: 0,
-        light: 0,
+        // temperature: 0,
+        // light: 0,
+        size: defaultSize,
         drawTail: false,
         img: null,
         emoji: null
@@ -43,7 +46,7 @@ function updateUser(userID, coords) {
 }
 
 
-function addDataToUser(userID, coords, temperature, light) {
+function addDataToUser(userID, coords, size) {
     let user = users[userID];
     if (user.coords.length < maxTailLength) {
         user.coords.push(coords);
@@ -51,8 +54,9 @@ function addDataToUser(userID, coords, temperature, light) {
         user.indexOfHead = (user.indexOfHead + 1) % user.coords.length;
         user.coords[user.indexOfHead] = coords;
     }
-    user.temperature = temperature;
-    user.light = light;
+    // user.temperature = temperature;
+    // user.light = light;
+    user.size = size;
 
     redrawCanvas();
 }
@@ -61,11 +65,11 @@ function addDataToUser(userID, coords, temperature, light) {
 
 
 function drawHead(user) {
-    let size = getScaleFromTemp(user.light).width / 2;
+    let size = user.size["w"] / 2;
     if (user.coords.length < 1) {
         return;
     }
-    let coords =  getCurrentUserCoords(user);
+    let coords = getCurrentUserCoords(user);
     context.fillStyle = user.color;
     context.beginPath();
     context.arc(coords.x, coords.y, size, 0, 2 * Math.PI);
@@ -78,13 +82,14 @@ function drawTail(user) {
     //     return;
     // }
 
+    userSize = user.size["w"];
     context.fillStyle = user.color;
     context.strokeStyle = user.color;
     let prevCoords = user.coords[(user.indexOfHead+1) % user.coords.length];
     for (let i = 1; i < user.coords.length; i++) {
         let coords = user.coords[(i + user.indexOfHead + 1) % user.coords.length];
         // context.lineWidth = tailWidth * ((i / user.coords.length));
-        context.lineWidth = getScaleFromTemp(user.light).width * ((i / user.coords.length)) * 0.8;
+        context.lineWidth = userSize * ((i / user.coords.length)) * 0.8;
         
         // draw circle at joint with diameter of lineWidth
         context.beginPath();
@@ -104,12 +109,20 @@ function drawTail(user) {
 
 
 
-function getScaleFromTemp(lightlevel) {
+function getScaleFromLight(lightlevel) {
     // Scale image based on temperature
-    let scale = (lightlevel - tempRange.low) / (tempRange.high - tempRange.low);
-    let width = imgSizes.widthLow + scale * (imgSizes.widthHigh - imgSizes.widthLow);
-    let height = imgSizes.heightLow + scale * (imgSizes.heightHigh - imgSizes.heightLow);
-    return {width: width, height: height};
+    let scale = (lightlevel - lightRange.low) / (lightRange.high - lightRange.low);
+    let width = figSizeRange.widthLow + scale * (figSizeRange.widthHigh - figSizeRange.widthLow);
+    let height = figSizeRange.heightLow + scale * (figSizeRange.heightHigh - figSizeRange.heightLow);
+    return {w: width, h: height};
+}
+
+function getScaleFromTemp(temperature) {
+    // Scale image based on temperature
+    let scale = (temperature - tempRange.low) / (tempRange.high - tempRange.low);
+    let width = figSizeRange.widthLow + scale * (figSizeRange.widthHigh - figSizeRange.widthLow);
+    let height = figSizeRange.heightLow + scale * (figSizeRange.heightHigh - figSizeRange.heightLow);
+    return {w: width, h: height};
 }
 
 
@@ -120,11 +133,9 @@ function drawFigure(user) {
 
     if (user.img !== null) {
         drawImage(user);
-    }
-    else if (user.emoji !== null) {
+    } else if (user.emoji !== null) {
         drawEmoji(user);
-    }
-    else {
+    } else {
         drawHead(user);
     }
 }
@@ -133,16 +144,16 @@ function drawFigure(user) {
 function drawEmoji(user) {
     // Draw emoji at head
     let coords =  getCurrentUserCoords(user);
-    let scale = getScaleFromTemp(user.light);
-    scale.width *= figSizeMult;
-    scale.height *= figSizeMult;
+    let userSize = user.size;
+    let scaleWidth = userSize["w"] * figSizeMult;
+    let scaleHeight = userSize["h"] * figSizeMult;
     let emoji = user.emoji;
     if (emoji !== null) {
-        emoji.width = scale.width;
-        emoji.height = scale.height;
+        emoji.width = scaleWidth;
+        emoji.height = scaleHeight;
         // Draw emoji centered at head (as text)
-        context.font = `${scale.width}px Arial`;
-        context.fillText(emoji, coords.x - scale.width / 1.5, coords.y + scale.height / 2.9);
+        context.font = `${scaleWidth}px Arial`;
+        context.fillText(emoji, coords.x - scaleWidth / 1.5, coords.y + scaleHeight / 2.9);
         // context.fillText(emoji, coords.x, coords.y);
     } else {
         console.log("Error: No emoji selected");
@@ -153,20 +164,20 @@ function drawEmoji(user) {
 function drawImage(user) {
     // Draw image at head
     let coords =  getCurrentUserCoords(user);
-    let scale = getScaleFromTemp(user.light);
     let img = user.img;
-    scale.width *= figSizeMult;
-    scale.height *= figSizeMult;
+    let userSize = user.size;
+    let scaleWidth = userSize["w"] * figSizeMult;
+    let scaleHeight = userSize["h"] * figSizeMult;
     if (img !== null) {
-        img.width = scale.width;
-        img.height = scale.height;
+        img.width = scaleWidth;
+        img.height = scaleHeight;
         // Draw img as circle
         context.save();
         context.beginPath();
-        context.arc(coords.x, coords.y, scale.width / 2, 0, 2 * Math.PI);
+        context.arc(coords.x, coords.y, scaleWidth / 2, 0, 2 * Math.PI);
         context.closePath();
         context.clip();
-        context.drawImage(img, coords.x - scale.width / 2, coords.y - scale.height / 2, scale.width, scale.height);
+        context.drawImage(img, coords.x - scaleWidth / 2, coords.y - scaleHeight / 2, scaleWidth, scaleHeight);
         context.restore();
     } else {
         drawHead(user);

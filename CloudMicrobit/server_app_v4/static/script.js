@@ -37,12 +37,12 @@ socket.onmessage = function(event) {
 
     let fromUser = users[jsonData.userID];
     
-    if ("color" in jsonData) {
+    if ("coords" in jsonData) {
+        addDataToUser(jsonData.userID, {x: jsonData["coords"]["x"], y: jsonData["coords"]["y"]}, jsonData["s"]);
+    } else if ("color" in jsonData) {
         console.log("Received color: ", jsonData.color);
         fromUser.color = jsonData.color;
         redrawCanvas();
-    } else if ("coords" in jsonData) {
-        addDataToUser(jsonData.userID, {x: jsonData["coords"]["x"], y: jsonData["coords"]["y"]}, jsonData["t"], jsonData["l"]);
     } else if ("img" in jsonData) {
         console.log("Received image");
         fromUser.emoji = null;

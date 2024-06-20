@@ -6,8 +6,12 @@ let canvas = document.querySelector("#canvas");
 let context = canvas.getContext('2d');
 // let canvasColor = canvas.style.backgroundColor;
 
-tempText = document.getElementById("temp");
-lightText = document.getElementById("lys");
+tempText = document.getElementById("tempLabel");
+lightText = document.getElementById("lightLabel");
+
+tempRadio = document.getElementById("tempRadio");
+lightRadio = document.getElementById("lightRadio");
+noneRadio = document.getElementById("noneRadio");
 
 let microbitConnected = false;
 connectMicroButton.onclick = connectMicroClicked;
@@ -54,7 +58,7 @@ let userColor = colors[myUserID.charCodeAt(0) % colors.length];
 context.fillStyle = userColor;
 
 addUser(myUserID, userColor);
-addDataToUser(myUserID, {x: canvas.width / 2, y: canvas.height / 2}, 20)
+addDataToUser(myUserID, {x: canvas.width / 2, y: canvas.height / 2}, defaultSize);
 
 let colorPicker = document.getElementById("colorPicker");
 colorPicker.value = context.fillStyle;
@@ -109,16 +113,19 @@ function handleData(message) {
     y = (canvas.height / 2) - (y / 1000) * canvas.height/2;
     x = Math.round(x);
     y = Math.round(y);
+
+    size = getFigureSize(temperature, light);
     
-    addDataToUser(myUserID, {x: x, y: y}, temperature, light);
+    addDataToUser(myUserID, {x: x, y: y}, size);
     
     
     // console.log(x,y,temperature,light);
-    console.log(light);
+    // console.log(light);
     updateTextbox(temperature, light);
 
+
     if (isSocketOpen() && onServer) {
-      postCoordinates(myUserID, {x: x, y: y}, temperature, light);
+      postCoordinates(myUserID, {x: x, y: y}, size);
     }
 
   }
@@ -162,6 +169,17 @@ function redrawCanvas() {
     //     drawHead(myUser);
     // }
 
+}
+
+
+function getFigureSize(temperature, light) {
+    if (tempRadio.checked) {
+        return getScaleFromTemp(temperature);
+    } else if (lightRadio.checked) {
+        return getScaleFromLight(light);
+    } else {
+        return defaultSize;
+    }
 }
 
 
@@ -265,28 +283,10 @@ function loadImg(event) {
             console.log("Image loaded");
             var img = new Image();
             img.onload = function () {
-                handleImg(img, imgSizes.widthHigh * figSizeMult, imgSizes.heightHigh * figSizeMult);
+                handleImg(img, figSizeRange.widthHigh * figSizeMult, figSizeRange.heightHigh * figSizeMult);
             }
             img.src = event.target.result;
         }
-        
-        // reader.onload = function (event) {
-        //     console.log("Image loaded");
-        //     var img = new Image();
-        //     img.src = event.target.result;
-        //     img.onload = function () {
-        //         resizeImage(img, imgSizes.widthHigh * figSizeMult, imgSizes.heightHigh * figSizeMult)
-        //         // img.width = imgSizes.widthHigh * figSizeMult;
-        //         // img.height = imgSizes.heightHigh * figSizeMult;
-        //         // console.log("Image loaded: ", img.src);
-        //         users[myUserID].img = img;
-        //         users[myUserID].emoji = null;
-        //         redrawCanvas();
-        //         postImage(myUserID, img);
-        //         allLoadedImgs.push(img);
-        //         fileEl.value = null;
-        //     }
-        // }
 
         reader.readAsDataURL(file);
     }

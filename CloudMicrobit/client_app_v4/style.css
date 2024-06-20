@@ -56,9 +56,11 @@ body {
     border-style: solid;
     border-radius: 10px;;
     width: 250px;
-    right: -260px;
+    right: -270px;
+    padding-left: 10px;
+    padding-bottom: 10px;
 }
 
-#temp, #lys {
-    margin: 10px;
+#tempRadio, #lightRadio, #noneRadio {
+    margin: 5px;
 }
