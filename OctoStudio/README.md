@@ -9,7 +9,7 @@ Tryk på bogen for at læse den i Skoletube. For nogle bøger er der ved siden a
       <a href="https://www.skoletube.dk/video/8756686/1a66ca2dc1928832f37a89d2d48c9863" target="_blank">
       <img src="KomIgang.png" alt="Robotter følger streger" width="200"></a></td>
     <td>
-      <a href="https://ocaprani.github.io/OctoStudio/Jorden.octopus" target="_blank" download>Jorden.octostudio</a><br> 
+      <a href="https://ocaprani.github.io/OctoStudio/Jorden.octostudio" target="_blank" download>Jorden.octostudio</a><br> 
       <a href="https://ocaprani.github.io/SPIKE Prime/FølgKantLysprocent.llsp3" target="_blank" download>FølgKantLysprocent.llsp3</a><br>
       <a href="https://ocaprani.github.io/SPIKE Prime/FølgKantPreg.llsp3" target="_blank" download>FølgKantPreg.llsp3</a><br>
       <a href="https://ocaprani.github.io/SPIKE Prime/FølgKantPregData.llsp3" target="_blank" download>FølgKantPregData.llsp3</a><br>
