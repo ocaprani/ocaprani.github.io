@@ -1,8 +1,8 @@
 # OctoStudio
-Bøger om blokprogrammering af LEGO modeller bygget ved brug af LEGO elementerne i <a href="https://www.lego.com/da-dk/product/lego-education-spike-prime-set-45678" target="_blank">
-LEGO® Education SPIKE™ Prime-sæt 45678</a>.
-Tryk på bogen for at læse den i Skoletube. For nogle bøger er der ved siden af bogens forside en liste af blokprogrammer brugt i bogen. Tryk på programmerne for at downloade dem til brug i 
-<a href="https://education.lego.com/da-dk/downloads/spike-app/software/" target="_blank">SPIKE App</a>.
+<a href="https://octostudio.org/en/" target="_blank">OctoStudio</a> er et værktøj til at skabe projekter med bl. a. animerede historier eller spil på en mobiltelefon eller en iPad/tablet. Til at animere figurer eller skabe dynamik i spil benyttes blokprogrammering. 
+Nedenfor ses forsiderne af bøger om at skabe projekter i OctoStudio. 
+Tryk på bogen for at læse bogen i Skoletube. For nogle bøger er der ved siden af bogens forside en liste af blokprogrammer brugt i bogen. Tryk på programmerne for at downloade dem til brug i 
+OctoStudio App fra GooglePlay eller App Store.
 <table>
   <tr>
     <td>
