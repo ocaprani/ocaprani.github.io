@@ -8,7 +8,8 @@ OctoStudio App fra GooglePlay eller App Store.
   <tr>
     <td>
       <a href="https://read.bookcreator.com/wrToTHuZFwS2G-jisbgkwLQWjcL9JgZ46ZobJpdKivc/rc4fDuMxRnidCn0T6XO1Rg" target="_blank">
-      <img src="KomIgang.png" alt="OctoStudio" width="200"></a></td>
+      <img src="KomIgang.png" alt="OctoStudio" width="200"></a>
+    </td>
     <td>
       <a href="https://ocaprani.github.io/OctoStudio/Jorden.octostudio" target="_blank" download>Jorden.octostudio</a><br> 
     </td>
