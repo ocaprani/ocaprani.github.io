@@ -11,16 +11,12 @@ OctoStudio App fra GooglePlay eller App Store.
       <img src="KomIgang.png" alt="OctoStudio" width="200"></a></td>
     <td>
       <a href="https://ocaprani.github.io/OctoStudio/Jorden.octostudio" target="_blank" download>Jorden.octostudio</a><br> 
-      <a href="https://ocaprani.github.io/SPIKE Prime/FølgKantLysprocent.llsp3" target="_blank" download>FølgKantLysprocent.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE Prime/FølgKantPreg.llsp3" target="_blank" download>FølgKantPreg.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE Prime/FølgKantPregData.llsp3" target="_blank" download>FølgKantPregData.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE Prime/FølgKantPDreg.llsp3" target="_blank" download>FølgKantPDreg.llsp3</a><br>
     </td>
   </tr>
   <tr>
     <td>
       <a href="https://www.skoletube.dk/video/7035103/98d8e58d4e3286e3bb089ebae9f91481" target="_blank">
-      <img src="DJSPIKE/DJSPIKESamle.png" alt="DJ SPIKE samle" width="200"></a>
+      <img src="OctoStudio/Villads.png" alt="DJ SPIKE samle" width="200"></a>
     </td>
     <td>
       <a href="https://www.skoletube.dk/video/7035096/9fbbd353fb4836e02236c3b2cdfe8882" target="_blank">
