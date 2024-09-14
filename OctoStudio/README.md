@@ -16,7 +16,7 @@ OctoStudio App fra GooglePlay eller App Store.
   <tr>
     <td>
       <a href="https://www.skoletube.dk/video/7035103/98d8e58d4e3286e3bb089ebae9f91481" target="_blank">
-      <img src="OctoStudio/Villads.png" alt="DJ SPIKE samle" width="200"></a>
+      <img src="Villads.png" alt="DJ SPIKE samle" width="200"></a>
     </td>
     <td>
       <a href="https://www.skoletube.dk/video/7035096/9fbbd353fb4836e02236c3b2cdfe8882" target="_blank">
