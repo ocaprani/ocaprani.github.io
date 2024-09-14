@@ -16,21 +16,10 @@ OctoStudio App fra GooglePlay eller App Store.
   <tr>
     <td>
       <a href="https://www.skoletube.dk/video/7035103/98d8e58d4e3286e3bb089ebae9f91481" target="_blank">
-      <img src="Villads.png" alt="DJ SPIKE samle" width="200"></a>
-    </td>
-    <td>
-      <a href="https://www.skoletube.dk/video/7035096/9fbbd353fb4836e02236c3b2cdfe8882" target="_blank">
-      <img src="DJSPIKE/DJSPIKE.png" alt="DJ SPIKE" width="200"></a>
+      <img src="Villads.png" alt="Villads fra Valby" width="200"></a>
     </td>
     <td>
       <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Toner.llsp3" target="_blank" download>Toner.llsp3</a><br> 
-      <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 1.llsp3" target="_blank" download>Trin 1.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 2.llsp3" target="_blank" download>Trin 2.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 3.llsp3" target="_blank" download>Trin 3.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 4 Pentaton.llsp3" target="_blank" download>Trin 4 Pentaton.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Trin 5 Burp Lyde.llsp3" target="_blank" download>Trin 5 Burp Lyde.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Lydbil1.llsp3" target="_blank" download>Lydbil1.llsp3</a><br>
-      <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Lydbil2.llsp3" target="_blank" download>Lydbil2.llsp3</a><br>
     </td>
   </tr>
 </table>
