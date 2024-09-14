@@ -7,8 +7,8 @@ OctoStudio App fra GooglePlay eller App Store.
 <table>
   <tr>
     <td>
-      <a href="https://www.skoletube.dk/video/8756686/1a66ca2dc1928832f37a89d2d48c9863" target="_blank">
-      <img src="KomIgang.png" alt="Robotter følger streger" width="200"></a></td>
+      <a href="https://read.bookcreator.com/wrToTHuZFwS2G-jisbgkwLQWjcL9JgZ46ZobJpdKivc/rc4fDuMxRnidCn0T6XO1Rg" target="_blank">
+      <img src="KomIgang.png" alt="OctoStudio" width="200"></a></td>
     <td>
       <a href="https://ocaprani.github.io/OctoStudio/Jorden.octostudio" target="_blank" download>Jorden.octostudio</a><br> 
       <a href="https://ocaprani.github.io/SPIKE Prime/FølgKantLysprocent.llsp3" target="_blank" download>FølgKantLysprocent.llsp3</a><br>
