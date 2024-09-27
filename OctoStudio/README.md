@@ -12,6 +12,7 @@ OctoStudio App fra GooglePlay eller App Store.
     </td>
     <td>
       <a href="https://ocaprani.github.io/OctoStudio/Jorden.octostudio" target="_blank" download>Jorden.octostudio</a><br> 
+      <a href="https://ocaprani.github.io/OctoStudio/Spilstyrer.octostudio" target="_blank" download>Spilstyrer.octostudio</a><br> 
     </td>
     <tr></tr>
     <td>
