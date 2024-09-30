@@ -14,7 +14,7 @@ OctoStudio App fra GooglePlay eller App Store.
       <a href="https://ocaprani.github.io/OctoStudio/Jorden.octostudio" target="_blank" download>Jorden.octostudio</a><br>
       <a href="https://ocaprani.github.io/OctoStudio/Larve.octostudio" target="_blank" download>Larve.octostudio</a><br> 
       <a href="https://ocaprani.github.io/OctoStudio/Tryllestav.octostudio" target="_blank" download>Tryllestav.octostudio</a><br> 
-      <a href="https://ocaprani.github.io/OctoStudio/Stop spil.octostudio" target="_blank" download>Stop spil.octostudio</a><br> 
+      <a href="https://ocaprani.github.io/OctoStudio/StopSpil.octostudio" target="_blank" download>StopSpil.octostudio</a><br> 
       <a href="https://ocaprani.github.io/OctoStudio/Sternefanger stop.octostudio" target="_blank" download>Stjernefanger stop.octostudio</a><br> 
       <a href="https://ocaprani.github.io/OctoStudio/Spilstyrer.octostudio" target="_blank" download>Spilstyrer.octostudio</a><br> 
       <a href="https://ocaprani.github.io/OctoStudio/På ski.octostudio" target="_blank" download>På ski.octostudio</a><br> 
