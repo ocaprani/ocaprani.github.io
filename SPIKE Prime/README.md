@@ -35,9 +35,11 @@ Tryk på bogen for at læse den i Skoletube. For nogle bøger er der ved siden a
       <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Lydbil1.llsp3" target="_blank" download>Lydbil1.llsp3</a><br>
       <a href="https://ocaprani.github.io/SPIKE Prime/DJSPIKE/Lydbil2.llsp3" target="_blank" download>Lydbil2.llsp3</a><br>
     </td>
+    <tr>
         <td>
       <a href="https://www.skoletube.dk/video/7035096/9fbbd353fb4836e02236c3b2cdfe8882" target="_blank">
-      <img src="DJSPIKE/DJSPIKE.png" alt="DJ SPIKE" width="200"></a>
-    </td>
+      <img src="Kunst/forsideKunst.png" alt="Kunst" width="200"></a>
+        </td>
+    </tr>
   </tr>
 </table>
