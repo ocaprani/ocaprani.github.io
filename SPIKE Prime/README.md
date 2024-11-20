@@ -45,6 +45,7 @@ Tryk på bogen for at læse den i Skoletube. For nogle bøger er der ved siden a
       <a href="https://ocaprani.github.io/SPIKE Prime/Kunst/Kunst 2.llsp3" target="_blank" download>Kunst 2.llsp3</a><br>
       <a href="https://ocaprani.github.io/SPIKE Prime/Kunst/Kunst 3.llsp3" target="_blank" download>Kunst 3.llsp3</a><br>
       <a href="https://ocaprani.github.io/SPIKE Prime/Kunst/Kunst 4.llsp3" target="_blank" download>Kunst 4.llsp3</a><br>
+      <a href="https://ocaprani.github.io/SPIKE Prime/Kunst/Kunst 5.llsp3" target="_blank" download>Kunst 5.llsp3</a><br>
         </td>  
     </tr>
   </tr>
