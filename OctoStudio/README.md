@@ -28,6 +28,8 @@ OctoStudio App fra GooglePlay eller App Store.
     </td>
     <td>
       <a href="https://ocaprani.github.io/OctoStudio/Villads/Historie starter.octostudio" target="_blank" download>Historie starter.octostudio</a><br> 
+      <a href="https://ocaprani.github.io/OctoStudio/Villads/Halloween.octostudio" target="_blank" download>Halloween.octostudio</a><br> 
+      <a href="https://ocaprani.github.io/OctoStudio/Villads/Kaninfanger spil.octostudio" target="_blank" download>Kaninfanger spil.octostudio</a><br> 
     </td>
   </tr>
 </table>
