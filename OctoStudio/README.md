@@ -27,7 +27,7 @@ OctoStudio App fra GooglePlay eller App Store.
       <img src="Villads.png" alt="Villads fra Valby" width="200"></a>
     </td>
     <td>
-      <a href="https://ocaprani.github.io/OctoStudio/Villads/Historien starter.octostudio" target="_blank" download>Historien starter.octostudio</a><br> 
+      <a href="https://ocaprani.github.io/OctoStudio/Villads/Historie starter.octostudio" target="_blank" download>Historie starter.octostudio</a><br> 
     </td>
   </tr>
 </table>
