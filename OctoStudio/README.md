@@ -31,7 +31,7 @@ OctoStudio App fra GooglePlay eller App Store.
       <a href="https://ocaprani.github.io/OctoStudio/Villads/Halloween.octostudio" target="_blank" download>Halloween.octostudio</a><br> 
       <a href="https://ocaprani.github.io/OctoStudio/Villads/Kaninfanger spil.octostudio" target="_blank" download>Kaninfanger spil.octostudio</a><br>
        <a href="https://ocaprani.github.io/OctoStudio/Villads/Villads scorer.octostudio" target="_blank" download>Villads scorer.octostudio</a><br> 
-       <a href="https://ocaprani.github.io/OctoStudio/Villads/Undgå Fridas mor.octostudio" target="_blank" download>Undgå Fridas mor.octostudio</a><br> 
+       <a href="https://ocaprani.github.io/OctoStudio/Villads/Undgaa Fridas mor.octostudio" target="_blank" download>Undgå Fridas mor.octostudio</a><br> 
     </td>
   </tr>
 </table>
