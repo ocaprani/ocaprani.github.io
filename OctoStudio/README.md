@@ -39,7 +39,7 @@ OctoStudio App fra GooglePlay eller App Store.
   <tr>
     <td>
       <a href="https://www.skoletube.dk/video/9483437/k3laify6kk39gnjuu7mo3g3aqyf10dxc9d902zbj" target="_blank">
-      <img src="Villads.png" alt="Villads fra Valby" width="200"></a>
+      <img src="Habakuk.png" alt="Habakuk" width="200"></a>
     </td>
     <td>
       <a href="https://ocaprani.github.io/OctoStudio/Villads/Historie starter.octostudio" target="_blank" download>Historie starter.octostudio</a><br> 
