@@ -38,7 +38,7 @@ OctoStudio App fra GooglePlay eller App Store.
   </tr>
   <tr>
     <td>
-      <a href="https://www.skoletube.dk/video/9483437/k3laify6kk39gnjuu7mo3g3aqyf10dxc9d902zbj" target="_blank">
+      <a href="https://www.skoletube.dk/media/9769539/lijduotnomy2n5ymv4uq9zbkn8sbgdomvwvl1zz9" target="_blank">
       <img src="Habakuk.png" alt="Habakuk" width="200"></a>
     </td>
     <td>
