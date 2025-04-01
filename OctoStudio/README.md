@@ -21,6 +21,7 @@ OctoStudio App fra GooglePlay eller App Store.
       <a href="https://ocaprani.github.io/OctoStudio/Musiker.octostudio" target="_blank" download>Musiker.octostudio</a><br> 
       <a href="https://ocaprani.github.io/OctoStudio/Frugt.octostudio" target="_blank" download>Frugt.octostudio</a><br> 
     </td>
+  </tr>
     <tr>
     <td>
       <a href="https://www.skoletube.dk/video/9483437/k3laify6kk39gnjuu7mo3g3aqyf10dxc9d902zbj" target="_blank">
