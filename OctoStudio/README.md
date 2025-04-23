@@ -43,7 +43,7 @@ OctoStudio App fra GooglePlay eller App Store.
     </td>
     <td>
       <a href="https://ocaprani.github.io/OctoStudio/Habakuk/Bandeord.octostudio" target="_blank" download>Bandeord.octostudio</a><br> 
-     <br> 
+      <a href="https://ocaprani.github.io/OctoStudio/Habakuk/Styr Klokken.octostudio" target="_blank" download>Styr Klokken.octostudio</a><br> 
     </td>
   </tr>
 </table>
