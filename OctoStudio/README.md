@@ -44,6 +44,8 @@ OctoStudio App fra GooglePlay eller App Store.
     <td>
       <a href="https://ocaprani.github.io/OctoStudio/Habakuk/Bandeord.octostudio" target="_blank" download>Bandeord.octostudio</a><br> 
       <a href="https://ocaprani.github.io/OctoStudio/Habakuk/StyrKlokken.octostudio" target="_blank" download>StyrKlokken.octostudio</a><br> 
+      <a href="https://ocaprani.github.io/OctoStudio/Habakuk/JagFlue.octostudio" target="_blank" download>JagFlue.octostudio</a><br> 
+      <a href="https://ocaprani.github.io/OctoStudio/Habakuk/JagFlue2.octostudio" target="_blank" download>JagFlue2.octostudio</a><br> 
     </td>
   </tr>
 </table>
