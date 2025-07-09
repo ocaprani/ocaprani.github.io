@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <meta charset="utf-8">
+    <title>micro:Maqueen</title>
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
+        
+    </head>
+  <body>
+    <h2>micro:Maqueen fjernstyring</h2>
+
+    <div class="buttons">
+     <p>
+     <button onclick="connect()">Forbind</button>
+     <button onclick="disconnect()">Afbryd</button>
+    </div>
+    
+    <div class="box">
+      
+      <div>
+	<p>
+	<img src="images/hvid.png" height = 100 width = 94>
+        <img id="forward"          src="images/frem.png" height = 100 width = 94>
+	<br>
+	<img id="left"             src="images/venstre.png" height = 100 width = 94>
+	<img id="stop"             src="images/stop.png" height = 100>
+	<img id="right"            src="images/højre.png" height = 100 width = 94>
+	<br>
+	<img src="images/hvid.png" height = 100 width = 94>
+        <img id="backwards"        src="images/bak.png" height = 100 width = 94>
+       </div>
+      
+     </div>       
+        
+    </body>
+    <script src="microbit-web-bluetooth-uart.js"></script>
+</html>
